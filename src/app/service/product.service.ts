@@ -32,7 +32,7 @@ export class ProductService {
   // 🔒 LISTA PRIVADA (COM TOKEN)
   loadPrivateProducts() {
     this.http
-      .get<Product[]>(this.API_PRIVADA)
+      .get<Product[]>(`${this.API_PRIVADA}/list`)
       .subscribe(products => {
         this.productsSubject.next(products);
       });
