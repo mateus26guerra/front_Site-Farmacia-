@@ -1,0 +1,20 @@
+
+<h2>Produtos Disponíveis</h2>
+<div class="products">
+  @for (p of products$ | async; track p.id) {
+    <div class="card">
+      <img [src]="p.imagemUrl" />
+      <h3>{{ p.name }}</h3>
+      <p>{{ p.price | currency:'BRL' }}</p>
+
+     
+      @if (authService.isAdmin()) {
+        <button
+          class="delete-btn"
+          (click)="delete(p.id)">
+          Deletar
+        </button>
+      }
+    </div>
+  }
+</div> 

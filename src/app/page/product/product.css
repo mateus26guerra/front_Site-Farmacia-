@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
+.product-container {
+  min-height: calc(30vh - 60px); /* desconta navbar */
+  background-color: #f4f6f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.product-card {
+  background: #ffffff;
+  width: 900px; /* MAIS LARGO = retângulo */
+  padding: 35px 30px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.product-card h3 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 600;
+  color: #333;
+}
+
+.product-card form {
+  display: flex;
+  flex-direction: row;   /* 👈 HORIZONTAL */
+  gap: 20px;             /* 👈 espaço entre os inputs */
+  align-items: center;
+  
+}
+
+.product-card input {
+  flex: 1;               /* 👈 cada input ocupa o mesmo espaço */
+  padding: 12px 10px;
+  border: none;
+  border-bottom: 2px solid #ddd;
+  outline: none;
+  font-size: 14px;
+}
+
+.product-card input:focus {
+  border-bottom-color: #3fd3dc;
+}
+
+.product-card button {
+  margin-top: 10px;
+  padding: 14px;
+  background: #3fd3dc;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.product-card button:hover {
+  background: #35bcc4;
+}

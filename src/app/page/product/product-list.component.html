@@ -1,0 +1,37 @@
+<app-navbar></app-navbar>
+<app-sidebar></app-sidebar>
+<div class="product-container">
+  <div class="product-card">
+    <h3>Adicionar Produto</h3>
+
+    <form (ngSubmit)="addProduct()">
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="name"
+        placeholder="Nome do produto"
+        required
+      />
+
+      <input
+        type="number"
+        name="price"
+        [(ngModel)]="price"
+        placeholder="Preço"
+        required
+      />
+
+      <input
+        type="text"
+        name="imagemUrl"
+        [(ngModel)]="imagemUrl"
+        placeholder="URL da imagem"
+        required
+      />
+
+      <button type="submit">Adicionar</button>
+    </form>
+  </div>
+</div>
+
+<app-lista-de-produto></app-lista-de-produto>
