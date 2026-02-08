@@ -1,11 +1,23 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+
+import Swal from 'sweetalert2';
 
 import { ProductService } from '../../service/product.service';
 import { ListaDeProduto } from '../../shared/lista-de-produto/lista-de-produto';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { NavbarAdministradorComponent } from '../../shared/navbar-administrador/navbar-administrador';
+
+import {
+  LucideAngularModule,
+  Package,
+  Plus,
+  FolderPlus,
+  BarChart3,
+  Trash2
+} from 'lucide-angular';
 
 @Component({
   selector: 'app-products',
@@ -13,6 +25,8 @@ import { NavbarAdministradorComponent } from '../../shared/navbar-administrador/
   imports: [
     CommonModule,
     FormsModule,
+    RouterModule,
+    LucideAngularModule,
     ListaDeProduto,
     SidebarComponent,
     NavbarAdministradorComponent
@@ -54,22 +68,7 @@ export class ProductListComponent {
     this.showCategoryModal = false;
   }
 
-  // 🔥 SALVAR PRODUTO
-  addProduct(form: NgForm) {
-    if (form.invalid) return;
 
-    this.productService.addProduct({
-      name: this.name,
-      valor: this.valor,
-      desconto: this.desconto,
-      imagemUrl: this.imagemUrl,
-      categoriaId: this.categoriaId,
-      temEmEstoque: this.temEmEstoque
-    }).subscribe(() => {
-      form.resetForm({ temEmEstoque: true });
-      this.closeProductModal();
-    });
-  }
 
   // 🔍 PESQUISA
   onSearch(value: string) {

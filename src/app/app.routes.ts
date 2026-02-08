@@ -6,6 +6,7 @@ import { TelaInicial } from './page/tela-inicial/tela-inicial';
 import { adminGuard } from './core/guards/admin.guard';
 import { AdminUsersComponent } from './page/admin-users/admin-users';
 import { publicGuard } from './core/public.guard';
+import { TelaDeAddProduto } from './page/tela-de-add-produto/tela-de-add-produto';
 
 
 export const routes: Routes = [
@@ -14,6 +15,7 @@ export const routes: Routes = [
   { path: 'products', component: ProductListComponent, canActivate: [authGuard] },
 
   { path: 'AddUsuario', component: AdminUsersComponent, canActivate: [adminGuard] },
+  {path: 'addProduto', component: TelaDeAddProduto, canActivate: [adminGuard]},
 
   { path: '**', redirectTo: '' }
 ];

@@ -1,20 +1,59 @@
+<h2 class="section-title">Produtos Disponíveis</h2>
 
-<h2>Produtos Disponíveis</h2>
-<div class="products">
-  @for (p of products$ | async; track p.id) {
-    <div class="card">
-      <img [src]="p.imagemUrl" />
-      <h3>{{ p.name }}</h3>
-      <p>{{ p.price | currency:'BRL' }}</p>
+<div class="carousel-wrapper">
+  <!-- Botão Anterior -->
+  <button class="carousel-btn carousel-btn-prev" (click)="scrollLeft()">
+    ❮
+  </button>
 
-     
-      @if (authService.isAdmin()) {
-        <button
-          class="delete-btn"
-          (click)="delete(p.id)">
-          Deletar
-        </button>
+  <!-- Carrossel -->
+  <div class="carousel" #carouselContainer>
+    <div class="products">
+      @for (p of products$ | async; track p.id) {
+        <div class="product-card">
+
+          <!-- Badge desconto -->
+          @if (p.preco && p.preco.desconto > 0) {
+            <span class="discount-badge">
+              -{{ p.preco.desconto }}%
+            </span>
+          }
+
+          <!-- Botão adicionar -->
+          <button class="add-btn">+</button>
+
+          <!-- Imagem -->
+          <img [src]="p.imagemUrl" alt="{{ p.name }}" />
+
+          <!-- Info -->
+          <div class="info">
+            <h3>{{ p.name }}</h3>
+
+            @if (p.preco && p.preco.desconto > 0) {
+              <p class="old-price">
+                {{ p.preco.valor | currency:'BRL' }}
+              </p>
+            }
+
+            <p class="price">
+              {{ p.preco.valorFinal | currency:'BRL' }}
+            </p>
+          </div>
+
+          <!-- ADMIN -->
+          @if (authService.isAdmin()) {
+            <button class="delete-btn" (click)="delete(p.id)">
+              Deletar
+            </button>
+          }
+
+        </div>
       }
     </div>
-  }
-</div> 
+  </div>
+
+  <!-- Botão Próximo -->
+  <button class="carousel-btn carousel-btn-next" (click)="scrollRight()">
+    ❯
+  </button>
+</div>

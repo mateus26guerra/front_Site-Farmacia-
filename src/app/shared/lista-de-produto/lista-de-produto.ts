@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../service/product.service';
 import { AuthService } from '../../service/auth.service';
@@ -15,6 +15,7 @@ import { Product } from '../../service/product.service';
 export class ListaDeProduto implements OnInit {
 
   products$!: Observable<Product[]>;
+  @ViewChild('carouselContainer') carouselContainer!: ElementRef;
 
   constructor(
     private productService: ProductService,
@@ -25,18 +26,29 @@ export class ListaDeProduto implements OnInit {
 
   ngOnInit() {
     if (this.authService.isAuthenticated() && this.authService.isAdmin()) {
-      // 🔒 ADMIN
       this.productService.loadPrivateProducts();
     } else {
-      // 🔓 PÚBLICO
       this.productService.loadPublicProducts();
     }
   }
 
-  delete(id: number) {
-  if (confirm('Tem certeza que deseja deletar este produto?')) {
-    this.productService.deleteProduct(id);
+  // ⬅️ SCROLL ANTERIOR
+  scrollLeft() {
+    if (this.carouselContainer) {
+      this.carouselContainer.nativeElement.scrollBy({ left: -280, behavior: 'smooth' });
+    }
   }
-}
 
+  // ➡️ SCROLL PRÓXIMO
+  scrollRight() {
+    if (this.carouselContainer) {
+      this.carouselContainer.nativeElement.scrollBy({ left: 280, behavior: 'smooth' });
+    }
+  }
+
+  delete(id: number) {
+    if (confirm('Tem certeza que deseja deletar este produto?')) {
+      this.productService.deleteProduct(id);
+    }
+  }
 }

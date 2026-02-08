@@ -6,16 +6,16 @@ import { map } from 'rxjs/operators';
 export interface Product {
   id: number;
   name: string;
-  price: number;
   imagemUrl: string;
-}
-export interface CreateProductDTO {
-  name: string;
-  valor: number;
-  desconto: number;
-  imagemUrl: string;
-  categoriaId: number;
-  temEmEstoque: boolean;
+  categoria?: {
+    id: number;
+    nome_categoria: string;
+  };
+  preco: {
+    valor: number;
+    desconto: number;
+    valorFinal: number;
+  };
 }
 
 
@@ -64,7 +64,7 @@ export class ProductService {
   }
 
 
-addProduct(product: CreateProductDTO) {
+addProduct(product: Product) {
   return this.http.post(
     `${this.API_PRIVADA}/add_products`,product);
 }

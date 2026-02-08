@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { AfterViewInit, Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,6 @@ import { RouterOutlet } from '@angular/router';
   template: `<router-outlet></router-outlet>`
 })
 
-export class App {
-  protected readonly title = signal('frontend');
+export class App  {
+
 }

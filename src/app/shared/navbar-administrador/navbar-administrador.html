@@ -5,7 +5,7 @@
     
     <!-- LOGO -->
     <a class="logo" [routerLink]="linkPaginaInicial">
-      <i data-lucide="plus" class="icon-plus"></i>
+      <lucide-icon name="plus" size="24" class="icon-plus"></lucide-icon>
       <span class="logo-text">PROMOFARMA</span>
     </a>
 
@@ -15,7 +15,7 @@
       <!-- LOGIN -->
       @if (!authService.isAuthenticated()) {
         <a routerLink="/login" class="action-item">
-          <i data-lucide="user-circle"></i>
+          <lucide-icon name="user-circle" size="20"></lucide-icon>
           <span>Administração</span>
         </a>
       }
@@ -23,11 +23,11 @@
       <!-- LOGOUT -->
       @if (authService.isAuthenticated()) {
         <button class="action-item">
-          <i data-lucide="user-circle"></i>
+          <lucide-icon name="user-circle" size="20"></lucide-icon>
           <span>Olá, {{ authService.getUserName() }}</span>
         </button>
         <button class="btn-sair" (click)="logout()">
-          <i data-lucide="log-out"></i>
+          <lucide-icon name="log-out" size="18"></lucide-icon>
           Sair</button> 
       }
 

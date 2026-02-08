@@ -4,16 +4,21 @@ import { AuthService } from '../../service/auth.service';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
-declare const lucide: any; // ✅ CORREÇÃO AQUI
+import {
+  LucideAngularModule,
+  Plus,
+  UserCircle,
+  LogOut
+} from 'lucide-angular';
 
 @Component({
   selector: 'app-navbar-administrador',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, LucideAngularModule],
   templateUrl: './navbar-administrador.html',
   styleUrl: './navbar-administrador.css',
 })
-export class NavbarAdministradorComponent implements OnInit, AfterViewInit  {
+export class NavbarAdministradorComponent implements OnInit {
 
   showLogoutModal = false;
   closing = false;
@@ -23,20 +28,7 @@ export class NavbarAdministradorComponent implements OnInit, AfterViewInit  {
   constructor(public authService: AuthService) {}
 
   ngOnInit() {
-    this.initIcons();
-  }
-
-
-  ngAfterViewInit() {
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
-    }
-  }
-
-  initIcons() {
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
-    }
+    // Inicialização do componente
   }
 
   abrirLogout() {

@@ -40,6 +40,10 @@
   transform: translateY(-2px);
 }
 
+.logo lucide-icon {
+  color: #dc2626;
+}
+
 .icon-plus {
   color: #dc2626;
   width: 32px;
@@ -77,10 +81,13 @@
   transition: all 0.3s;
 }
 
-.action-item i {
+.action-item lucide-icon {
   color: #dc2626;
-  width: 20px;
-  height: 20px;
+}
+
+.action-item:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
 }
 
 /* BOTÃO SAIR */
@@ -99,15 +106,14 @@
   transition: all 0.3s;
 }
 
+.btn-sair lucide-icon {
+  color: #fff;
+}
+
 .btn-sair:hover {
   background: #b91c1c;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(220,38,38,0.3);
-}
-
-.btn-sair i {
-  width: 18px;
-  height: 18px;
 }
 
 /* MODAL LOGOUT */

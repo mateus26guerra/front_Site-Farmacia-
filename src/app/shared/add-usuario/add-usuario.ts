@@ -3,10 +3,11 @@ import { Navbar } from '../../shared/navbar/navbar';
 import { AuthService } from '../../service/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NavbarAdministradorComponent } from "../navbar-administrador/navbar-administrador";
 
 @Component({
   selector: 'app-add-usuario',
-  imports: [CommonModule, Navbar, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarAdministradorComponent],
   templateUrl: './add-usuario.html',
   styleUrl: './add-usuario.css',
 })
