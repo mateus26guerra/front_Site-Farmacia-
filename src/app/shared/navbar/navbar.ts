@@ -1,51 +1,69 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
 import { CommonModule } from '@angular/common';
 
+declare const lucide: any;
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule], // 👈 ADICIONA CommonModule
+  imports: [RouterModule, CommonModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class Navbar {
+export class Navbar implements OnInit, AfterViewChecked {
   
-  isOpen = false; // 👈 CONTROLE DA SIDEBAR
-
   showLogoutModal = false;
   closing = false;
-  constructor(public authService: AuthService) {} // 👈 PUBLIC para usar no template
+  showMenu = false;
+  activeCategory = '';
 
-  logout() {
-    this.authService.logout();
-    location.href = '/'; // 👈 vai pra home (lista pública)
+  constructor(public authService: AuthService) {}
+
+  ngOnInit() {
+    this.initIcons();
   }
 
-    abrirLogout() {
-    this.showLogoutModal = true;
+  ngAfterViewChecked() {
+    this.initIcons();
   }
 
-    cancelarLogout() {
+  initIcons() {
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  }
+
+  setActive(category: string) {
+    this.activeCategory = category;
+  }
+
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
+    setTimeout(() => this.initIcons(), 50);
+  }
+
+ abrirLogout() {
+  this.showLogoutModal = true;
+  console.log('Modal aberto:', this.showLogoutModal); 
+  setTimeout(() => this.initIcons(), 50);
+}
+  cancelarLogout() {
     this.closing = true;
-
     setTimeout(() => {
       this.showLogoutModal = false;
       this.closing = false;
     }, 250);
   }
 
-
-confirmarLogout() {
-  this.closing = true;
-
-  setTimeout(() => {
-    this.authService.logout();
-    this.showLogoutModal = false;
-    this.closing = false;
-    location.href = '/';
-  }, 250);
-}
-
+  confirmarLogout() {
+    this.closing = true;
+    setTimeout(() => {
+      this.authService.logout();
+      this.showLogoutModal = false;
+      this.closing = false;
+      location.href = '/';
+    }, 250);
+  }
 }

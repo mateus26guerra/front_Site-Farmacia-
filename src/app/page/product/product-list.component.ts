@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService, Product } from '../../service/product.service';
 import { Observable } from 'rxjs';
-import { Navbar } from "../../shared/navbar/navbar";
+import { Navbar } from '../../shared/navbar/navbar';
 import { ListaDeProduto } from "../../shared/lista-de-produto/lista-de-produto";
 import { SidebarComponent } from "../../shared/sidebar/sidebar.component";
+import { NavbarAdministradorComponent } from "../../shared/navbar-administrador/navbar-administrador";
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar, ListaDeProduto, SidebarComponent],
+  imports: [CommonModule, FormsModule, Navbar, ListaDeProduto, SidebarComponent, NavbarAdministradorComponent,NavbarAdministradorComponent],
   templateUrl: './product-list.component.html',
   styleUrl: './product.css',
 

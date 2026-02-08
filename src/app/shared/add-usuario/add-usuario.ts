@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Navbar } from "../navbar/navbar";
+import { Navbar } from '../../shared/navbar/navbar';
 import { AuthService } from '../../service/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';

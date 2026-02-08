@@ -1,0 +1,50 @@
+
+
+<nav class="navbar-admin">
+  <div class="container">
+    
+    <!-- LOGO -->
+    <a class="logo" [routerLink]="linkPaginaInicial">
+      <i data-lucide="plus" class="icon-plus"></i>
+      <span class="logo-text">PROMOFARMA</span>
+    </a>
+
+    <!-- AÇÕES DE ADMIN -->
+    <div class="actions">
+      
+      <!-- LOGIN -->
+      @if (!authService.isAuthenticated()) {
+        <a routerLink="/login" class="action-item">
+          <i data-lucide="user-circle"></i>
+          <span>Administração</span>
+        </a>
+      }
+
+      <!-- LOGOUT -->
+      @if (authService.isAuthenticated()) {
+        <button class="action-item">
+          <i data-lucide="user-circle"></i>
+          <span>Olá, {{ authService.getUserName() }}</span>
+        </button>
+        <button class="btn-sair" (click)="logout()">
+          <i data-lucide="log-out"></i>
+          Sair</button> 
+      }
+
+    </div>
+  </div>
+</nav>
+
+<!-- MODAL LOGOUT -->
+@if (showLogoutModal) {
+  <div class="modal-backdrop" [class.closing]="closing">
+    <div class="modal">
+      <h5>Confirmar saída</h5>
+      <p>Tem certeza que deseja sair da administração?</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="cancelarLogout()">Cancelar</button>
+        <button class="btn-confirm" (click)="confirmarLogout()">Sair</button>
+      </div>
+    </div>
+  </div>
+}
