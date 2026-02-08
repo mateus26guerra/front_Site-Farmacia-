@@ -1,38 +1,115 @@
 <app-navbar-administrador></app-navbar-administrador>
-
 <app-sidebar></app-sidebar>
-<div class="product-container">
-  <div class="product-card">
+
+<!-- 🔥 MENU DE AÇÕES -->
+<div class="action-bar">
+  <input
+    type="text"
+    placeholder="Pesquisar produtos..."
+    (input)="onSearch($event.target.value)"
+  />
+
+  <div class="actions">
+    <button class="btn primary" (click)="openProductModal()">
+      ➕ Produto
+    </button>
+
+    <button class="btn secondary" (click)="openCategoryModal()">
+      🗂️ Categoria
+    </button>
+  </div>
+</div>
+
+<!-- 📦 LISTA DE PRODUTOS -->
+<app-lista-de-produto></app-lista-de-produto>
+
+<!-- 🟢 MODAL PRODUTO -->
+<div class="modal-backdrop" *ngIf="showProductModal">
+  <div class="modal">
     <h3>Adicionar Produto</h3>
 
-    <form (ngSubmit)="addProduct()">
+    <form #form="ngForm" (ngSubmit)="addProduct(form)">
+
       <input
         type="text"
-        name="name"
         [(ngModel)]="name"
+        name="name"
         placeholder="Nome do produto"
         required
       />
 
       <input
         type="number"
-        name="price"
-        [(ngModel)]="price"
+        [(ngModel)]="valor"
+        name="valor"
         placeholder="Preço"
+        required
+        min="0.01"
+      />
+
+      <input
+        type="number"
+        [(ngModel)]="desconto"
+        name="desconto"
+        placeholder="Desconto"
+        min="0"
+      />
+
+      <input
+        type="number"
+        [(ngModel)]="categoriaId"
+        name="categoriaId"
+        placeholder="Categoria ID"
         required
       />
 
       <input
         type="text"
-        name="imagemUrl"
         [(ngModel)]="imagemUrl"
+        name="imagemUrl"
         placeholder="URL da imagem"
         required
       />
 
-      <button type="submit">Adicionar</button>
+      <label class="checkbox">
+        <input
+          type="checkbox"
+          [(ngModel)]="temEmEstoque"
+          name="temEmEstoque"
+        />
+        Em estoque
+      </label>
+
+      <div class="actions">
+        <button class="btn primary" type="submit" [disabled]="form.invalid">
+          Salvar
+        </button>
+
+        <button
+          type="button"
+          class="btn secondary"
+          (click)="closeProductModal()"
+        >
+          Cancelar
+        </button>
+      </div>
+
     </form>
   </div>
 </div>
 
-<app-lista-de-produto></app-lista-de-produto>
+<!-- 🟣 MODAL CATEGORIA -->
+<div class="modal-backdrop" *ngIf="showCategoryModal">
+  <div class="modal">
+    <h3>Adicionar Categoria</h3>
+
+    <input type="text" placeholder="Nome da categoria" />
+
+    <div class="actions">
+      <button class="btn primary">Salvar</button>
+      <button class="btn secondary" (click)="closeCategoryModal()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>

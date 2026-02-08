@@ -1,7 +1,8 @@
 import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../service/auth.service';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../service/auth.service';
+import { ProductService } from '../../service/product.service';
 
 declare const lucide: any;
 
@@ -13,13 +14,20 @@ declare const lucide: any;
   styleUrl: './navbar.css',
 })
 export class Navbar implements OnInit, AfterViewChecked {
-  
+
   showLogoutModal = false;
   closing = false;
   showMenu = false;
   activeCategory = '';
 
-  constructor(public authService: AuthService) {}
+  constructor(
+    public authService: AuthService,
+    private productService: ProductService
+  ) {}
+
+  onSearch(value: string) {
+    this.productService.setSearch(value);
+  }
 
   ngOnInit() {
     this.initIcons();
@@ -44,11 +52,10 @@ export class Navbar implements OnInit, AfterViewChecked {
     setTimeout(() => this.initIcons(), 50);
   }
 
- abrirLogout() {
-  this.showLogoutModal = true;
-  console.log('Modal aberto:', this.showLogoutModal); 
-  setTimeout(() => this.initIcons(), 50);
-}
+  abrirLogout() {
+    this.showLogoutModal = true;
+  }
+
   cancelarLogout() {
     this.closing = true;
     setTimeout(() => {
@@ -61,8 +68,6 @@ export class Navbar implements OnInit, AfterViewChecked {
     this.closing = true;
     setTimeout(() => {
       this.authService.logout();
-      this.showLogoutModal = false;
-      this.closing = false;
       location.href = '/';
     }, 250);
   }

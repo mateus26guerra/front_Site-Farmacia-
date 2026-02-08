@@ -12,9 +12,10 @@
       <!-- BARRA DE PESQUISA -->
       <div class="search-bar">
         <i data-lucide="search" class="search-icon"></i>
-        <input 
-          type="text" 
-          placeholder="Buscar medicamentos, cosméticos e muito mais..."
+        <input
+        type="text"
+        placeholder="Buscar medicamentos, cosméticos e muito mais..."
+        (input)="onSearch($event.target.value)"
         >
         <button class="search-btn">
           <i data-lucide="search"></i>

@@ -1,43 +1,78 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ProductService, Product } from '../../service/product.service';
-import { Observable } from 'rxjs';
-import { Navbar } from '../../shared/navbar/navbar';
-import { ListaDeProduto } from "../../shared/lista-de-produto/lista-de-produto";
-import { SidebarComponent } from "../../shared/sidebar/sidebar.component";
-import { NavbarAdministradorComponent } from "../../shared/navbar-administrador/navbar-administrador";
+import { FormsModule, NgForm } from '@angular/forms';
+
+import { ProductService } from '../../service/product.service';
+import { ListaDeProduto } from '../../shared/lista-de-produto/lista-de-produto';
+import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
+import { NavbarAdministradorComponent } from '../../shared/navbar-administrador/navbar-administrador';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar, ListaDeProduto, SidebarComponent, NavbarAdministradorComponent,NavbarAdministradorComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ListaDeProduto,
+    SidebarComponent,
+    NavbarAdministradorComponent
+  ],
   templateUrl: './product-list.component.html',
   styleUrl: './product.css',
-
 })
 export class ProductListComponent {
 
-  products$!: Observable<Product[]>;
-
-  
+  // 🔹 FORM PRODUTO
   name = '';
-  price!: number;
-  imagemUrl = ''
+  valor!: number;
+  desconto = 0;
+  imagemUrl = '';
+  categoriaId!: number;
+  temEmEstoque = true;
 
-  constructor(private productService: ProductService) {
-    this.products$ = this.productService.products$;
+  // 🔹 CONTROLE MODAIS
+  showProductModal = false;
+  showCategoryModal = false;
+
+  constructor(private productService: ProductService) {}
+
+  // 🔥 MODAL PRODUTO
+  openProductModal() {
+    this.showProductModal = true;
   }
 
-  addProduct() {
+  closeProductModal() {
+    this.showProductModal = false;
+  }
+
+  // 🔥 MODAL CATEGORIA
+  openCategoryModal() {
+    this.showCategoryModal = true;
+  }
+
+  closeCategoryModal() {
+    this.showCategoryModal = false;
+  }
+
+  // 🔥 SALVAR PRODUTO
+  addProduct(form: NgForm) {
+    if (form.invalid) return;
+
     this.productService.addProduct({
       name: this.name,
-      price: this.price,
-      imagemUrl: this.imagemUrl
+      valor: this.valor,
+      desconto: this.desconto,
+      imagemUrl: this.imagemUrl,
+      categoriaId: this.categoriaId,
+      temEmEstoque: this.temEmEstoque
+    }).subscribe(() => {
+      form.resetForm({ temEmEstoque: true });
+      this.closeProductModal();
     });
+  }
 
-    this.name = '';
-    this.price = 0;
-    this.imagemUrl = '';
+  // 🔍 PESQUISA
+  onSearch(value: string) {
+    this.productService.setSearch(value);
   }
 }

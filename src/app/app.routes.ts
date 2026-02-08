@@ -5,10 +5,11 @@ import { authGuard } from './core/guards/auth-guard';
 import { TelaInicial } from './page/tela-inicial/tela-inicial';
 import { adminGuard } from './core/guards/admin.guard';
 import { AdminUsersComponent } from './page/admin-users/admin-users';
+import { publicGuard } from './core/public.guard';
 
 
 export const routes: Routes = [
-  { path: '', component: TelaInicial },
+  { path: '', component: TelaInicial , canActivate: [publicGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'products', component: ProductListComponent, canActivate: [authGuard] },
 
