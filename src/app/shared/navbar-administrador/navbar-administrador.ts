@@ -23,7 +23,6 @@ export class NavbarAdministradorComponent implements OnInit {
   showLogoutModal = false;
   closing = false;
 
-  linkPaginaInicial = '/dashboard';
 
   constructor(public authService: AuthService) {}
 

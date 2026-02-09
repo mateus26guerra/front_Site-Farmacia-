@@ -2,17 +2,11 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../service/auth.service';
-declare const lucide: any;
-import {LucideAngularModule} from 'lucide-angular';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [
-    CommonModule,
-  
-    RouterModule,
-    LucideAngularModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })
@@ -54,10 +48,4 @@ export class SidebarComponent {
       location.href = '/';
     }, 250);
   }
-
-ngAfterViewInit() {
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons();
-  }
-}
 }

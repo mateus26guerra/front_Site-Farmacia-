@@ -6,84 +6,41 @@
   <nav class="menu">
 
     @if (authService.isAuthenticated()) {
-      <!-- CABEÇALHO DO USUÁRIO -->
-      <div class="user-header">
-        <div class="user-avatar">
-          <i data-lucide="user"></i>
-        </div>
-        <div class="user-info">
-          <span class="user-title">Menu Administrativo</span>
-          <span class="user-role">Administrador</span>
-        </div>
+
+      <!-- TÍTULO DO MENU -->
+      <div class="menu-title">
+        Menu do Administrador
       </div>
 
-      <!-- DIVISOR -->
-      <div class="divider"></div>
+      <!-- USUÁRIO -->
+      <div class="user">
+        Olá, <strong>{{ authService.getUserName() }}</strong>
+      </div>
 
-      <!-- SEÇÃO: GESTÃO -->
       @if (authService.isAdmin()) {
-        <div class="menu-section">
-          <span class="section-title">Gestão</span>
-          
-          <a routerLink="/AddUsuario" routerLinkActive="active">
-            <i data-lucide="users"></i>
-            <span>Usuários</span>
-          </a>
-          
-          <a routerLink="/products" routerLinkActive="active">
-            <i data-lucide="shirt"></i>
-            <span>Produtos</span>
-          </a>
-        </div>
+        <a routerLink="/AddUsuario">
+          Usuários
+        </a>
 
-        <!-- DIVISOR -->
-        <div class="divider"></div>
+        <a routerLink="/products">
+          Produtos
+        </a>
       }
 
-      <!-- SEÇÃO: SISTEMA -->
-      <div class="menu-section">
-        <span class="section-title">Sistema</span>
-        
-        <button class="menu-item" (click)="fecharSidebar()">
-          <i data-lucide="x"></i>
-          <span>Fechar menu</span>
-        </button>
-      </div>
+      <!-- FECHAR SIDEBAR -->
+      <button class="logout-btn" (click)="fecharSidebar()">
+        Fechar menu
+      </button>
 
     }
 
   </nav>
 </aside>
 
-<!-- OVERLAY -->
-<div
-  class="overlay"
-  *ngIf="isOpen"
-  (click)="fecharSidebar()">
-</div>
-
 <!-- BOTÃO TOGGLE -->
 <button 
   class="toggle-btn"
   *ngIf="!isOpen"
   (click)="abrirSidebar()">
-  <i data-lucide="menu"></i>
+  ☰
 </button>
-
-<!-- MODAL DE LOGOUT -->
-@if (showLogoutModal) {
-  <div class="modal-backdrop" [class.closing]="closing">
-    <div class="modal">
-      <div class="modal-icon">
-        <i data-lucide="log-out"></i>
-      </div>
-      <h3>Confirmar saída</h3>
-      <p>Tem certeza que deseja sair da sua conta?</p>
-
-      <div class="modal-actions">
-        <button class="cancel" (click)="cancelarLogout()">Cancelar</button>
-        <button class="confirm" (click)="confirmarLogout()">Sair</button>
-      </div>
-    </div>
-  </div>
-}

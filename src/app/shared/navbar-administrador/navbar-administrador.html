@@ -1,50 +1,27 @@
+<nav class="navbar">
+  <div class="logo" routerLink="/">
+   + PROMOFARMA
+  </div>
 
+  <div class="actions">
 
-<nav class="navbar-admin">
-  <div class="container">
-    
-    <!-- LOGO -->
-    <a class="logo" [routerLink]="linkPaginaInicial">
-      <lucide-icon name="plus" size="24" class="icon-plus"></lucide-icon>
-      <span class="logo-text">PROMOFARMA</span>
-    </a>
+    <!-- 🔓 NÃO LOGADO -->
+    @if (!authService.isAuthenticated()) {
+      <a routerLink="/login" class="login-btn">
+        Login
+      </a>
+    }
 
-    <!-- AÇÕES DE ADMIN -->
-    <div class="actions">
-      
-      <!-- LOGIN -->
-      @if (!authService.isAuthenticated()) {
-        <a routerLink="/login" class="action-item">
-          <lucide-icon name="user-circle" size="20"></lucide-icon>
-          <span>Administração</span>
-        </a>
-      }
+    <!-- 🔐 LOGADO -->
+    @if (authService.isAuthenticated()) {
+      <button class="user-btn">
+        Olá, {{ authService.getUserName() || 'suporte' }}
+      </button>
 
-      <!-- LOGOUT -->
-      @if (authService.isAuthenticated()) {
-        <button class="action-item">
-          <lucide-icon name="user-circle" size="20"></lucide-icon>
-          <span>Olá, {{ authService.getUserName() }}</span>
-        </button>
-        <button class="btn-sair" (click)="logout()">
-          <lucide-icon name="log-out" size="18"></lucide-icon>
-          Sair</button> 
-      }
+      <button class="logout-btn" (click)="logout()">
+        Sair
+      </button>
+    }
 
-    </div>
   </div>
 </nav>
-
-<!-- MODAL LOGOUT -->
-@if (showLogoutModal) {
-  <div class="modal-backdrop" [class.closing]="closing">
-    <div class="modal">
-      <h5>Confirmar saída</h5>
-      <p>Tem certeza que deseja sair da administração?</p>
-      <div class="modal-actions">
-        <button class="btn-cancel" (click)="cancelarLogout()">Cancelar</button>
-        <button class="btn-confirm" (click)="confirmarLogout()">Sair</button>
-      </div>
-    </div>
-  </div>
-}
