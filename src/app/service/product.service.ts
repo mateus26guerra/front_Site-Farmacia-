@@ -18,6 +18,16 @@ export interface Product {
   };
 }
 
+export interface ProdutoAddDTO {
+  name: string;
+  valor: number;
+  desconto: number;
+  variacao: string;
+  imagemUrl: string;
+  categoriaId: number;
+  quantidadeEmEstoque: number;
+}
+
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
@@ -64,7 +74,7 @@ export class ProductService {
   }
 
 
-addProduct(product: Product) {
+addProduct(product: ProdutoAddDTO) {
   return this.http.post(
     `${this.API_PRIVADA}/add_products`,product);
 }

@@ -1,1 +1,130 @@
 <app-navbar-administrador></app-navbar-administrador>
+
+<div class="page-wrapper">
+  <div class="card">
+
+    <h2 class="card-title">
+      Cadastro de Produto
+    </h2>
+
+    <form (ngSubmit)="salvar()">
+
+      <div class="form-grid">
+
+        <div class="form-group full">
+          <label for="name">Nome do Produto</label>
+          <input
+            id="name"
+            type="text"
+            placeholder="Ex: Dipirona 500mg"
+            [(ngModel)]="name"
+            name="name"
+            required
+            autocomplete="off">
+          <span class="helper-text">Digite o nome principal do produto.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="valor">Valor (R$)</label>
+          <input
+            id="valor"
+            type="number"
+            placeholder="Ex: 19.90"
+            [(ngModel)]="valor"
+            name="valor"
+            min="0"
+            step="0.01"
+            required>
+          <span class="helper-text">Valor base do produto.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="desconto">Desconto (%)</label>
+          <input
+            id="desconto"
+            type="number"
+            placeholder="Ex: 10"
+            [(ngModel)]="desconto"
+            name="desconto"
+            min="0"
+            max="100">
+          <span class="helper-text">Opcional (0–100).</span>
+        </div>
+
+        <div class="form-group">
+          <label for="quantidadeEmEstoque">Estoque</label>
+          <input
+            id="quantidadeEmEstoque"
+            type="number"
+            placeholder="Ex: 150"
+            [(ngModel)]="quantidadeEmEstoque"
+            name="quantidadeEmEstoque"
+            min="0">
+          <span class="helper-text">Quantidade disponível.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="categoriaId">Categoria ID</label>
+          <input
+            id="categoriaId"
+            type="number"
+            placeholder="Ex: 3"
+            [(ngModel)]="categoriaId"
+            name="categoriaId"
+            min="1">
+          <span class="helper-text">ID da categoria no sistema.</span>
+        </div>
+
+        <div class="form-group full">
+          <label for="imagemUrl">Imagem (URL)</label>
+          <input
+            id="imagemUrl"
+            type="text"
+            placeholder="https://exemplo.com/imagem.jpg"
+            [(ngModel)]="imagemUrl"
+            name="imagemUrl"
+            autocomplete="off">
+          <span class="helper-text">Link direto para a imagem do produto.</span>
+        </div>
+
+      </div>
+
+      <hr class="section-divider">
+      <p class="section-label">Variações do Produto</p>
+
+      <div
+        *ngFor="let v of variacoes; let i = index; trackBy: trackByIndex"
+        class="variacao-row">
+        <input
+          type="text"
+          placeholder="Ex: Tamanho P | Tamanho M"
+          [(ngModel)]="variacoes[i]"
+          [name]="'variacao' + i">
+        <button
+          type="button"
+          class="btn danger-sm"
+          (click)="removerVariacao(i)"
+          aria-label="Remover variação">
+          Remover
+        </button>
+      </div>
+
+      <button
+        type="button"
+        class="btn success"
+        (click)="adicionarVariacao()">
+        Adicionar Variação
+      </button>
+
+      <div class="button-group">
+        <button type="button" class="btn secondary" [routerLink]="['/produtos']">
+          Cancelar
+        </button>
+        <button type="submit" class="btn primary">
+          Salvar Produto
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

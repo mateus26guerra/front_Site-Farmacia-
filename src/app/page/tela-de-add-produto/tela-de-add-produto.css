@@ -1,0 +1,283 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+:root {
+  --bg:           #f4f6f8;
+  --card-bg:      #ffffff;
+  --radius-card:  12px;
+  --radius-btn:   50px;
+  --radius-input: 8px;
+  --border:       #d1d5db;
+  --border-focus: #4f46e5;
+  --text-title:   #1e293b;
+  --text-body:    #374151;
+  --text-label:   #4b5563;
+  --text-muted:   #9ca3af;
+}
+
+/* ── Page Wrapper ─────────────────────────────────────── */
+.page-wrapper {
+  background-color: #f4f6f8 !important;
+  min-height: 100vh;
+  padding: 40px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Card ─────────────────────────────────────────────── */
+.card {
+  width: 100%;
+  max-width: 900px;
+  background: #ffffff !important;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.05),
+    0 16px 40px rgba(0, 0, 0, 0.12),
+    0 2px 4px rgba(0, 0, 0, 0.04);
+  animation: fadeUp 0.35s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Card Title ───────────────────────────────────────── */
+.card-title {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 28px;
+}
+
+.card-title i {
+  width: 22px;
+  height: 22px;
+  color: #4f46e5;
+}
+
+/* ── Divider ──────────────────────────────────────────── */
+.section-divider {
+  border: none !important;
+  border-top: 1px solid #e5e7eb !important;
+  margin: 28px 0;
+}
+
+/* ── Section Label ────────────────────────────────────── */
+.section-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+  margin-bottom: 16px;
+}
+
+/* ── Form Grid ────────────────────────────────────────── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 24px;
+}
+
+.form-grid .full {
+  grid-column: 1 / -1;
+}
+
+/* ── Form Group ───────────────────────────────────────── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+/* ── Inputs ───────────────────────────────────────────── */
+.form-group input,
+.variacao-row input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db !important;
+  font-size: 0.95rem;
+  color: #374151;
+  background: #fafafa !important;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.form-group input::placeholder,
+.variacao-row input::placeholder {
+  color: #9ca3af;
+  font-weight: 300;
+}
+
+.form-group input:focus,
+.variacao-row input:focus {
+  border-color: #4f46e5 !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type="number"] { -moz-appearance: textfield; }
+
+/* ── Helper Text ──────────────────────────────────────── */
+.helper-text {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* ── Variações ────────────────────────────────────────── */
+.variacao-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+  animation: fadeIn 0.2s ease both;
+}
+
+.variacao-row input {
+  flex: 1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-4px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   BOTÕES — Sólidos pill, cores forçadas
+═══════════════════════════════════════════════════════ */
+button.btn,
+.btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px;
+  padding: 10px 24px;
+  border: none !important;
+  border-radius: 10px !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff !important;
+  cursor: pointer;
+  transition: filter 0.18s ease, transform 0.15s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+button.btn i,
+.btn i {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+button.btn:hover,
+.btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+button.btn:active,
+.btn:active {
+  filter: brightness(0.95);
+  transform: scale(0.97);
+}
+
+/* Primary — índigo */
+button.btn.primary,
+.btn.primary {
+  background-color: #4f46e5 !important;
+}
+
+/* Secondary — cinza */
+button.btn.secondary,
+.btn.secondary {
+  background-color: #64748b !important;
+}
+
+/* Success — verde */
+button.btn.success,
+.btn.success {
+  background-color: #16a34a !important;
+}
+
+/* Danger — vermelho */
+button.btn.danger,
+.btn.danger {
+  background-color: #e53e3e !important;
+}
+
+/* Danger pequeno — remover variação */
+button.btn.danger-sm,
+.btn.danger-sm {
+  background-color: #e53e3e !important;
+  font-size: 0.82rem !important;
+  padding: 8px 18px !important;
+  font-weight: 500 !important;
+  flex-shrink: 0;
+  border-radius: 10px !important;
+}
+
+/* ── Button Group submit ──────────────────────────────── */
+.button-group {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* ── Responsivo ───────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page-wrapper { padding: 20px 12px 60px; }
+
+  .card { padding: 20px 16px; }
+
+  .card-title {
+    font-size: 1.15rem;
+    margin-bottom: 20px;
+  }
+
+  .form-grid { grid-template-columns: 1fr; }
+  .form-grid .full { grid-column: 1; }
+
+  .variacao-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn.danger-sm { width: 100%; }
+
+  .button-group {
+    flex-direction: column-reverse;
+  }
+
+  .button-group .btn {
+    width: 100%;
+    padding: 13px !important;
+  }
+
+  .form-group input,
+  .variacao-row input { font-size: 16px; }
+}
