@@ -1,59 +1,68 @@
 <h2 class="section-title">Produtos Disponíveis</h2>
 
 <div class="carousel-wrapper">
-  <!-- Botão Anterior -->
-  <button class="carousel-btn carousel-btn-prev" (click)="scrollLeft()">
-    ❮
-  </button>
 
-  <!-- Carrossel -->
+  <button class="carousel-btn" (click)="scrollLeft()">❮</button>
+
   <div class="carousel" #carouselContainer>
     <div class="products">
-      @for (p of products$ | async; track p.id) {
+
+      @for (p of vitrine$ | async; track p.name) {
+
+        @let variacao = getVariacao(p);
+
         <div class="product-card">
 
-          <!-- Badge desconto -->
-          @if (p.preco && p.preco.desconto > 0) {
+          <!-- DESCONTO -->
+          @if (variacao.preco.desconto > 0) {
             <span class="discount-badge">
-              -{{ p.preco.desconto }}%
+-{{
+  (variacao.preco.desconto / variacao.preco.valor) * 100
+  | number:'1.0-0'
+}}%
             </span>
           }
 
-          <!-- Botão adicionar -->
-          <button class="add-btn">+</button>
+          <!-- BOTÃO ADD -->
+          <button class="add-btn" (click)="adicionar(variacao)">+</button>
 
-          <!-- Imagem -->
-          <img [src]="p.imagemUrl" alt="{{ p.name }}" />
+          <!-- IMAGEM -->
+          <img [src]="variacao.imagemUrl" alt="{{ p.name }}" />
 
-          <!-- Info -->
+          <!-- INFO -->
           <div class="info">
-            <h3>{{ p.name }}</h3>
+            <h3 class="product-name">{{ p.name }}</h3>
 
-            @if (p.preco && p.preco.desconto > 0) {
+            @if (variacao.preco.desconto > 0) {
               <p class="old-price">
-                {{ p.preco.valor | currency:'BRL' }}
+                {{ variacao.preco.valor | currency:'BRL' }}
               </p>
             }
 
             <p class="price">
-              {{ p.preco.valorFinal | currency:'BRL' }}
+              {{ variacao.preco.valorFinal | currency:'BRL' }}
             </p>
           </div>
 
-          <!-- ADMIN -->
-          @if (authService.isAdmin()) {
-            <button class="delete-btn" (click)="delete(p.id)">
-              Deletar
-            </button>
-          }
+          <!-- VARIAÇÕES -->
+          <div class="variacoes">
+            @for (v of p.variacoes; track v.id) {
+              <button
+                class="variacao-btn"
+                [class.active]="v.id === variacao.id"
+                (click)="selecionarVariacao(p, v.id)"
+              >
+                {{ v.variacao }}
+              </button>
+            }
+          </div>
 
         </div>
       }
+
     </div>
   </div>
 
-  <!-- Botão Próximo -->
-  <button class="carousel-btn carousel-btn-next" (click)="scrollRight()">
-    ❯
-  </button>
+  <button class="carousel-btn" (click)="scrollRight()">❯</button>
+
 </div>

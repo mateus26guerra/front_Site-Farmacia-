@@ -47,14 +47,23 @@
         }
 
         <!-- CESTA -->
-        <div class="action-item cart">
-          <i data-lucide="shopping-cart"></i>
-          <div class="action-text">
-            <small>Cesta</small>
-            <strong>R$ 0,00</strong>
-          </div>
-          <span class="badge">0</span>
-        </div>
+<div class="action-item cart" (click)="abrirCarrinho()">
+  <i data-lucide="shopping-cart"></i>
+
+  <div class="action-text">
+    <small>Cesta</small>
+    <strong>
+      {{ cartService.totalValor() | currency:'BRL' }}
+    </strong>
+  </div>
+
+  @if (cartService.totalItens() > 0) {
+    <span class="badge">
+      {{ cartService.totalItens() }}
+    </span>
+  }
+</div>
+
 
       </div>
     </div>
@@ -109,6 +118,10 @@
     </div>
   </div>
 </nav>
+
+@if (showCart) {
+  <app-cart (close)="showCart = false"></app-cart>
+}
 
 <!-- MENU MOBILE -->
 @if (showMenu) {

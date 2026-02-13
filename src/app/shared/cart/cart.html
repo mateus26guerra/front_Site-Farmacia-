@@ -1,0 +1,45 @@
+<div class="cart-backdrop" (click)="fechar()">
+  <div class="cart-drawer" (click)="$event.stopPropagation()">
+
+    <header>
+      <h3>Cesta</h3>
+      <button (click)="fechar()">×</button>
+    </header>
+
+    <div class="cart-items">
+      @for (item of cartService.cart$ | async; track item.product.id) {
+   <div class="cart-item">
+  <img [src]="item.product.imagemUrl">
+
+  <div class="info">
+    <strong>{{ item.product.name }}</strong>
+
+    <div class="quantity">
+      <button (click)="diminuir(item.product.id)">−</button>
+      <span>{{ item.quantidade }}</span>
+      <button (click)="aumentar(item.product.id)">+</button>
+    </div>
+  </div>
+
+  <div class="price">
+    {{ item.product.preco.valorFinal * item.quantidade | currency:'BRL' }}
+  </div>
+
+  <button class="remove" (click)="remover(item.product.id)">🗑</button>
+</div>
+
+      }
+    </div>
+
+    <footer>
+      <strong>
+        <span>Subtotal</span>
+        <span>{{ cartService.totalValor() | currency:'BRL' }}</span>
+      </strong>
+
+      <button class="finish">Ir para cesta</button>
+      <button class="continue" (click)="fechar()">Continuar comprando</button>
+    </footer>
+
+  </div>
+</div>

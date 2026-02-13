@@ -6,17 +6,21 @@ import { map } from 'rxjs/operators';
 export interface Product {
   id: number;
   name: string;
+  variacao: string; // 👈 ESSENCIAL
   imagemUrl: string;
+
   categoria?: {
     id: number;
     nome_categoria: string;
   };
+
   preco: {
     valor: number;
     desconto: number;
     valorFinal: number;
   };
 }
+
 
 export interface ProdutoAddDTO {
   name: string;
@@ -26,6 +30,11 @@ export interface ProdutoAddDTO {
   imagemUrl: string;
   categoriaId: number;
   quantidadeEmEstoque: number;
+}
+
+export interface ProdutoVitrine {
+  name: string;
+  variacoes: Product[];
 }
 
 
@@ -79,5 +88,24 @@ addProduct(product: ProdutoAddDTO) {
     `${this.API_PRIVADA}/add_products`,product);
 }
 
+groupByName(produtos: Product[]): ProdutoVitrine[] {
+  const map = new Map<string, Product[]>();
+
+  produtos.forEach(p => {
+    if (!map.has(p.name)) {
+      map.set(p.name, []);
+    }
+    map.get(p.name)!.push(p);
+  });
+
+  return Array.from(map.entries()).map(([name, variacoes]) => ({
+    name,
+    variacoes
+  }));
+}
+
+vitrine$ = this.products$.pipe(
+  map(produtos => this.groupByName(produtos))
+);
 
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService } from '../../service/product.service';
+import { ProductService, ProdutoVitrine, Product } from '../../service/product.service';
 import { AuthService } from '../../service/auth.service';
 import { Observable } from 'rxjs';
-import { Product } from '../../service/product.service';
+import { CartService } from '../../service/cart.service';
 
 @Component({
   selector: 'app-lista-de-produto',
@@ -14,41 +14,41 @@ import { Product } from '../../service/product.service';
 })
 export class ListaDeProduto implements OnInit {
 
-  products$!: Observable<Product[]>;
+  vitrine$!: Observable<ProdutoVitrine[]>;
+  variacaoSelecionada = new Map<string, number>();
+
   @ViewChild('carouselContainer') carouselContainer!: ElementRef;
 
   constructor(
     private productService: ProductService,
+    private cartService: CartService,
     public authService: AuthService
   ) {
-    this.products$ = this.productService.products$;
+    this.vitrine$ = this.productService.vitrine$;
   }
 
   ngOnInit() {
-    if (this.authService.isAuthenticated() && this.authService.isAdmin()) {
-      this.productService.loadPrivateProducts();
-    } else {
-      this.productService.loadPublicProducts();
-    }
+    this.productService.loadPublicProducts();
   }
 
-  // ⬅️ SCROLL ANTERIOR
   scrollLeft() {
-    if (this.carouselContainer) {
-      this.carouselContainer.nativeElement.scrollBy({ left: -280, behavior: 'smooth' });
-    }
+    this.carouselContainer?.nativeElement.scrollBy({ left: -280, behavior: 'smooth' });
   }
 
-  // ➡️ SCROLL PRÓXIMO
   scrollRight() {
-    if (this.carouselContainer) {
-      this.carouselContainer.nativeElement.scrollBy({ left: 280, behavior: 'smooth' });
-    }
+    this.carouselContainer?.nativeElement.scrollBy({ left: 280, behavior: 'smooth' });
   }
 
-  delete(id: number) {
-    if (confirm('Tem certeza que deseja deletar este produto?')) {
-      this.productService.deleteProduct(id);
-    }
+  adicionar(product: Product) {
+    this.cartService.add(product);
+  }
+
+  selecionarVariacao(produto: ProdutoVitrine, variacaoId: number) {
+    this.variacaoSelecionada.set(produto.name, variacaoId);
+  }
+
+  getVariacao(produto: ProdutoVitrine): Product {
+    const id = this.variacaoSelecionada.get(produto.name);
+    return produto.variacoes.find(v => v.id === id) ?? produto.variacoes[0];
   }
 }

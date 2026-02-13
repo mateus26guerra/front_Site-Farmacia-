@@ -1,12 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 :host {
   display: block;
   padding: 30px;
-  background: linear-gradient(135deg, #f4f6f8, #f4f6f8);
+  background: #f4f6f8;
   min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Título */
+/* ───────── TÍTULO ───────── */
 .section-title {
   font-size: 22px;
   font-weight: 600;
@@ -14,179 +16,185 @@
   color: #1a1a1a;
 }
 
-/* Wrapper Carrossel */
+/* ───────── CARROSSEL ───────── */
 .carousel-wrapper {
   display: flex;
   align-items: center;
   gap: 12px;
-  position: relative;
 }
 
-/* Botões Navegação */
-.carousel-btn {
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-}
-
-.carousel-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.5);
-}
-
-.carousel-btn:active {
-  transform: scale(0.95);
-}
-
-/* Carrossel Container */
 .carousel {
   flex: 1;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding-bottom: 8px;
+
+  /* Snap suave no mobile */
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  /* Padding lateral para o primeiro/último card não ficarem colados nas bordas */
+  padding: 8px 4px 16px;
 }
 
-/* Remove scrollbar da barra feia */
 .carousel::-webkit-scrollbar {
   display: none;
 }
 
-.carousel {
-  -ms-overflow-style: none;  /* IE 10+ */
-  scrollbar-width: none;  /* Firefox */
-}
-
 .products {
   display: flex;
-  gap: 20px;
-  padding: 8px 0;
+  gap: 16px;
+
+  /* Garante que a lista não encolha além do necessário */
+  width: max-content;
 }
 
-/* Card */
-.product-card {
-  min-width: 220px;
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 14px;
-  position: relative;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-}
-
-.product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-}
-
-/* Desconto */
-.discount-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: linear-gradient(135deg, #2e9e5b, #27ae60);
-  color: white;
-  padding: 4px 10px;
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 20px;
-  z-index: 2;
-}
-
-/* Botão + */
-.add-btn {
-  position: absolute;
-  right: 12px;
-  bottom: 110px;
-  width: 40px;
-  height: 40px;
+/* ───────── BOTÕES SETA ───────── */
+.carousel-btn {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;          /* ← impede que os botões encolham */
   border-radius: 50%;
-  background: linear-gradient(135deg, #f43f5e, #e11d1d);
-  color: white;
+  background: #ffffff;
+  color: #dc2626;
   border: none;
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
-  transition: all 0.3s ease;
-  z-index: 1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transition: 0.2s;
 }
 
-.add-btn:hover {
+.carousel-btn:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(244, 63, 94, 0.5);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
 }
 
-.add-btn:active {
-  transform: scale(0.95);
+/* ───────── CARD ───────── */
+.product-card {
+  /* Largura fluida: 80vw em telas pequenas, máx 230px em telas grandes */
+  width: clamp(200px, 72vw, 230px);
+  height: 360px;
+
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 14px;
+  position: relative;
+  flex-shrink: 0;
+  border: 1.5px solid #e5e7eb;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* Snap: cada card "encaixa" ao parar o scroll */
+  scroll-snap-align: start;
+
+  transition: 0.3s;
 }
 
-/* Imagem */
+.product-card:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  border-color: #dc2626;
+}
+
+/* ───────── DESCONTO ───────── */
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #16a34a;
+  color: white;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 20px;
+}
+
+/* ───────── BOTÃO + ───────── */
+.add-btn {
+  position: absolute;
+  right: 12px;
+  top: 120px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #dc2626;
+  color: white;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.35);
+}
+
+/* ───────── IMAGEM ───────── */
 .product-card img {
   width: 100%;
   height: 140px;
   object-fit: contain;
-  margin: 16px 0 8px;
-  border-radius: 8px;
+  margin-top: 30px;
 }
 
-/* Info */
-.info h3 {
+/* ───────── INFO ───────── */
+.info {
+  text-align: center;
+}
+
+.product-name {
   font-size: 14px;
   font-weight: 600;
   color: #1a1a1a;
-  margin-bottom: 4px;
-  line-height: 1.3;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .old-price {
-  text-decoration: line-through;
-  color: #999;
   font-size: 12px;
-  margin-bottom: 2px;
+  color: #9ca3af;
+  text-decoration: line-through;
 }
 
 .price {
   font-size: 18px;
   font-weight: 700;
-  color: #2e9e5b;
-  margin: 4px 0;
+  color: #16a34a;
 }
 
-/* Admin - Delete Button */
-.delete-btn {
+/* ───────── VARIAÇÕES ───────── */
+.variacoes {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
   margin-top: 10px;
-  width: 100%;
-  padding: 8px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #ff4d4f, #ff7875);
-  color: white;
-  border: none;
-  font-size: 12px;
+}
+
+.variacao-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid #d1d5db;
+  background: #ffffff;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.2s;
 }
 
-.delete-btn:hover {
-  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.3);
-  transform: translateY(-2px);
+.variacao-btn:hover {
+  border-color: #dc2626;
+  color: #dc2626;
 }
 
-/* Responsivo */
-@media (max-width: 768px) {
+.variacao-btn.active {
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+}
+
+/* ───────── RESPONSIVO MOBILE ───────── */
+@media (max-width: 600px) {
   :host {
-    padding: 20px;
+    padding: 20px 12px;
   }
 
   .section-title {
@@ -194,67 +202,24 @@
     margin-bottom: 16px;
   }
 
+  /* Esconde os botões de seta no mobile (swipe nativo é suficiente) */
+  .carousel-btn {
+    display: none;
+  }
+
+  /* Sem gap lateral nos botões, o carrossel ocupa a largura toda */
   .carousel-wrapper {
-    gap: 8px;
+    gap: 0;
   }
 
-  .carousel-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
-  }
-
-  .product-card {
-    min-width: 180px;
-    padding: 12px;
-  }
-
-  .product-card img {
-    height: 120px;
-  }
-
-  .info h3 {
-    font-size: 13px;
-  }
-
-  .price {
-    font-size: 16px;
-  }
-
-  .add-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-    bottom: 100px;
-  }
-}
-
-@media (max-width: 480px) {
-  :host {
-    padding: 16px;
-  }
-
-  .carousel-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 14px;
+  /* Padding lateral para o primeiro card aparecer levemente recortado
+     dando dica visual de que há mais itens */
+  .carousel {
+    padding: 8px 0 16px 4px;
   }
 
   .product-card {
-    min-width: 160px;
-    padding: 10px;
-  }
-
-  .product-card img {
-    height: 100px;
-    margin: 12px 0 6px;
-  }
-
-  .info h3 {
-    font-size: 12px;
-  }
-
-  .price {
-    font-size: 14px;
+    /* No mobile mostra ~1 card e uma frestinha do próximo */
+    width: clamp(220px, 80vw, 260px);
   }
 }

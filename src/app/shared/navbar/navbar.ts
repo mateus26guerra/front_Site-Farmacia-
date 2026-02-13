@@ -3,13 +3,15 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../service/auth.service';
 import { ProductService } from '../../service/product.service';
+import { Cart } from '../cart/cart';
+import { CartService } from '../../service/cart.service';
 
 declare const lucide: any;
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, Cart],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
@@ -20,10 +22,12 @@ export class Navbar implements OnInit, AfterViewChecked {
   showMenu = false;
   activeCategory = '';
 
-  constructor(
-    public authService: AuthService,
-    private productService: ProductService
-  ) {}
+ constructor(
+  public authService: AuthService,
+  private productService: ProductService,
+  public cartService: CartService
+) {}
+
 
   onSearch(value: string) {
     this.productService.setSearch(value);
@@ -71,4 +75,10 @@ export class Navbar implements OnInit, AfterViewChecked {
       location.href = '/';
     }, 250);
   }
+  showCart = false;
+
+abrirCarrinho() {
+  this.showCart = true;
+}
+
 }
