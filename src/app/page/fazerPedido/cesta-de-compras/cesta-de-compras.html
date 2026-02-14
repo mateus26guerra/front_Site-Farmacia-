@@ -1,0 +1,129 @@
+<app-navbar></app-navbar>
+
+<div class="conteudo-principal">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a routerLink="/">Página inicial</a>
+    <span class="separator">></span>
+    <span class="current">Cesta de compras</span>
+  </div>
+
+  <div class="pagina-cesta">
+
+    <!-- LISTA DE PRODUTOS -->
+    <div class="lista-produtos">
+      <h1>Cesta de compras</h1>
+
+      @if ((cartService.cart$ | async)?.length === 0) {
+
+        <div class="lista-vazia">
+          <div class="icone-carrinho">🛒</div>
+          <h2>Seu carrinho está vazio</h2>
+          <p>Adicione produtos para continuar.</p>
+        </div>
+
+      } @else {
+
+        @for (item of cartService.cart$ | async; track item.product.id) {
+
+          <div class="produto">
+
+            <img [src]="item.product.imagemUrl" width="80">
+
+            <!-- INFO PRODUTO -->
+            <div class="info-produto">
+              <h3>{{ item.product.name }}</h3>
+              <p>{{ item.product.variacao }}</p>
+
+              @if (item.product.preco.desconto > 0) {
+
+                <span class="preco-antigo">
+                  {{ item.product.preco.valor | currency:'BRL' }}
+                </span>
+
+                <span class="badge-desconto">
+                  {{ item.product.preco.desconto }}% OFF
+                </span>
+
+              }
+
+              <span class="preco">
+                {{ item.product.preco.valorFinal | currency:'BRL' }}
+              </span>
+            </div>
+
+            <!-- CONTROLE -->
+            <div class="controle">
+              <button (click)="diminuir(item.product.id)">−</button>
+              <span>{{ item.quantidade }}</span>
+              <button (click)="aumentar(item.product.id)">+</button>
+            </div>
+
+            <!-- REMOVER -->
+            <button class="btn-remover"
+                    (click)="remover(item.product.id)">
+              🗑
+            </button>
+
+            <!-- SUBTOTAL -->
+            <div class="subtotal">
+              {{
+                item.product.preco.valorFinal * item.quantidade
+                | currency:'BRL'
+              }}
+            </div>
+
+          </div>
+
+        }
+
+      }
+
+    </div>
+
+    <!-- RESUMO SIMPLES (COMO VOCÊ GOSTOU) --><div class="resumo">
+  <h2>Resumo do pedido</h2>
+
+  @if ((cartService.cart$ | async)?.length === 0) {
+
+    <div class="carrinho-vazio">
+      <div class="icone-carrinho">🛒</div>
+      <p>Seu carrinho está vazio</p>
+
+      <button class="btn-add" (click)="irParaHome()">
+        Adicionar itens
+      </button>
+    </div>
+
+  } @else {
+
+    <div class="linha">
+      <span>Subtotal</span>
+      <span>{{ cartService.totalOriginal() | currency:'BRL' }}</span>
+    </div>
+
+    <div class="linha desconto">
+      <span>Desconto</span>
+      <span>
+        - {{ cartService.totalDesconto() | currency:'BRL' }}
+      </span>
+    </div>
+
+    <div class="linha total">
+      <span>Total</span>
+      <span>
+        {{ cartService.totalComDesconto() | currency:'BRL' }}
+      </span>
+    </div>
+
+    <button class="btn-prosseguir"(click)="irParaTelaDados()">
+      Prosseguir
+    </button>
+
+  }
+</div>
+
+
+  </div>
+</div>

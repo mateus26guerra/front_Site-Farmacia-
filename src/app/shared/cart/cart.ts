@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../service/cart.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -13,7 +14,7 @@ export class Cart {
 
   @Output() close = new EventEmitter<void>();
 
-  constructor(public cartService: CartService) {}
+  constructor(public cartService: CartService,private router: Router) {}
 
   fechar() {
     this.close.emit();
@@ -24,11 +25,14 @@ export class Cart {
   }
 
   aumentar(id: number) {
-  this.cartService.aumentar(id);
-}
+    this.cartService.aumentar(id);
+  }
 
-diminuir(id: number) {
-  this.cartService.diminuir(id);
+  diminuir(id: number) {
+    this.cartService.diminuir(id);
+  }
+  
+irParaLogin() {
+  this.router.navigate(['/cestar']);
 }
-
 }

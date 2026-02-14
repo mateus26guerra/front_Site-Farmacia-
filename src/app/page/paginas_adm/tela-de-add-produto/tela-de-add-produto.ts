@@ -5,8 +5,8 @@ import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 import { forkJoin } from 'rxjs';
 
-import { ProductService } from '../../service/product.service';
-import { NavbarAdministradorComponent } from "../../shared/navbar-administrador/navbar-administrador";
+import { ProductService } from '../../../service/product.service';
+import { NavbarAdministradorComponent } from "../../../shared/navbar-administrador/navbar-administrador";
 
 @Component({
   encapsulation: ViewEncapsulation.None,

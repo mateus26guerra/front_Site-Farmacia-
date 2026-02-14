@@ -1,9 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { User, UserAdminService } from '../../service/UserAdmin.service';
-import { AddUsuario } from "../../shared/add-usuario/add-usuario";
-import { SidebarComponent } from "../../shared/sidebar/sidebar.component";
+import { User } from '../../../service/UserAdmin.service';
+import { AddUsuario } from '../../../shared/add-usuario/add-usuario';
+import { SidebarComponent } from '../../../shared/sidebar/sidebar.component';
+import { UserAdminService } from '../../../service/UserAdmin.service';
 
 @Component({
   selector: 'app-admin-users',

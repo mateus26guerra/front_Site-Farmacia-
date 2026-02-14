@@ -5,6 +5,9 @@ import { Product } from './product.service';
 export interface CartItem {
   product: Product;
   quantidade: number;
+
+  animar?: boolean;
+  removendo?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -71,4 +74,28 @@ diminuir(productId: number) {
   }
 }
 
+// Soma preço ORIGINAL
+totalOriginal(): number {
+  return this.cartSubject.value.reduce((total, item) => {
+    return total + (item.product.preco.valor * item.quantidade);
+  }, 0);
+}
+
+// Soma desconto em dinheiro
+totalDesconto(): number {
+  return this.cartSubject.value.reduce((total, item) => {
+    const descontoUnitario =
+      item.product.preco.valor *
+      (item.product.preco.desconto / 100);
+
+    return total + (descontoUnitario * item.quantidade);
+  }, 0);
+}
+
+// Total final
+totalComDesconto(): number {
+  return this.totalOriginal() - this.totalDesconto();
+}
+
+  
 }

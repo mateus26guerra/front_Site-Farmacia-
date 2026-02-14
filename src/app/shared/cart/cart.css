@@ -201,3 +201,28 @@
 .remove:hover {
   color: #e11d48;
 }
+/* VARIAÇÃO */
+.variacao {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ANIMAÇÃO DA QUANTIDADE */
+.qty {
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+.qty.bump {
+  transform: scale(1.25);
+}
+
+/* BOTÕES + - COM FEEDBACK */
+.quantity button {
+  transition: transform 0.1s ease, background 0.1s ease;
+}
+
+.quantity button:active {
+  transform: scale(0.9);
+  background: #e5e7eb;
+}

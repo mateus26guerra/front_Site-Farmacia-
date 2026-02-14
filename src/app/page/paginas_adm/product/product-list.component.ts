@@ -5,10 +5,10 @@ import { RouterModule } from '@angular/router';
 
 import Swal from 'sweetalert2';
 
-import { ProductService } from '../../service/product.service';
-import { ListaDeProduto } from '../../shared/lista-de-produto/lista-de-produto';
-import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
-import { NavbarAdministradorComponent } from '../../shared/navbar-administrador/navbar-administrador';
+import { ProductService } from '../../../service/product.service';
+import { ListaDeProduto } from '../../../shared/lista-de-produto/lista-de-produto';
+import { SidebarComponent } from '../../../shared/sidebar/sidebar.component';
+import { NavbarAdministradorComponent } from '../../../shared/navbar-administrador/navbar-administrador';
 
 import {
   LucideAngularModule,

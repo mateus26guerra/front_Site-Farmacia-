@@ -12,11 +12,16 @@
   <img [src]="item.product.imagemUrl">
 
   <div class="info">
-    <strong>{{ item.product.name }}</strong>
+<strong>{{ item.product.name }}</strong>
+<small class="variacao">
+  {{ item.product.variacao }}
+</small>
 
     <div class="quantity">
       <button (click)="diminuir(item.product.id)">−</button>
-      <span>{{ item.quantidade }}</span>
+<span class="qty" [class.bump]="item.animar">
+  {{ item.quantidade }}
+</span>
       <button (click)="aumentar(item.product.id)">+</button>
     </div>
   </div>
@@ -37,7 +42,7 @@
         <span>{{ cartService.totalValor() | currency:'BRL' }}</span>
       </strong>
 
-      <button class="finish">Ir para cesta</button>
+      <button class="finish" (click)="irParaLogin()">Ir para cesta</button>
       <button class="continue" (click)="fechar()">Continuar comprando</button>
     </footer>
 

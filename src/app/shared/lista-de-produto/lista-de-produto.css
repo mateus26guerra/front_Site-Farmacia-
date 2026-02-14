@@ -93,6 +93,7 @@
 }
 
 .product-card:hover {
+  transform: translateY(-6px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
   border-color: #dc2626;
 }
@@ -161,23 +162,63 @@
   color: #16a34a;
 }
 
-/* ───────── VARIAÇÕES ───────── */
-.variacoes {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
+/* ───────── VARIAÇÕES (wrapper com fade) ───────── */
+.variacoes-wrapper {
+  position: relative;
   margin-top: 10px;
 }
 
+/* Fade na borda direita: dica visual de que tem mais botões */
+.variacoes-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 28px;
+  height: 100%;
+  background: linear-gradient(to right, transparent, #ffffff);
+  pointer-events: none;
+  border-radius: 0 0 12px 0;
+}
+
+/* ───────── VARIAÇÕES ───────── */
+.variacoes {
+  display: flex;
+  gap: 6px;
+
+  /* Scroll horizontal quando tiver muitas variações */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  /* Sem scroll visível */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  /* Padding sutil para o foco/hover não ser cortado */
+  padding: 2px 1px 4px;
+}
+
+.variacoes::-webkit-scrollbar {
+  display: none;
+}
+
 .variacao-btn {
-  padding: 6px 14px;
+  /* Não encolhe — mantém tamanho mínimo legível */
+  flex-shrink: 0;
+
+  padding: 5px 10px;
   border-radius: 20px;
   border: 1.5px solid #d1d5db;
   background: #ffffff;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
+  scroll-snap-align: start;
+
+  /* Evita quebra de texto dentro do botão */
+  white-space: nowrap;
 }
 
 .variacao-btn:hover {
