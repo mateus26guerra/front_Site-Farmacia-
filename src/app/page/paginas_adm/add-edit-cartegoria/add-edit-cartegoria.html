@@ -1,0 +1,45 @@
+<app-navbar-administrador></app-navbar-administrador>
+
+<div class="container">
+
+  <h2>Gerenciar Categorias</h2>
+
+  <!-- FORM -->
+  <div class="form-box">
+    <input
+      type="text"
+      placeholder="Nome da categoria"
+      [(ngModel)]="nomeCategoria">
+
+    <button (click)="salvar()">
+      {{ editandoId ? 'Atualizar' : 'Criar' }}
+    </button>
+
+    <button *ngIf="editandoId" class="cancelar" (click)="resetForm()">
+      Cancelar
+    </button>
+  </div>
+
+  <!-- LISTA -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let cat of categorias">
+        <td>{{ cat.id }}</td>
+        <td>{{ cat.nomeCategoria }}</td>
+        <td>
+          <button class="edit" (click)="editar(cat)">Editar</button>
+          <button class="delete" (click)="deletar(cat.id)">Deletar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

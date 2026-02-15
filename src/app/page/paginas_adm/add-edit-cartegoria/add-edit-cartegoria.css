@@ -1,0 +1,59 @@
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.form-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #2563eb;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.cancelar {
+  background: #6b7280;
+}
+
+.edit {
+  background: #16a34a;
+  margin-right: 6px;
+}
+
+.delete {
+  background: #dc2626;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}

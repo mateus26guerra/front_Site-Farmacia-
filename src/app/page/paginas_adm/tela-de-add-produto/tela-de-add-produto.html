@@ -62,18 +62,44 @@
             min="0">
           <span class="helper-text">Quantidade disponível.</span>
         </div>
+<!-- Substitui o <select> de categoria no form-grid -->
 
-        <div class="form-group">
-          <label for="categoriaId">Categoria ID</label>
-          <input
-            id="categoriaId"
-            type="number"
-            placeholder="Ex: 3"
-            [(ngModel)]="categoriaId"
-            name="categoriaId"
-            min="1">
-          <span class="helper-text">ID da categoria no sistema.</span>
-        </div>
+<div class="form-group">
+  <label>Categoria</label>
+
+  <div class="custom-select" [class.open]="dropdownAberto" (clickOutside)="fecharDropdown()">
+
+    <!-- Trigger -->
+    <button
+      type="button"
+      class="custom-select__trigger"
+      (click)="toggleDropdown()">
+      <span [class.placeholder]="!categoriaSelecionada">
+        {{ categoriaSelecionada || 'Selecione uma categoria' }}
+      </span>
+      <svg class="custom-select__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </button>
+
+    <!-- Lista de opções -->
+    <ul class="custom-select__list">
+      <li
+        *ngFor="let cat of categorias"
+        class="custom-select__item"
+        [class.selected]="cat === categoriaSelecionada"
+        (click)="selecionarCategoria(cat)">
+        {{ cat }}
+        <svg *ngIf="cat === categoriaSelecionada" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </li>
+    </ul>
+
+  </div>
+
+  <span class="helper-text">Escolha a categoria do produto.</span>
+</div>
 
         <div class="form-group full">
           <label for="imagemUrl">Imagem (URL)</label>

@@ -1,12 +1,12 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, HostListener, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 import { forkJoin } from 'rxjs';
 
 import { ProductService } from '../../../service/product.service';
-import { NavbarAdministradorComponent } from "../../../shared/navbar-administrador/navbar-administrador";
+import { NavbarAdministradorComponent } from '../../../shared/navbar-administrador/navbar-administrador';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -14,42 +14,103 @@ import { NavbarAdministradorComponent } from "../../../shared/navbar-administrad
   standalone: true,
   imports: [
     FormsModule,
-    NgFor,
+    CommonModule,
     NavbarAdministradorComponent,
     RouterModule
   ],
   templateUrl: './tela-de-add-produto.html',
   styleUrl: './tela-de-add-produto.css',
 })
-export class TelaDeAddProduto {
+export class TelaDeAddProduto implements OnInit {
 
   name!: string;
   valor!: number;
-  desconto!: number;
+  desconto: number = 0;
   imagemUrl!: string;
-  categoriaId!: number;
+  categorias: string[] = [];
+  categoriaSelecionada: string = '';
   quantidadeEmEstoque!: number;
-
   variacoes: string[] = [''];
+
+  // ── Dropdown state ──────────────────────────────────
+  dropdownAberto = false;
 
   constructor(
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private elementRef: ElementRef   // para detectar click fora
   ) {}
 
-  // 🔎 Validação
-  private validarCampos(): boolean {
+  ngOnInit() {
+    this.productService.getCategorias().subscribe({
+      next: cats => this.categorias = cats,
+      error: () => {
+        Swal.fire({
+          title: 'Erro ao carregar categorias',
+          text: 'Verifique se a API está rodando.',
+          icon: 'error',
+          confirmButtonColor: '#dc2626'
+        });
+      }
+    });
+  }
 
+  // ── Dropdown methods ────────────────────────────────
+
+  toggleDropdown() {
+    this.dropdownAberto = !this.dropdownAberto;
+  }
+
+  fecharDropdown() {
+    this.dropdownAberto = false;
+  }
+
+  selecionarCategoria(cat: string) {
+    this.categoriaSelecionada = cat;
+    this.dropdownAberto = false;
+  }
+
+  // Fecha ao clicar fora do componente
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.dropdownAberto = false;
+    }
+  }
+
+  // Fecha com ESC
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.dropdownAberto = false;
+  }
+
+  // ── Form ────────────────────────────────────────────
+
+  trackByIndex(index: number): number {
+    return index;
+  }
+
+  adicionarVariacao() {
+    this.variacoes.push('');
+  }
+
+  removerVariacao(index: number) {
+    if (this.variacoes.length > 1) {
+      this.variacoes.splice(index, 1);
+    }
+  }
+
+  private validarCampos(): boolean {
     if (
-      !this.name ||
+      !this.name?.trim() ||
       !this.valor ||
       this.valor <= 0 ||
-      this.categoriaId == null ||
+      !this.categoriaSelecionada ||
       this.quantidadeEmEstoque == null
     ) {
       Swal.fire({
         title: 'Campos obrigatórios!',
-        text: 'Preencha todos os campos obrigatórios antes de salvar.',
+        text: 'Preencha todos os campos obrigatórios.',
         icon: 'warning',
         confirmButtonColor: '#2563eb'
       });
@@ -57,7 +118,6 @@ export class TelaDeAddProduto {
     }
 
     const variacaoVazia = this.variacoes.some(v => !v || v.trim() === '');
-
     if (variacaoVazia) {
       Swal.fire({
         title: 'Variação inválida!',
@@ -71,40 +131,20 @@ export class TelaDeAddProduto {
     return true;
   }
 
-  // 🔁 TrackBy para não quebrar input
-  trackByIndex(index: number): number {
-    return index;
-  }
-
-  adicionarVariacao() {
-    this.variacoes.push('');
-  }
-
-  removerVariacao(index: number) {
-    this.variacoes.splice(index, 1);
-  }
-
-  // 💾 Salvar produto
   salvar() {
+    if (!this.validarCampos()) return;
 
-    if (!this.validarCampos()) {
-      return;
-    }
-
-    const requests = this.variacoes.map(variacao => {
-
-      const produto = {
-        name: this.name,
+    const requests = this.variacoes.map(variacao =>
+      this.productService.addProduct({
+        name: this.name.trim(),
         valor: this.valor,
-        desconto: this.desconto,
-        variacao: variacao,
-        imagemUrl: this.imagemUrl,
-        categoriaId: this.categoriaId,
+        desconto: this.desconto ?? 0,
+        variacao: variacao.trim(),
+        imagemUrl: this.imagemUrl?.trim() ?? '',
+        categoriaNome: this.categoriaSelecionada,
         quantidadeEmEstoque: this.quantidadeEmEstoque
-      };
-
-      return this.productService.addProduct(produto);
-    });
+      })
+    );
 
     forkJoin(requests).subscribe({
       next: () => {
@@ -113,14 +153,12 @@ export class TelaDeAddProduto {
           text: 'Os produtos foram cadastrados com sucesso.',
           icon: 'success',
           confirmButtonColor: '#2563eb'
-        }).then(() => {
-          this.router.navigate(['/products']);
-        });
+        }).then(() => this.router.navigate(['/products']));
       },
       error: () => {
         Swal.fire({
           title: 'Erro!',
-          text: 'Algo deu errado ao salvar.',
+          text: 'Erro ao salvar produto.',
           icon: 'error',
           confirmButtonColor: '#dc2626'
         });

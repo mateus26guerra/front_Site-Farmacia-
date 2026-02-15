@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 export interface Product {
   id: number;
   name: string;
-  variacao: string; // 👈 ESSENCIAL
+  variacao: string;
   imagemUrl: string;
 
   categoria?: {
@@ -21,14 +21,13 @@ export interface Product {
   };
 }
 
-
 export interface ProdutoAddDTO {
   name: string;
   valor: number;
   desconto: number;
   variacao: string;
   imagemUrl: string;
-  categoriaId: number;
+  categoriaNome: string;
   quantidadeEmEstoque: number;
 }
 
@@ -37,7 +36,6 @@ export interface ProdutoVitrine {
   variacoes: Product[];
 }
 
-
 @Injectable({ providedIn: 'root' })
 export class ProductService {
 
@@ -45,9 +43,8 @@ export class ProductService {
   private API_PUBLICA = 'http://localhost:8080/productsPublico';
 
   private productsSubject = new BehaviorSubject<Product[]>([]);
-  private searchSubject = new BehaviorSubject<string>('');
+  private searchSubject   = new BehaviorSubject<string>('');
 
-  // 🔥 PRODUTOS JÁ FILTRADOS
   products$ = combineLatest([
     this.productsSubject,
     this.searchSubject
@@ -57,6 +54,10 @@ export class ProductService {
         p.name.toLowerCase().includes(search.toLowerCase())
       )
     )
+  );
+
+  vitrine$ = this.products$.pipe(
+    map(produtos => this.groupByName(produtos))
   );
 
   constructor(private http: HttpClient) {}
@@ -82,30 +83,21 @@ export class ProductService {
       .subscribe(() => this.loadPrivateProducts());
   }
 
+  addProduct(product: ProdutoAddDTO) {
+    return this.http.post(`${this.API_PRIVADA}/add_products`, product);
+  }
 
-addProduct(product: ProdutoAddDTO) {
-  return this.http.post(
-    `${this.API_PRIVADA}/add_products`,product);
-}
+  groupByName(produtos: Product[]): ProdutoVitrine[] {
+    const map = new Map<string, Product[]>();
+    produtos.forEach(p => {
+      if (!map.has(p.name)) map.set(p.name, []);
+      map.get(p.name)!.push(p);
+    });
+    return Array.from(map.entries()).map(([name, variacoes]) => ({ name, variacoes }));
+  }
 
-groupByName(produtos: Product[]): ProdutoVitrine[] {
-  const map = new Map<string, Product[]>();
-
-  produtos.forEach(p => {
-    if (!map.has(p.name)) {
-      map.set(p.name, []);
-    }
-    map.get(p.name)!.push(p);
-  });
-
-  return Array.from(map.entries()).map(([name, variacoes]) => ({
-    name,
-    variacoes
-  }));
-}
-
-vitrine$ = this.products$.pipe(
-  map(produtos => this.groupByName(produtos))
-);
-
+  // ✅ FIX: API retorna string[] direto, sem objeto
+  getCategorias() {
+    return this.http.get<string[]>(`${this.API_PUBLICA}/categorias`);
+  }
 }

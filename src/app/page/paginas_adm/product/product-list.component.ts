@@ -34,6 +34,8 @@ import {
   templateUrl: './product-list.component.html',
   styleUrl: './product.css',
 })
+
+
 export class ProductListComponent {
 
   // 🔹 FORM PRODUTO
@@ -50,6 +52,8 @@ export class ProductListComponent {
 
   constructor(private productService: ProductService) {}
 
+
+  
   // 🔥 MODAL PRODUTO
   openProductModal() {
     this.showProductModal = true;
@@ -68,10 +72,10 @@ export class ProductListComponent {
     this.showCategoryModal = false;
   }
 
-
-
   // 🔍 PESQUISA
   onSearch(value: string) {
     this.productService.setSearch(value);
   }
+
+  
 }

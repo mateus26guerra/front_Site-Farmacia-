@@ -281,3 +281,143 @@ button.btn.danger-sm,
   .form-group input,
   .variacao-row input { font-size: 16px; }
 }
+
+select {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  background: #fafafa;
+}
+
+select:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}/* ── Custom Select ─────────────────────────────────────
+   Cola no final do tela-de-add-produto.css
+   ──────────────────────────────────────────────────── */
+
+.custom-select {
+  position: relative;
+  width: 100%;
+  user-select: none;
+}
+
+/* Trigger (substitui o <select>) */
+.custom-select__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  font-family: 'Poppins', sans-serif;
+  color: #374151;
+  background: #fafafa;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  text-align: left;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ✅ FIX: span interno não herda highlight/background do browser */
+.custom-select__trigger span {
+  flex: 1;
+  background: transparent !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-select__trigger:hover {
+  border-color: #a5b4fc;
+  background: #fff;
+}
+
+.custom-select.open .custom-select__trigger {
+  border-color: #4f46e5;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.custom-select__trigger .placeholder {
+  color: #9ca3af !important;
+  font-weight: 300;
+}
+
+/* Seta animada */
+.custom-select__arrow {
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s;
+}
+
+.custom-select.open .custom-select__arrow {
+  transform: rotate(180deg);
+  color: #4f46e5;
+}
+
+/* Lista */
+.custom-select__list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  list-style: none;
+  padding: 6px;
+  z-index: 200;
+
+  /* Animação de entrada */
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.custom-select.open .custom-select__list {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/* Item */
+.custom-select__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 7px;
+  font-size: 0.9rem;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.custom-select__item:hover {
+  background: #f0f0ff;
+  color: #4f46e5;
+}
+
+.custom-select__item.selected {
+  background: #eef2ff;
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.custom-select__item svg {
+  width: 15px;
+  height: 15px;
+  color: #4f46e5;
+  flex-shrink: 0;
+}

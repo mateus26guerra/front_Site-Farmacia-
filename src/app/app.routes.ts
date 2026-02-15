@@ -9,6 +9,7 @@ import { publicGuard } from './core/public.guard';
 import { TelaDeAddProduto } from './page/paginas_adm/tela-de-add-produto/tela-de-add-produto';
 import { CestaDeCompras } from './page/fazerPedido/cesta-de-compras/cesta-de-compras';
 import { DadoClientes } from './page/fazerPedido/dado-clientes/dado-clientes';
+import { AddEditCartegoria } from './page/paginas_adm/add-edit-cartegoria/add-edit-cartegoria';
 
 
 export const routes: Routes = [
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'products', component: ProductListComponent, canActivate: [authGuard] },
   { path: 'AddUsuario', component: AdminUsersComponent, canActivate: [adminGuard] },
   {path: 'addProduto', component: TelaDeAddProduto, canActivate: [adminGuard]},
+  {path: 'addCategoria', component: AddEditCartegoria, canActivate: [adminGuard]},
 
   { path: '**', redirectTo: '' }
 ];
