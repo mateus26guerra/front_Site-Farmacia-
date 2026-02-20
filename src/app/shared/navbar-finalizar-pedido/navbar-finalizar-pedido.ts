@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Cart } from '../cart/cart'; // 👈 IMPORTA O CART
@@ -19,7 +19,13 @@ export class NavbarFinalizarPedido {
     public cartService: CartService
   ) {}
 
-  showCart = false;
+
+  // 🔥 CONTROLE DINÂMICO
+  @Input() activeStep: number = 1;
+  @Input() showStepper: boolean = true;
+  @Input() showCart: boolean = true;
+
+  
   activeCategory = '';
   showMenu = false;
 

@@ -131,3 +131,42 @@ select:focus {
     transform: translateY(0);
   }
 }
+
+
+
+
+/* ===== Breadcrumb ===== */
+.breadcrumb {
+  padding: 12px 20px;
+  background: #f1f1f1;
+  font-size: 13px;
+  border-bottom: 1px solid #e0e0e0;
+  
+}
+
+.breadcrumb a {
+  color: #b5121b;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.separator {
+  margin: 0 6px;
+  color: #999;
+}
+
+.current {
+  font-weight: 600;
+  color: #333;
+}
+
+
+@media (max-width: 400px) {
+  .breadcrumb {
+    font-size: 12px;
+    padding: 10px 14px;
+  }
+}

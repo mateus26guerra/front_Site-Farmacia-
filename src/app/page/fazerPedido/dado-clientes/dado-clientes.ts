@@ -15,6 +15,8 @@ export class DadoClientes {
 
   modoPedido: string = '';      // '' | 'rapido'
   tipoEntrega: string = '';     // '' | 'endereco' | 'farmacia'
+  currentStep = 1;
+
 
   constructor(
     public cartService: CartService,
