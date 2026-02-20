@@ -10,6 +10,7 @@ import { TelaDeAddProduto } from './page/paginas_adm/tela-de-add-produto/tela-de
 import { CestaDeCompras } from './page/fazerPedido/cesta-de-compras/cesta-de-compras';
 import { DadoClientes } from './page/fazerPedido/dado-clientes/dado-clientes';
 import { AddEditCartegoria } from './page/paginas_adm/add-edit-cartegoria/add-edit-cartegoria';
+import { FinalizarPedido } from './page/fazerPedido/finalizar-pedido/finalizar-pedido';
 
 
 export const routes: Routes = [
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [publicGuard] },
   { path: 'cestar', component: CestaDeCompras, canActivate:[publicGuard]},
   { path: 'dados', component: DadoClientes, canActivate:[publicGuard]},
+  { path: 'finalizar-pedido', component: FinalizarPedido, canActivate:[publicGuard]},
 
   { path: 'products', component: ProductListComponent, canActivate: [authGuard] },
   { path: 'AddUsuario', component: AdminUsersComponent, canActivate: [adminGuard] },

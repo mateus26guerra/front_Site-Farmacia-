@@ -10,12 +10,12 @@ export interface User {
 @Injectable({ providedIn: 'root' })
 export class UserAdminService {
 
-  private API = 'http://localhost:8080/auth/admin';
+  private API = 'http://localhost:8080/register';
 
   constructor(private http: HttpClient) {}
 
   listarUsuarios() {
-    return this.http.get<User[]>(`${this.API}/users`);
+    return this.http.get<User[]>(`${this.API}`);
   }
 
   atualizarUsuario(

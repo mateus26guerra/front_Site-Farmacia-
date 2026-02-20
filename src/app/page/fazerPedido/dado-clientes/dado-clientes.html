@@ -1,1 +1,35 @@
 <app-navbar></app-navbar>
+
+<div class="page-wrapper">
+  <div class="card">
+    <h2 class="card-title">
+      Como deseja continuar?
+    </h2>
+
+    <p class="subtitle">
+      Escolha a melhor forma para finalizar sua compra.
+    </p>
+
+    <div class="cards-container">
+
+      <!-- CARD LOGIN -->
+      <div class="option-card login" (click)="irParaLogin()">
+        <h3>🔐 Fazer Login</h3>
+        <p>
+          Entre na plataforma e acompanhe seus pedidos
+          pelo seu painel.
+        </p>
+      </div>
+
+      <!-- CARD COMPRA RÁPIDA -->
+      <div class="option-card quick" (click)="compraRapida()">
+        <h3>🚀 Compra Rápida</h3>
+        <p>
+          Sem criar conta. Receba atualizações
+          do seu pedido pelo WhatsApp.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

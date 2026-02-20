@@ -1,0 +1,54 @@
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.card {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  width: 600px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.cards-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.option-card {
+  flex: 1;
+  padding: 25px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  text-align: left;
+}
+
+.option-card h3 {
+  margin-bottom: 10px;
+}
+
+.option-card p {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.option-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Card Login */
+.login {
+  background: #eff6ff;
+  border: 2px solid #2563eb;
+}
+
+/* Card Compra Rápida */
+.quick {
+  background: #f0fdf4;
+  border: 2px solid #16a34a;
+}

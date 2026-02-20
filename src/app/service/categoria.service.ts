@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+// ✅ campo corrigido para bater com o que o backend retorna
 export interface Categoria {
   id: number;
-  nomeCategoria: string;
+  nome_categoria: string;
 }
 
 @Injectable({
@@ -12,8 +13,7 @@ export interface Categoria {
 })
 export class CategoriaService {
 
-  private apiUrl = 'http://localhost:8080/productsPublico/categorias';
-
+  private apiUrl = 'http://localhost:8080/categorias';
 
   constructor(private http: HttpClient) {}
 

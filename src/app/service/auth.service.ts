@@ -46,7 +46,7 @@ isAdmin(): boolean {
 
 
   register(login: string, password: string, role: 'ADMIN' | 'USER') {
-  return this.http.post(`${this.API}/auth/register`, {
+  return this.http.post(`${this.API}/register`, {
     login,
     password,
     role
