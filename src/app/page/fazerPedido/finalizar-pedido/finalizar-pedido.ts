@@ -6,11 +6,12 @@ import { CartService } from '../../../service/cart.service';
 import { Router } from '@angular/router';
 import { Navbar } from "../../../shared/navbar/navbar";
 import Swal from 'sweetalert2';
+import { NavbarFinalizarPedido } from "../../../shared/navbar-finalizar-pedido/navbar-finalizar-pedido";
 
 @Component({
   selector: 'app-finalizar-pedido',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule, NavbarFinalizarPedido],
   templateUrl: './finalizar-pedido.html',
   styleUrl: './finalizar-pedido.css'
 })

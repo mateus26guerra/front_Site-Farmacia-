@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { CartService } from '../../../service/cart.service';
 import { Router } from '@angular/router';
+import { NavbarFinalizarPedido } from "../../../shared/navbar-finalizar-pedido/navbar-finalizar-pedido";
 
 @Component({
   selector: 'app-cesta-de-compras',
   standalone: true,
-  imports: [CommonModule, Navbar],
+  imports: [CommonModule, NavbarFinalizarPedido],
   templateUrl: './cesta-de-compras.html',
   styleUrl: './cesta-de-compras.css',
 })
