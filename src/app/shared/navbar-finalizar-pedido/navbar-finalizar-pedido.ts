@@ -1,14 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Cart } from '../cart/cart'; // 👈 IMPORTA O CART
+import { Cart } from '../cart/cart';
 import { CartService } from '../../service/cart.service';
 declare const lucide: any;
 
 @Component({
   selector: 'app-navbar-finalizar-pedido',
-  standalone: true, // 👈 IMPORTANTE
-  imports: [CommonModule, Cart], // 👈 ADICIONA AQUI
+  standalone: true,
+  imports: [CommonModule], 
   templateUrl: './navbar-finalizar-pedido.html',
   styleUrl: './navbar-finalizar-pedido.css',
 })
@@ -20,7 +20,6 @@ export class NavbarFinalizarPedido {
   ) {}
 
 
-  // 🔥 CONTROLE DINÂMICO
   @Input() activeStep: number = 1;
   @Input() showStepper: boolean = true;
   @Input() showCart: boolean = true;

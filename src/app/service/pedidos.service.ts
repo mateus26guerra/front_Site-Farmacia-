@@ -1,0 +1,46 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+export interface ItemPedido {
+
+  produtoId: number;
+  nomeProduto: string;
+  quantidade: number;
+
+}
+
+export interface Pedido {
+
+  id: number;
+  criado: string;
+
+  cliente: string;
+  telefone: string;
+
+  endereco: string;
+  bairro: string;
+  complemento: string;
+
+  formaDePagamento: string;
+
+  itens: ItemPedido[];
+
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PedidosService {
+
+  private api = 'http://localhost:8080/pedidos';
+
+  constructor(private http: HttpClient) {}
+
+  listar(): Observable<Pedido[]> {
+
+    return this.http.get<Pedido[]>(this.api);
+
+  }
+
+}

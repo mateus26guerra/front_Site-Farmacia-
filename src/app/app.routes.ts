@@ -11,7 +11,7 @@ import { CestaDeCompras } from './page/fazerPedido/cesta-de-compras/cesta-de-com
 import { DadoClientes } from './page/fazerPedido/dado-clientes/dado-clientes';
 import { AddEditCartegoria } from './page/paginas_adm/add-edit-cartegoria/add-edit-cartegoria';
 import { FinalizarPedido } from './page/fazerPedido/finalizar-pedido/finalizar-pedido';
-
+import { Pedidos } from './page/paginas_adm/pedidos/pedidos';
 
 export const routes: Routes = [
   { path: '', component: TelaInicial , canActivate: [publicGuard] },
@@ -20,6 +20,7 @@ export const routes: Routes = [
   { path: 'dados', component: DadoClientes, canActivate:[publicGuard]},
   { path: 'finalizar-pedido', component: FinalizarPedido, canActivate:[publicGuard]},
 
+  { path: 'pedido', component: Pedidos, canActivate: [authGuard] },
   { path: 'products', component: ProductListComponent, canActivate: [authGuard] },
   { path: 'AddUsuario', component: AdminUsersComponent, canActivate: [adminGuard] },
   {path: 'addProduto', component: TelaDeAddProduto, canActivate: [adminGuard]},

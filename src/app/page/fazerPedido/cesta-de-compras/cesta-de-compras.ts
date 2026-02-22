@@ -8,7 +8,7 @@ import { NavbarFinalizarPedido } from "../../../shared/navbar-finalizar-pedido/n
 @Component({
   selector: 'app-cesta-de-compras',
   standalone: true,
-  imports: [CommonModule, NavbarFinalizarPedido, Navbar],
+  imports: [CommonModule, NavbarFinalizarPedido],
   templateUrl: './cesta-de-compras.html',
   styleUrl: './cesta-de-compras.css',
 })
