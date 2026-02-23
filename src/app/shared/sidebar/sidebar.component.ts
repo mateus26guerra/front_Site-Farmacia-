@@ -12,7 +12,7 @@ import { AuthService } from '../../service/auth.service';
 })
 export class SidebarComponent {
 
-  isOpen = true;
+  isOpen = false;
 
   showLogoutModal = false;
   closing = false;

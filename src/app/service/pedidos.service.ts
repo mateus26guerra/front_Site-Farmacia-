@@ -45,4 +45,10 @@ export class PedidosService {
 
   }
 
+  
+ geraPdf(id: number) {
+  return this.http.get(`${this.api}/${id}/pdf`, {
+    responseType: 'blob'
+  });
+}
 }

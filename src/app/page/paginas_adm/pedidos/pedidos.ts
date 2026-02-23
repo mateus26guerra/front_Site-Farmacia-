@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PedidosService, Pedido } from '../../../service/pedidos.service';
@@ -6,7 +6,6 @@ import { SidebarComponent } from '../../../shared/sidebar/sidebar.component';
 import { NavbarAdministradorComponent } from '../../../shared/navbar-administrador/navbar-administrador';
 import { Router } from '@angular/router';
 
-// Extendemos a interface Pedido localmente para campos extras de UI
 interface PedidoUI extends Pedido {
   status: string;
   total: number;
@@ -29,7 +28,6 @@ export class Pedidos implements OnInit {
   busca = '';
   filtroAtivo = 'todos';
 
-  // Paginação
   paginaAtual = 1;
   itensPorPagina = 10;
   totalPaginas = 1;
@@ -50,12 +48,14 @@ export class Pedidos implements OnInit {
     return Math.min(this.paginaAtual * this.itensPorPagina, this.pedidosFiltrados.length);
   }
 
-  constructor(private service: PedidosService,
-  private router: Router) {}
+  constructor(
+    private service: PedidosService,
+    private router: Router,
+    private cdr: ChangeDetectorRef  // 👈 adicionado
+  ) {}
 
   ngOnInit() {
     this.service.listar().subscribe(res => {
-      // Mapeia e adiciona campos de UI (status e total podem vir do backend ou serem derivados)
       this.pedidos = res.map(p => ({
         ...p,
         status: (p as any).status ?? 'Pendente',
@@ -64,6 +64,7 @@ export class Pedidos implements OnInit {
       }));
       this.calcularContadores();
       this.aplicarFiltros();
+      this.cdr.detectChanges(); // 👈 adicionado
     });
   }
 
@@ -89,12 +90,10 @@ export class Pedidos implements OnInit {
   aplicarFiltros() {
     let lista = [...this.pedidos];
 
-    // Filtro por status (card)
     if (this.filtroAtivo !== 'todos') {
       lista = lista.filter(p => p.status === this.filtroAtivo);
     }
 
-    // Filtro por busca
     if (this.busca.trim()) {
       const termo = this.busca.toLowerCase();
       lista = lista.filter(p =>
@@ -136,13 +135,13 @@ export class Pedidos implements OnInit {
       for (let i = 1; i <= total; i++) paginas.push(i);
     } else {
       paginas.push(1);
-      if (atual > 3) paginas.push(-1); // ellipsis
+      if (atual > 3) paginas.push(-1);
 
       const inicio = Math.max(2, atual - 1);
       const fim = Math.min(total - 1, atual + 1);
       for (let i = inicio; i <= fim; i++) paginas.push(i);
 
-      if (atual < total - 2) paginas.push(-1); // ellipsis
+      if (atual < total - 2) paginas.push(-1);
       paginas.push(total);
     }
 
@@ -161,8 +160,6 @@ export class Pedidos implements OnInit {
   }
 
   atualizarStatus(pedido: PedidoUI) {
-    // Aqui você chama o service para salvar no backend:
-    // this.service.atualizarStatus(pedido.id, pedido.status).subscribe();
     this.calcularContadores();
     console.log(`Pedido #${pedido.id} atualizado para: ${pedido.status}`);
   }
@@ -173,13 +170,12 @@ export class Pedidos implements OnInit {
   }
 
   exportarRelatorio() {
-    // Implementar exportação CSV/PDF
     console.log('Exportando relatório...');
   }
 
- verDetalhes(pedido: PedidoUI) {
-  this.router.navigate(['/pedidos', pedido.id]);
-}
+  verDetalhes(pedido: PedidoUI) {
+    this.router.navigate(['/pedidos', pedido.id]);
+  }
 
   imprimir(pedido: PedidoUI) {
     window.print();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PedidosService, Pedido } from '../../../service/pedidos.service';
@@ -19,7 +19,8 @@ export class DetalhePedido implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private service: PedidosService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -27,8 +28,10 @@ export class DetalhePedido implements OnInit {
 
     this.service.listar().subscribe(lista => {
       const encontrado = lista.find(p => p.id === id);
+
       if (encontrado) {
         this.pedido = encontrado;
+        this.cdr.detectChanges();
       } else {
         this.router.navigate(['/pedidos']);
       }
@@ -36,7 +39,7 @@ export class DetalhePedido implements OnInit {
   }
 
   voltar() {
-    this.router.navigate(['/pedido']);
+    this.router.navigate(['/pedidos']);
   }
 
   falarWhatsApp() {
@@ -46,8 +49,23 @@ export class DetalhePedido implements OnInit {
   }
 
   calcularTotal(): number {
-  return this.pedido.itens.reduce((total, item) => {
-    return total + (item.preco * item.quantidade);
-  }, 0);
-}
+    return this.pedido.itens.reduce((total, item) => {
+      return total + (item.preco * item.quantidade);
+    }, 0);
+  }
+
+  gerarPDF() {
+    this.service.geraPdf(this.pedido.id).subscribe((blob: Blob) => {
+
+      const fileURL = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+
+      link.href = fileURL;
+      link.download = `pedido-${this.pedido.id}.pdf`;
+      link.click();
+
+      window.URL.revokeObjectURL(fileURL);
+    });
+  }
+
 }
