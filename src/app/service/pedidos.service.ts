@@ -3,11 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface ItemPedido {
-
   produtoId: number;
   nomeProduto: string;
+  variacao: string;
+  imagemUrl: string;
+  categoria: string;
+  preco: number; 
   quantidade: number;
-
 }
 
 export interface Pedido {

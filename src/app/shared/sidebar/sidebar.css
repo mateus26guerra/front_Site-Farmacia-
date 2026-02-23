@@ -2,7 +2,7 @@
 .sidebar {
   position: fixed;
   top: 64px;
-  left: 0;
+  left: -260px; /* começa escondida */
   width: 260px;
   height: calc(100vh - 64px);
   background: #ffffff;
@@ -11,13 +11,12 @@
   border-right: 1px solid #e8e8e8;
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
 
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
+  transition: left 0.3s ease;
   z-index: 900;
 }
 
 .sidebar.open {
-  transform: translateX(0);
+  left: 0; /* aparece */
 }
 
 /* ===== MENU ===== */

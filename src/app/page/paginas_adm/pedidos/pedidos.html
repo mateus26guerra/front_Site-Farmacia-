@@ -38,25 +38,25 @@
     <div class="card novos" [class.active]="filtroAtivo === 'novos'" (click)="filtrar('novos')">
       <div class="card-header">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <span class="card-label">Urgente</span>
+        <span class="card-label">Aguardando</span>
       </div>
       <div class="card-count">
         <strong>{{ contadores.novosHoje }}</strong>
         <span>pedidos</span>
       </div>
-      <p class="card-desc">Novos hoje para processamento.</p>
+      <p class="card-desc">Aguardando confirmação do cliente.</p>
     </div>
 
     <div class="card pendente" [class.active]="filtroAtivo === 'Pendente'" (click)="filtrar('Pendente')">
       <div class="card-header">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span class="card-label">Atenção</span>
+        <span class="card-label">Separação</span>
       </div>
       <div class="card-count">
         <strong>{{ contadores.pendentes }}</strong>
         <span>pedidos</span>
       </div>
-      <p class="card-desc">Aguardando confirmação de rota.</p>
+      <p class="card-desc">Processo de separação do pedido.</p>
     </div>
 
     <div class="card transito" [class.active]="filtroAtivo === 'Em trânsito'" (click)="filtrar('Em trânsito')">

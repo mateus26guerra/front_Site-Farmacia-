@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { PedidosService, Pedido } from '../../../service/pedidos.service';
 import { SidebarComponent } from '../../../shared/sidebar/sidebar.component';
 import { NavbarAdministradorComponent } from '../../../shared/navbar-administrador/navbar-administrador';
+import { Router } from '@angular/router';
 
 // Extendemos a interface Pedido localmente para campos extras de UI
 interface PedidoUI extends Pedido {
@@ -49,7 +50,8 @@ export class Pedidos implements OnInit {
     return Math.min(this.paginaAtual * this.itensPorPagina, this.pedidosFiltrados.length);
   }
 
-  constructor(private service: PedidosService) {}
+  constructor(private service: PedidosService,
+  private router: Router) {}
 
   ngOnInit() {
     this.service.listar().subscribe(res => {
@@ -175,9 +177,9 @@ export class Pedidos implements OnInit {
     console.log('Exportando relatório...');
   }
 
-  verDetalhes(pedido: PedidoUI) {
-    console.log('Ver detalhes do pedido:', pedido);
-  }
+ verDetalhes(pedido: PedidoUI) {
+  this.router.navigate(['/pedidos', pedido.id]);
+}
 
   imprimir(pedido: PedidoUI) {
     window.print();

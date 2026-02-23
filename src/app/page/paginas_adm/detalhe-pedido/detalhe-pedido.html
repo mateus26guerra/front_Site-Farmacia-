@@ -1,0 +1,67 @@
+<app-navbar-administrador></app-navbar-administrador>
+<app-sidebar></app-sidebar>
+
+<div class="page" *ngIf="pedido">
+
+  <h1>Pedido #{{ pedido.id }}</h1>
+
+  <!-- CARD CLIENTE -->
+  <div class="card">
+    <h2>Informações do Cliente</h2>
+
+    <div class="cliente-grid">
+      <p><strong>Nome:</strong> {{ pedido.cliente }}</p>
+      <p><strong>Telefone:</strong> {{ pedido.telefone }}</p>
+      <p><strong>Endereço:</strong> {{ pedido.endereco }}</p>
+      <p><strong>Bairro:</strong> {{ pedido.bairro }}</p>
+      <p><strong>Complemento:</strong> {{ pedido.complemento }}</p>
+      <p><strong>Pagamento:</strong> {{ pedido.formaDePagamento }}</p>
+    </div>
+  </div>
+
+  <!-- CARD ITENS -->
+  <div class="card">
+    <h2>Itens do Pedido</h2>
+
+    <table class="itens-table">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Variação</th>
+          <th>Preço</th>
+          <th>Qtd</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of pedido.itens">
+          <td class="produto-cell">
+            <img [src]="item.imagemUrl" alt="Produto">
+            <span>{{ item.nomeProduto }}</span>
+          </td>
+          <td>{{ item.variacao }}</td>
+          <td>{{ item.preco | currency:'BRL' }}</td>
+          <td>x{{ item.quantidade }}</td>
+          <td>
+            {{ (item.preco * item.quantidade) | currency:'BRL' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="total">
+      Total:
+      <strong>{{ calcularTotal() | currency:'BRL' }}</strong>
+    </div>
+  </div>
+
+  <!-- AÇÕES -->
+  <div class="actions">
+    <button class="btn-voltar" (click)="voltar()">Voltar</button>
+    <button class="btn-whatsapp" (click)="falarWhatsApp()">
+      Falar no WhatsApp
+    </button>
+  </div>
+
+</div>
