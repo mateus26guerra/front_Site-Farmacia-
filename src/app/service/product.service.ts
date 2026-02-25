@@ -84,7 +84,7 @@ export class ProductService {
   }
 
   addProduct(product: ProdutoAddDTO) {
-    return this.http.post(`${this.API_PRIVADA}/add_products`, product);
+    return this.http.post(`${this.API_PRIVADA}`, product);
   }
 
   groupByName(produtos: Product[]): ProdutoVitrine[] {

@@ -74,14 +74,23 @@
   margin: 28px 0;
 }
 
-/* ── Section Label ────────────────────────────────────── */
+/* ── Section Label + Checkboxes em linha ─────────────── */
+.section-label-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
 .section-label {
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #9ca3af;
-  margin-bottom: 16px;
+  white-space: nowrap;
+  margin-bottom: 0;
 }
 
 /* ── Form Grid ────────────────────────────────────────── */
@@ -110,7 +119,8 @@
 
 /* ── Inputs ───────────────────────────────────────────── */
 .form-group input,
-.variacao-row input {
+.variacao-row input[type="text"],
+.variacao-row input[type="number"] {
   width: 100%;
   padding: 11px 14px;
   border-radius: 8px;
@@ -129,7 +139,8 @@
 }
 
 .form-group input:focus,
-.variacao-row input:focus {
+.variacao-row input[type="text"]:focus,
+.variacao-row input[type="number"]:focus {
   border-color: #4f46e5 !important;
   background: #fff !important;
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
@@ -138,6 +149,40 @@
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 input[type="number"] { -moz-appearance: textfield; }
+
+/* ── Checkboxes ───────────────────────────────────────── */
+input[type="checkbox"] {
+  appearance: auto !important;
+  -webkit-appearance: checkbox !important;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px;
+  cursor: pointer;
+  accent-color: #4f46e5;
+  border: 1px solid #d1d5db !important;
+  border-radius: 4px !important;
+  background: #fafafa !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  flex-shrink: 0;
+}
+
+input[type="checkbox"]:focus {
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12) !important;
+  border-color: #4f46e5 !important;
+}
+
+/* ── Check Inline ─────────────────────────────────────── */
+.check-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4b5563;
+  white-space: nowrap;
+  cursor: pointer;
+}
 
 /* ── Helper Text ──────────────────────────────────────── */
 .helper-text {
@@ -148,14 +193,11 @@ input[type="number"] { -moz-appearance: textfield; }
 /* ── Variações ────────────────────────────────────────── */
 .variacao-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   align-items: center;
   margin-bottom: 10px;
   animation: fadeIn 0.2s ease both;
-}
-
-.variacao-row input {
-  flex: 1;
 }
 
 @keyframes fadeIn {
@@ -164,7 +206,7 @@ input[type="number"] { -moz-appearance: textfield; }
 }
 
 /* ═══════════════════════════════════════════════════════
-   BOTÕES — Sólidos pill, cores forçadas
+   BOTÕES
 ═══════════════════════════════════════════════════════ */
 button.btn,
 .btn {
@@ -184,13 +226,6 @@ button.btn,
   text-decoration: none;
 }
 
-button.btn i,
-.btn i {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-}
-
 button.btn:hover,
 .btn:hover {
   filter: brightness(1.1);
@@ -203,31 +238,26 @@ button.btn:active,
   transform: scale(0.97);
 }
 
-/* Primary — índigo */
 button.btn.primary,
 .btn.primary {
   background-color: #4f46e5 !important;
 }
 
-/* Secondary — cinza */
 button.btn.secondary,
 .btn.secondary {
   background-color: #64748b !important;
 }
 
-/* Success — verde */
 button.btn.success,
 .btn.success {
   background-color: #16a34a !important;
 }
 
-/* Danger — vermelho */
 button.btn.danger,
 .btn.danger {
   background-color: #e53e3e !important;
 }
 
-/* Danger pequeno — remover variação */
 button.btn.danger-sm,
 .btn.danger-sm {
   background-color: #e53e3e !important;
@@ -238,7 +268,7 @@ button.btn.danger-sm,
   border-radius: 10px !important;
 }
 
-/* ── Button Group submit ──────────────────────────────── */
+/* ── Button Group ─────────────────────────────────────── */
 .button-group {
   margin-top: 32px;
   padding-top: 24px;
@@ -248,63 +278,13 @@ button.btn.danger-sm,
   gap: 12px;
 }
 
-/* ── Responsivo ───────────────────────────────────────── */
-@media (max-width: 640px) {
-  .page-wrapper { padding: 20px 12px 60px; }
-
-  .card { padding: 20px 16px; }
-
-  .card-title {
-    font-size: 1.15rem;
-    margin-bottom: 20px;
-  }
-
-  .form-grid { grid-template-columns: 1fr; }
-  .form-grid .full { grid-column: 1; }
-
-  .variacao-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .btn.danger-sm { width: 100%; }
-
-  .button-group {
-    flex-direction: column-reverse;
-  }
-
-  .button-group .btn {
-    width: 100%;
-    padding: 13px !important;
-  }
-
-  .form-group input,
-  .variacao-row input { font-size: 16px; }
-}
-
-select {
-  width: 100%;
-  padding: 11px 14px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  font-size: 0.95rem;
-  background: #fafafa;
-}
-
-select:focus {
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
-}/* ── Custom Select ─────────────────────────────────────
-   Cola no final do tela-de-add-produto.css
-   ──────────────────────────────────────────────────── */
-
+/* ── Custom Select ────────────────────────────────────── */
 .custom-select {
   position: relative;
   width: 100%;
   user-select: none;
 }
 
-/* Trigger (substitui o <select>) */
 .custom-select__trigger {
   width: 100%;
   display: flex;
@@ -325,7 +305,6 @@ select:focus {
   appearance: none;
 }
 
-/* ✅ FIX: span interno não herda highlight/background do browser */
 .custom-select__trigger span {
   flex: 1;
   background: transparent !important;
@@ -350,7 +329,6 @@ select:focus {
   font-weight: 300;
 }
 
-/* Seta animada */
 .custom-select__arrow {
   width: 16px;
   height: 16px;
@@ -364,7 +342,6 @@ select:focus {
   color: #4f46e5;
 }
 
-/* Lista */
 .custom-select__list {
   position: absolute;
   top: calc(100% + 6px);
@@ -377,8 +354,6 @@ select:focus {
   list-style: none;
   padding: 6px;
   z-index: 200;
-
-  /* Animação de entrada */
   opacity: 0;
   transform: translateY(-6px);
   pointer-events: none;
@@ -391,7 +366,6 @@ select:focus {
   pointer-events: all;
 }
 
-/* Item */
 .custom-select__item {
   display: flex;
   align-items: center;
@@ -420,4 +394,28 @@ select:focus {
   height: 15px;
   color: #4f46e5;
   flex-shrink: 0;
+}
+
+/* ── Responsivo ───────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page-wrapper { padding: 20px 12px 60px; }
+  .card { padding: 20px 16px; }
+  .card-title { font-size: 1.15rem; margin-bottom: 20px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-grid .full { grid-column: 1; }
+
+  .section-label-row { gap: 12px; }
+
+  .variacao-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn.danger-sm { width: 100%; }
+
+  .button-group { flex-direction: column-reverse; }
+  .button-group .btn { width: 100%; padding: 13px !important; }
+
+  .form-group input,
+  .variacao-row input { font-size: 16px; }
 }

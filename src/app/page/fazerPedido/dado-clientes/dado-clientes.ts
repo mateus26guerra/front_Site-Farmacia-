@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { Navbar } from "../../../shared/navbar/navbar";
-import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CartService } from '../../../service/cart.service';
+import { CommonModule } from '@angular/common';
 import { NavbarFinalizarPedido } from "../../../shared/navbar-finalizar-pedido/navbar-finalizar-pedido";
 
 @Component({
@@ -13,28 +12,25 @@ import { NavbarFinalizarPedido } from "../../../shared/navbar-finalizar-pedido/n
 })
 export class DadoClientes {
 
-  modoPedido: string = '';      // '' | 'rapido'
-  tipoEntrega: string = '';     // '' | 'endereco' | 'farmacia'
-  currentStep = 1;
-
+  modoPedido: string = ''; 
+  tipoEntrega: 'ENTREGA' | 'RETIRADA' | '' = '';
 
   constructor(
     public cartService: CartService,
     private router: Router
   ) {}
 
-  // Botão só ativa quando: selecionou pedido rápido E selecionou tipo de entrega
   podeContinuar(): boolean {
     return this.modoPedido === 'rapido' && this.tipoEntrega !== '';
   }
 
-  remover(id: number) {
-    this.cartService.remove(id);
-  }
-
   irParaTelaDados() {
     if (this.podeContinuar()) {
-      this.router.navigate(['/finalizar-pedido']);
+      this.router.navigate(['/finalizar-pedido'], {
+        state: {
+          tipoEntrega: this.tipoEntrega
+        }
+      });
     }
   }
 

@@ -1,14 +1,11 @@
-<app-navbar-finalizar-pedido
-  [activeStep]="3"
-></app-navbar-finalizar-pedido>
+<app-navbar-finalizar-pedido [activeStep]="3"></app-navbar-finalizar-pedido>
 
 <div class="page-wrapper">
 
-  
   <div class="card">
 
     <h2 class="card-title">
-      Finalize seu Pedido 🚀
+      Finalize seu Pedido 
     </h2>
 
     <form (ngSubmit)="finalizar()">
@@ -49,6 +46,14 @@
             <option value="" disabled selected>Selecione</option>
             <option *ngFor="let f of formas" [value]="f">{{ f }}</option>
           </select>
+        </div>
+
+ 
+
+        <!-- NOVO: Observação -->
+        <div class="form-group full">
+          <label>Observação (opcional)</label>
+          <textarea [(ngModel)]="observacao" name="observacao" rows="3"></textarea>
         </div>
 
       </div>

@@ -23,10 +23,9 @@ export class FinalizarPedido {
   bairro = '';
   complemento = '';
   formaDePagamento = '';
-
   bairros = ['madalena','prato','cordeiro','bongi','torre','derby'];
   formas = ['pix','dinheiro','cartao'];
-
+  observacao = '';
   constructor(
     private cartService: CartService,
     private http: HttpClient,
@@ -34,8 +33,7 @@ export class FinalizarPedido {
   ) {}
 
 
-
-  finalizar() {
+finalizar() {
 
   const itens = this.cartService.items.map(item => ({
     produtoId: item.product.id,
@@ -49,6 +47,8 @@ export class FinalizarPedido {
     bairro: this.bairro,
     complemento: this.complemento,
     formaDePagamento: this.formaDePagamento,
+    tipoEntrega: history.state?.tipoEntrega || 'ENTREGA',
+    observacao: this.observacao,
     itens: itens
   };
 
@@ -58,7 +58,7 @@ export class FinalizarPedido {
 
         Swal.fire({
           title: 'Pedido realizado com sucesso! 🚀',
-          text: 'Aguarde atualização no seu WhatsApp de um de nossos atendentes.',
+          text: 'Aguarde atualização no WhatsApp.',
           icon: 'success',
           confirmButtonColor: '#16a34a'
         }).then(() => {

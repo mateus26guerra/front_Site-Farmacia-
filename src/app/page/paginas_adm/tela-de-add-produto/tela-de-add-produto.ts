@@ -30,15 +30,29 @@ export class TelaDeAddProduto implements OnInit {
   categorias: string[] = [];
   categoriaSelecionada: string = '';
   quantidadeEmEstoque!: number;
-  variacoes: string[] = [''];
 
-  // ── Dropdown state ──────────────────────────────────
+  variacoes: {
+    nome: string;
+    precoDiferente: boolean;
+    novoPreco?: number;
+    temPromocao: boolean;
+    precoPromocional?: number;
+  }[] = [
+    {
+      nome: '',
+      precoDiferente: false,
+      temPromocao: false
+    }
+  ];
+
   dropdownAberto = false;
+  opcaoPreco = false;
+opcaoPromocao = false;
 
   constructor(
     private productService: ProductService,
     private router: Router,
-    private elementRef: ElementRef   // para detectar click fora
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit() {
@@ -55,7 +69,7 @@ export class TelaDeAddProduto implements OnInit {
     });
   }
 
-  // ── Dropdown methods ────────────────────────────────
+  // ── Dropdown ────────────────────────────────────────
 
   toggleDropdown() {
     this.dropdownAberto = !this.dropdownAberto;
@@ -70,7 +84,6 @@ export class TelaDeAddProduto implements OnInit {
     this.dropdownAberto = false;
   }
 
-  // Fecha ao clicar fora do componente
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
@@ -78,20 +91,23 @@ export class TelaDeAddProduto implements OnInit {
     }
   }
 
-  // Fecha com ESC
   @HostListener('document:keydown.escape')
   onEscape() {
     this.dropdownAberto = false;
   }
 
-  // ── Form ────────────────────────────────────────────
+  // ── Variações ───────────────────────────────────────
 
   trackByIndex(index: number): number {
     return index;
   }
 
   adicionarVariacao() {
-    this.variacoes.push('');
+    this.variacoes.push({
+      nome: '',
+      precoDiferente: false,
+      temPromocao: false
+    });
   }
 
   removerVariacao(index: number) {
@@ -100,7 +116,10 @@ export class TelaDeAddProduto implements OnInit {
     }
   }
 
+  // ── Validação ───────────────────────────────────────
+
   private validarCampos(): boolean {
+
     if (
       !this.name?.trim() ||
       !this.valor ||
@@ -117,34 +136,58 @@ export class TelaDeAddProduto implements OnInit {
       return false;
     }
 
-    const variacaoVazia = this.variacoes.some(v => !v || v.trim() === '');
-    if (variacaoVazia) {
-      Swal.fire({
-        title: 'Variação inválida!',
-        text: 'Nenhuma variação pode estar vazia.',
-        icon: 'warning',
-        confirmButtonColor: '#2563eb'
-      });
-      return false;
+    for (const v of this.variacoes) {
+
+      if (!v.nome?.trim()) {
+        Swal.fire('Erro', 'Nome da variação é obrigatório', 'warning');
+        return false;
+      }
+
+      if (v.precoDiferente) {
+        if (!v.novoPreco || v.novoPreco <= 0) {
+          Swal.fire('Erro', 'Informe um novo preço válido', 'warning');
+          return false;
+        }
+      }
+
+      if (v.temPromocao) {
+        if (!v.precoPromocional || v.precoPromocional <= 0) {
+          Swal.fire('Erro', 'Informe um preço promocional válido', 'warning');
+          return false;
+        }
+      }
     }
 
     return true;
   }
 
+  // ── Salvar ──────────────────────────────────────────
+
   salvar() {
+
     if (!this.validarCampos()) return;
 
-    const requests = this.variacoes.map(variacao =>
-      this.productService.addProduct({
+    const requests = this.variacoes.map(v => {
+
+      const precoFinal = v.precoDiferente && v.novoPreco
+        ? v.novoPreco
+        : this.valor;
+
+      const promocaoFinal = v.temPromocao && v.precoPromocional
+        ? v.precoPromocional
+        : this.desconto ?? 0;
+
+      return this.productService.addProduct({
         name: this.name.trim(),
-        valor: this.valor,
-        desconto: this.desconto ?? 0,
-        variacao: variacao.trim(),
+        valor: precoFinal,
+        desconto: promocaoFinal,
+        variacao: v.nome.trim(),
         imagemUrl: this.imagemUrl?.trim() ?? '',
         categoriaNome: this.categoriaSelecionada,
         quantidadeEmEstoque: this.quantidadeEmEstoque
-      })
-    );
+      });
+
+    });
 
     forkJoin(requests).subscribe({
       next: () => {
