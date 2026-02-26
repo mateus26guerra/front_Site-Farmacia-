@@ -23,6 +23,18 @@ export class DetalhePedido implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
+statusEtapas = [
+  { key: 'Aguardando', label: 'Pedido Recebido' },
+  { key: 'Separação', label: 'Em Separação' },
+  { key: 'EmTransito', label: 'Em Trânsito' },
+  { key: 'Concluído', label: 'Pedido Concluído' }
+];
+
+isEtapaAtiva(statusKey: string): boolean {
+  const ordem = ['Aguardando', 'Separação', 'EmTransito', 'Concluído'];
+  return ordem.indexOf(statusKey) <= ordem.indexOf(this.pedido.statusDoPedido);
+}
+
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 

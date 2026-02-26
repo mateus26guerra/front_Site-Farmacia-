@@ -35,7 +35,7 @@
   <!-- CARDS -->
   <div class="cards">
 
-    <div class="card novos" [class.active]="filtroAtivo === 'novos'" (click)="filtrar('novos')">
+    <div class="card novos" [class.active]="filtroAtivo === 'novos'" (click)="filtrar('Aguardando')">
       <div class="card-header">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <span class="card-label">Aguardando</span>
@@ -47,7 +47,7 @@
       <p class="card-desc">Aguardando confirmação do cliente.</p>
     </div>
 
-    <div class="card pendente" [class.active]="filtroAtivo === 'Pendente'" (click)="filtrar('Pendente')">
+    <div class="card pendente" [class.active]="filtroAtivo === 'Pendente'" (click)="filtrar('Separação')">
       <div class="card-header">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         <span class="card-label">Separação</span>
@@ -59,7 +59,7 @@
       <p class="card-desc">Processo de separação do pedido.</p>
     </div>
 
-    <div class="card transito" [class.active]="filtroAtivo === 'Em trânsito'" (click)="filtrar('Em trânsito')">
+    <div class="card transito" [class.active]="filtroAtivo === 'Em trânsito'" (click)="filtrar('EmTransito')">
       <div class="card-header">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
         <span class="card-label">Em Trânsito</span>
@@ -71,7 +71,7 @@
       <p class="card-desc">Saíram para entrega hoje.</p>
     </div>
 
-    <div class="card finalizado" [class.active]="filtroAtivo === 'Entregue'" (click)="filtrar('Entregue')">
+    <div class="card finalizado" [class.active]="filtroAtivo === 'Entregue'" (click)="filtrar('Concluído')">
       <div class="card-header">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         <span class="card-label">Concluído</span>
@@ -95,6 +95,18 @@
       <p class="card-desc">Total de pedidos registrados.</p>
     </div>
 
+    
+    <div class="card todos" [class.active]="filtroAtivo === 'todos'" (click)="filtrar('cancelado')">
+      <div class="card-header">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <span class="card-label">cancelado</span>
+      </div>
+      <div class="card-count">
+        <strong>{{ pedidos.length }}</strong>
+        <span>pedidos</span>
+      </div>
+      <p class="card-desc">Total de pedidos registrados.</p>
+    </div>
   </div>
 
   <!-- TABLE -->
@@ -120,20 +132,20 @@
           </td>
           <td>{{ pedido.criado | date:'dd/MM/yyyy HH:mm' }}</td>
           <td>
-            <select
-              class="status-select"
-              [ngClass]="getStatusClass(pedido.status)"
-              [(ngModel)]="pedido.status"
-              (ngModelChange)="atualizarStatus(pedido)"
-            >
-              <option value="Pendente">Pendente</option>
-              <option value="Em processamento">Em processamento</option>
-              <option value="Em trânsito">Em trânsito</option>
-              <option value="Entregue">Entregue</option>
-              <option value="Cancelado">Cancelado</option>
-            </select>
+          <select
+  class="status-select"
+  [ngClass]="getStatusClass(pedido.statusDoPedido)"
+  [(ngModel)]="pedido.statusDoPedido"
+  (ngModelChange)="atualizarStatus(pedido)"
+>
+  <option value="Aguardando">Aguardando</option>
+  <option value="Separação">Separação</option>
+  <option value="EmTransito">Em trânsito</option>
+  <option value="Concluído">Concluído</option>
+  <option value="cancelado">Cancelado</option>
+</select>
           </td>
-          <td>{{ pedido.total | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td>{{ pedido.totalComFrete | currency:'BRL':'symbol':'1.2-2' }}</td>
           <td>
             <div class="actions-cell">
               <button class="btn-icon btn-ver" title="Ver detalhes" (click)="verDetalhes(pedido)">

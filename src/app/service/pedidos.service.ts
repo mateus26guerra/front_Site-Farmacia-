@@ -26,8 +26,15 @@ export interface Pedido {
 
   formaDePagamento: string;
 
+  statusDoPedido: string;  
+ cep: string;   
   itens: ItemPedido[];
-
+ observacao?: string;
+  totalProdutos?: number;
+  valorFrete?: number;
+  totalComFrete?: number;
+  freteGratis?: boolean;
+  tipoEntrega?: string;
 }
 
 @Injectable({
@@ -50,5 +57,9 @@ export class PedidosService {
   return this.http.get(`${this.api}/${id}/pdf`, {
     responseType: 'blob'
   });
+}
+
+atualizarStatus(id: number, status: string) {
+  return this.http.patch(`${this.api}/${id}/status`, { status });
 }
 }

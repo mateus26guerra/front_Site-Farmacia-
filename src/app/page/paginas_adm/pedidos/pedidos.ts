@@ -6,9 +6,8 @@ import { SidebarComponent } from '../../../shared/sidebar/sidebar.component';
 import { NavbarAdministradorComponent } from '../../../shared/navbar-administrador/navbar-administrador';
 import { Router } from '@angular/router';
 
+
 interface PedidoUI extends Pedido {
-  status: string;
-  total: number;
   selecionado?: boolean;
 }
 
@@ -26,7 +25,7 @@ export class Pedidos implements OnInit {
   pedidosPaginados: PedidoUI[] = [];
 
   busca = '';
-  filtroAtivo = 'todos';
+ filtroAtivo = 'Aguardando';
 
   paginaAtual = 1;
   itensPorPagina = 10;
@@ -38,6 +37,7 @@ export class Pedidos implements OnInit {
     pendentes: 0,
     emTransito: 0,
     finalizados: 0,
+    cancelados: 0,
   };
 
   get inicioRegistro(): number {
@@ -54,27 +54,53 @@ export class Pedidos implements OnInit {
     private cdr: ChangeDetectorRef  // 👈 adicionado
   ) {}
 
-  ngOnInit() {
-    this.service.listar().subscribe(res => {
-      this.pedidos = res.map(p => ({
-        ...p,
-        status: (p as any).status ?? 'Pendente',
-        total: (p as any).total ?? 0,
-        selecionado: false,
-      }));
-      this.calcularContadores();
-      this.aplicarFiltros();
-      this.cdr.detectChanges(); // 👈 adicionado
-    });
+  ngOnInit(): void {
+    this.carregarPedidos();
   }
 
-  calcularContadores() {
-    const hoje = new Date().toDateString();
-    this.contadores.novosHoje = this.pedidos.filter(p => new Date(p.criado).toDateString() === hoje).length;
-    this.contadores.pendentes = this.pedidos.filter(p => p.status === 'Pendente' || p.status === 'Em processamento').length;
-    this.contadores.emTransito = this.pedidos.filter(p => p.status === 'Em trânsito').length;
-    this.contadores.finalizados = this.pedidos.filter(p => p.status === 'Entregue').length;
-  }
+carregarPedidos() {
+  this.service.listar().subscribe(res => {
+    this.pedidos = res.map(p => ({
+      ...p,
+      selecionado: false
+    }));
+
+    this.calcularContadores();
+    this.aplicarFiltros();
+    this.cdr.detectChanges(); // 👈 força atualizar a view
+  });
+}
+
+ calcularContadores() {
+
+  const hoje = new Date().toDateString();
+
+  this.contadores.novosHoje =
+    this.pedidos.filter(p =>
+      p.statusDoPedido === 'Aguardando' &&
+      new Date(p.criado).toDateString() === hoje
+    ).length;
+
+  this.contadores.pendentes =
+    this.pedidos.filter(p =>
+      p.statusDoPedido === 'Separação'
+    ).length;
+
+  this.contadores.emTransito =
+    this.pedidos.filter(p =>
+      p.statusDoPedido === 'EmTransito'
+    ).length;
+
+ this.contadores.finalizados =
+  this.pedidos.filter(p =>
+    p.statusDoPedido === 'Concluído'
+  ).length;
+
+this.contadores.cancelados =
+  this.pedidos.filter(p =>
+    p.statusDoPedido === 'cancelado'
+  ).length;
+}
 
   filtrar(status: string) {
     this.filtroAtivo = status;
@@ -91,8 +117,7 @@ export class Pedidos implements OnInit {
     let lista = [...this.pedidos];
 
     if (this.filtroAtivo !== 'todos') {
-      lista = lista.filter(p => p.status === this.filtroAtivo);
-    }
+lista = lista.filter(p => p.statusDoPedido === this.filtroAtivo);    }
 
     if (this.busca.trim()) {
       const termo = this.busca.toLowerCase();
@@ -149,20 +174,41 @@ export class Pedidos implements OnInit {
   }
 
   getStatusClass(status: string): string {
-    const map: Record<string, string> = {
-      'Pendente': 'status-pendente',
-      'Em processamento': 'status-processando',
-      'Em trânsito': 'status-enviado',
-      'Entregue': 'status-entregue',
-      'Cancelado': 'status-cancelado',
-    };
-    return map[status] ?? 'status-pendente';
-  }
 
-  atualizarStatus(pedido: PedidoUI) {
-    this.calcularContadores();
-    console.log(`Pedido #${pedido.id} atualizado para: ${pedido.status}`);
-  }
+  const map: Record<string, string> = {
+    'Aguardando': 'status-pendente',
+    'Separação': 'status-processando',
+    'EmTransito': 'status-enviado',
+    'Concluído': 'status-entregue',
+    'cancelado': 'status-cancelado',
+  };
+
+  return map[status] ?? 'status-pendente';
+}
+
+  
+atualizarStatus(pedido: PedidoUI) {
+
+  const statusAnterior = pedido.statusDoPedido;
+
+  // 🔥 Atualiza na tela na hora
+  this.calcularContadores();
+  this.aplicarFiltros();
+
+  this.service.atualizarStatus(pedido.id, pedido.statusDoPedido)
+    .subscribe({
+      next: () => {
+        console.log(`Pedido #${pedido.id} atualizado com sucesso`);
+      },
+      error: () => {
+        // ❌ Se der erro, volta pro status antigo
+        pedido.statusDoPedido = statusAnterior;
+        this.calcularContadores();
+        this.aplicarFiltros();
+        console.error('Erro ao atualizar status');
+      }
+    });
+}
 
   selecionarTodos(event: Event) {
     const checked = (event.target as HTMLInputElement).checked;

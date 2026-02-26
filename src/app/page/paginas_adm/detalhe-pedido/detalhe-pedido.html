@@ -8,7 +8,7 @@
     <div>
       <h1>
         Pedido #{{ pedido.id }}
-        <span class="badge-status">pedido.status </span>
+        <span class="badge-status">{{ pedido.statusDoPedido }}</span>
       </h1>
       <p class="page-meta">Realizado em {{ pedido.criado }}</p>
     </div>
@@ -21,74 +21,93 @@
     <div class="col-left">
 
       <!-- CARD CLIENTE -->
+
       <div class="card">
         <h2>
           <span class="card-icon pink">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+              viewBox="0 0 24 24" fill="none" stroke="#db2777"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="5"/>
+              <path d="M20 21a8 8 0 1 0-16 0"/>
+            </svg>
           </span>
           Informações do Cliente
         </h2>
 
         <div class="info-field">
-          <div class="info-label">Nome Completo</div>
+          <div class="info-label">Nome</div>
           <div class="info-value">{{ pedido.cliente }}</div>
         </div>
+
         <div class="info-field">
-          <div class="info-label">Telefone / WhatsApp</div>
+          <div class="info-label">Telefone</div>
           <div class="info-value">{{ pedido.telefone }}</div>
         </div>
+
         <div class="info-field">
           <div class="info-label">Bairro</div>
           <div class="info-value">{{ pedido.bairro }}</div>
         </div>
-        <div class="info-field">
-          <div class="info-label">Endereço de Entrega</div>
-          <div class="info-value">{{ pedido.endereco }}</div>
+
+        <div class="info-field" *ngIf="pedido.tipoEntrega === 'ENTREGA'">
+          <div class="info-label">Endereço</div>
+          <div class="info-value">
+            {{ pedido.endereco }}
+          </div>
         </div>
-        <div class="info-field">
+
+        <div class="info-field" *ngIf="pedido.complemento">
           <div class="info-label">Complemento</div>
-          <div class="info-value">{{ pedido.complemento }}</div>
+          <div class="info-value">
+            {{ pedido.complemento }}
+          </div>
         </div>
+
+        <div class="info-field" *ngIf="pedido.cep">
+          <div class="info-label">CEP</div>
+          <div class="info-value">
+            {{ pedido.cep }}
+          </div>
+        </div>
+
       </div>
 
-      <!-- CARD LOGÍSTICA E PAGAMENTO -->
-      <div class="card">
+     <div class="card">
         <h2>
           <span class="card-icon blue">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect width="13" height="8" x="9" y="11" rx="1"/><circle cx="11" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+              viewBox="0 0 24 24" fill="none" stroke="#2563eb"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="14" x="2" y="5" rx="2"/>
+              <line x1="2" x2="22" y1="10" y2="10"/>
+            </svg>
           </span>
           Logística e Pagamento
         </h2>
 
-        <div class="logistica-grid">
-          <div class="logistica-item">
-            <div class="logistica-item-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7494" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-            </div>
-            <div class="logistica-item-info">
-              <div class="info-label">Tipo do Pedido</div>
-              <div class="info-value"> pedido.tipoPedido </div>
-            </div>
-          </div>
+        <div class="info-field">
+          <div class="info-label">Tipo de Entrega</div>
+          <div class="info-value">{{ pedido.tipoEntrega }}</div>
+        </div>
 
-          <div class="logistica-item">
-            <div class="logistica-item-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7494" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
-            </div>
-            <div class="logistica-item-info">
-              <div class="info-label">Forma de Pagamento</div>
-              <div class="info-value">{{ pedido.formaDePagamento }}</div>
-              <div class="info-value" style="font-size: 0.78rem; color: var(--text-muted);">
-                 pedido.numeroCartao 
-              </div>
-              <div class="badge-pagamento">pedido.statusPagamento </div>
-            </div>
+        <div class="info-field">
+          <div class="info-label">Forma de Pagamento</div>
+          <div class="info-value">
+            {{ pedido.formaDePagamento }}
           </div>
         </div>
+
+        <div class="info-field">
+          <div class="info-label">Status</div>
+          <div class="info-value">
+            {{ pedido.statusDoPedido }}
+          </div>
+        </div>
+
       </div>
 
     </div>
-
     <!-- COLUNA DIREITA -->
     <div class="col-right">
 
@@ -157,7 +176,7 @@
           <svg class="obs-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
           <div>
             <h3>Observações do Cliente</h3>
-            <p>"{{ pedido.complemento }}"</p>
+            <p>"{{ pedido.observacao }}"</p>
           </div>
         </div>
       </div>
@@ -168,54 +187,34 @@
           <span class="card-icon green">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </span>
-          Histórico do Pedido
-        </h2>
+          Histórico do Pedido </h2>
 
-        <div class="historico-list">
-          <div class="historico-item ativo">
-            <div class="historico-dot-wrap">
-              <div class="historico-dot"></div>
-              <div class="historico-linha"></div>
-            </div>
-            <div class="historico-content">
-              <div class="historico-titulo">Pedido Enviado</div>
-              <div class="historico-descricao">Hoje, 10:45 – Motoboy Carlos saiu para entrega</div>
-            </div>
-          </div>
+  <div class="historico-list">
 
-          <div class="historico-item">
-            <div class="historico-dot-wrap">
-              <div class="historico-dot"></div>
-              <div class="historico-linha"></div>
-            </div>
-            <div class="historico-content">
-              <div class="historico-titulo">Pronto para Retirada/Envio</div>
-              <div class="historico-descricao">Hoje, 09:30 – Itens conferidos e embalados</div>
-            </div>
-          </div>
+    <div 
+      class="historico-item"
+      *ngFor="let etapa of statusEtapas; let last = last"
+      [class.ativo]="isEtapaAtiva(etapa.key)"
+    >
 
-          <div class="historico-item">
-            <div class="historico-dot-wrap">
-              <div class="historico-dot"></div>
-              <div class="historico-linha"></div>
-            </div>
-            <div class="historico-content">
-              <div class="historico-titulo">Pagamento Aprovado</div>
-              <div class="historico-descricao">Hoje, 08:32 – Transação #8839201 confirmada</div>
-            </div>
-          </div>
+      <div class="historico-dot-wrap">
+        <div class="historico-dot"></div>
+        <div class="historico-linha" *ngIf="!last"></div>
+      </div>
 
-          <div class="historico-item">
-            <div class="historico-dot-wrap">
-              <div class="historico-dot"></div>
-            </div>
-            <div class="historico-content">
-              <div class="historico-titulo">Pedido Realizado</div>
-              <div class="historico-descricao">Hoje, 08:30 – Criado via App Mobile</div>
-            </div>
-          </div>
+      <div class="historico-content">
+        <div class="historico-titulo">
+          {{ etapa.label }}
+        </div>
+        <div class="historico-descricao">
+          Status atual: {{ pedido.statusDoPedido }}
         </div>
       </div>
+
+    </div>
+
+  </div>
+</div>
 
     </div>
   </div>
