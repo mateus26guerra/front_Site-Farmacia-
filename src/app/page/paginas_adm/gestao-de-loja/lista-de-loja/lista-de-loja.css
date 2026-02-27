@@ -1,0 +1,95 @@
+/* ===== LISTA DE LOJAS ===== */
+.lista-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px 40px 20px;
+}
+body {
+  background-color: #f4f6f8;
+  margin: 0;
+}
+
+/* Grid de cards lado a lado */
+.lojas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+/* Card individual */
+.loja-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.loja-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.loja-card p {
+  font-size: 0.875rem;
+  color: #555;
+  margin: 0;
+}
+
+.loja-card p strong {
+  color: #111;
+  font-weight: 500;
+}
+
+/* Botões do card */
+.loja-card .botoes {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.loja-card .botoes button {
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.loja-card .botoes button:first-child {
+  background: #111;
+  color: #fff;
+}
+
+.loja-card .botoes button:last-child {
+  background: #f0f0f0;
+  color: #111;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #aaa;
+  font-size: 0.95rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .lojas-grid {
+    grid-template-columns: 1fr;
+  }
+}

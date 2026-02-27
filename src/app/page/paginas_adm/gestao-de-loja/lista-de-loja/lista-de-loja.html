@@ -1,0 +1,23 @@
+<div class="lista-container">
+
+  <div *ngIf="lojas.length === 0" class="empty-state">
+    Nenhuma loja cadastrada.
+  </div>
+
+  <div class="lojas-grid">
+    <div *ngFor="let loja of lojas" class="loja-card">
+
+      <h3>{{ loja.nome }}</h3>
+      <p><strong>CNPJ:</strong> {{ loja.cnpj }}</p>
+      <p><strong>Telefone:</strong> {{ loja.telefone }}</p>
+      <p><strong>Tipo:</strong> {{ loja.tipoAtendimento }}</p>
+
+      <div class="botoes">
+        <button [routerLink]="['/editar-loja', loja.id]">Editar</button>
+        <button [routerLink]="['/addloja', loja.id, 'funcionarios']">Adicionar Funcionário</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

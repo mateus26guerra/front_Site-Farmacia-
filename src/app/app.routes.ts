@@ -6,13 +6,17 @@ import { TelaInicial } from './page/tela-inicial/tela-inicial';
 import { adminGuard } from './core/guards/admin.guard';
 import { AdminUsersComponent } from './page/paginas_adm/admin-users/admin-users';
 import { publicGuard } from './core/public.guard';
-import { TelaDeAddProduto } from './page/paginas_adm/tela-de-add-produto/tela-de-add-produto';
+import { TelaDeAddProduto } from './page/paginas_adm/product/tela-de-add-produto/tela-de-add-produto';
 import { CestaDeCompras } from './page/fazerPedido/cesta-de-compras/cesta-de-compras';
 import { DadoClientes } from './page/fazerPedido/dado-clientes/dado-clientes';
 import { AddEditCartegoria } from './page/paginas_adm/add-edit-cartegoria/add-edit-cartegoria';
 import { FinalizarPedido } from './page/fazerPedido/finalizar-pedido/finalizar-pedido';
 import { Pedidos } from './page/paginas_adm/pedidos/pedidos';
 import { DetalhePedido } from './page/paginas_adm/detalhe-pedido/detalhe-pedido';
+import { GestaoDeLoja } from './page/paginas_adm/gestao-de-loja/gestao-de-loja';
+import { TelaDeAddLoja } from './page/paginas_adm/gestao-de-loja/tela-de-add-loja/tela-de-add-loja';
+import { EditarLoja } from './page/paginas_adm/gestao-de-loja/editar-loja/editar-loja';
+import { AddFuncionarioLoja } from './page/paginas_adm/gestao-de-loja/add-funcionario-loja/add-funcionario-loja';
 
 export const routes: Routes = [
   { path: '', component: TelaInicial , canActivate: [publicGuard] },
@@ -22,6 +26,10 @@ export const routes: Routes = [
   { path: 'finalizar-pedido', component: FinalizarPedido, canActivate:[publicGuard]},
 
   { path: 'pedido', component: Pedidos, canActivate: [authGuard] },
+  { path: 'loja', component: GestaoDeLoja, canActivate: [authGuard] },
+  { path: 'addloja', component: TelaDeAddLoja, canActivate: [authGuard] },
+  { path: 'editar-loja/:id', component: EditarLoja, canActivate: [authGuard] },
+  { path: 'addloja/:id/funcionarios', component: AddFuncionarioLoja, canActivate: [authGuard] },
   { path: 'pedidos/:id',loadComponent: () =>import('./page/paginas_adm/detalhe-pedido/detalhe-pedido').then(m => m.DetalhePedido), canActivate: [authGuard] },
   { path: 'products', component: ProductListComponent, canActivate: [authGuard] },
   { path: 'AddUsuario', component: AdminUsersComponent, canActivate: [adminGuard] },
