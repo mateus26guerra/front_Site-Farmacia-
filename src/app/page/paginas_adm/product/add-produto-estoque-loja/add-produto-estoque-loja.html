@@ -1,0 +1,97 @@
+<app-navbar-administrador></app-navbar-administrador>
+
+<div class="page-wrapper">
+
+<div class="card">
+
+<h2 class="card-title">
+Adicionar Produto ao Estoque
+</h2>
+
+<form (ngSubmit)="salvar()">
+
+<!-- LOJA -->
+
+<div class="form-group">
+
+<label>Selecionar Loja</label>
+
+<select [(ngModel)]="lojaSelecionada" name="loja">
+
+<option [ngValue]="undefined">
+Selecione uma loja
+</option>
+
+<option *ngFor="let loja of lojas" [ngValue]="loja">
+{{ loja.nome }}
+</option>
+
+</select>
+
+</div>
+
+<!-- PRODUTOS -->
+
+<p class="section-label">Produtos</p>
+
+<div class="produtos-grid">
+
+<div
+class="produto-card"
+*ngFor="let p of produtos"
+(click)="selecionarProduto(p)"
+[class.selected]="produtoSelecionado?.id === p.id"
+>
+
+<img
+*ngIf="p.imagemBase64"
+[src]="'data:image/*;base64,' + p.imagemBase64"
+/>
+
+<p>{{ p.name }}</p>
+
+</div>
+
+</div>
+
+<!-- QUANTIDADE -->
+
+<div class="form-group">
+
+<label>Quantidade</label>
+
+<input
+type="number"
+[(ngModel)]="quantidade"
+name="quantidade"
+/>
+
+</div>
+
+<!-- PREÇO -->
+
+<div class="form-group">
+
+<label>Preço</label>
+
+<input
+type="number"
+[(ngModel)]="precoVenda"
+name="precoVenda"
+step="0.01"
+/>
+
+</div>
+
+<div class="button-group">
+
+<button type="submit" class="btn primary">
+Salvar
+</button>
+
+</div>
+
+</form>
+
+</div>
+</div>

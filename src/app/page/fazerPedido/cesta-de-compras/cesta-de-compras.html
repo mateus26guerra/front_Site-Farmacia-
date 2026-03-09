@@ -8,7 +8,7 @@
 
   <div class="pagina-cesta">
 
-    <!-- LISTA DE PRODUTOS -->
+    <!-- LISTA DE PRODUTOS 
     <div class="lista-produtos">
       <h1>Cesta de compras</h1>
 
@@ -28,7 +28,7 @@
 
             <img [src]="item.product.imagemUrl" width="80" [alt]="item.product.name">
 
-            <!-- INFO PRODUTO -->
+            <!-- INFO PRODUTO
             <div class="info-produto">
               <h3>{{ item.product.name }}</h3>
               <p class="variacao">{{ item.product.variacao }}</p>
@@ -48,19 +48,19 @@
               </div>
             </div>
 
-            <!-- CONTROLE DE QUANTIDADE -->
+            <!-- CONTROLE DE QUANTIDADE
             <div class="controle">
               <button (click)="diminuir(item.product.id)" aria-label="Diminuir">−</button>
               <span>{{ item.quantidade }}</span>
               <button (click)="aumentar(item.product.id)" aria-label="Aumentar">+</button>
             </div>
 
-            <!-- SUBTOTAL (desktop) -->
+            <!-- SUBTOTAL (desktop)
             <div class="subtotal desktop-only">
               {{ item.product.preco.valorFinal * item.quantidade | currency:'BRL' }}
             </div>
 
-            <!-- REMOVER -->
+            <!-- REMOVER 
             <button class="btn-remover" (click)="remover(item.product.id)" aria-label="Remover item">
               🗑
             </button>
@@ -73,7 +73,7 @@
 
     </div>
 
-    <!-- RESUMO DO PEDIDO -->
+    <!-- RESUMO DO PEDIDO
     <div class="resumo">
       <h2>Resumo do pedido</h2>
 
@@ -116,4 +116,4 @@
     </div>
 
   </div>
-</div>
+</div> -->

@@ -1,15 +1,14 @@
 <nav class="navbar-promofarma">
-  <!-- LINHA SUPERIOR -->
+  LINHA SUPERIOR 
   <div class="navbar-top">
     <div class="container">
-      
-      <!-- LOGO -->
+         LOGO 
       <a class="logo" routerLink="/">
         <i data-lucide="plus" class="icon-plus"></i>
         <span class="logo-text">PROMOFARMA</span>
       </a>
 
-      <!-- BARRA DE PESQUISA -->
+       BARRA DE PESQUISA 
       <div class="search-bar">
         <i data-lucide="search" class="search-icon"></i>
         <input
@@ -22,10 +21,10 @@
         </button>
       </div>
 
-      <!-- AÇÕES -->
+    AÇÕES 
       <div class="actions">
         
-        <!-- ADMIN / LOGIN -->
+         ADMIN / LOGI
         @if (!authService.isAuthenticated()) {
           <a routerLink="/login" class="action-item">
             <i data-lucide="user-circle"></i>
@@ -46,14 +45,14 @@
           </button>
         }
 
-        <!-- CESTA -->
+       CESTA
 <div class="action-item cart" (click)="abrirCarrinho()">
   <i data-lucide="shopping-cart"></i>
 
   <div class="action-text">
     <small>Cesta</small>
     <strong>
-      {{ cartService.totalValor() | currency:'BRL' }}
+    <!--  {{ cartService.totalValor() | currency:'BRL' }}-->
     </strong>
   </div>
 
@@ -69,7 +68,7 @@
     </div>
   </div>
 
-  <!-- LINHA INFERIOR - CATEGORIAS -->
+LINHA INFERIOR - CATEGORIAS 
   <div class="navbar-bottom">
     <div class="container">
       <div class="categories">
@@ -120,10 +119,10 @@
 </nav>
 
 @if (showCart) {
-  <app-cart (close)="showCart = false"></app-cart>
+ <!-- <app-cart (close)="showCart = false"></app-cart>-->
 }
 
-<!-- MENU MOBILE -->
+ MENU MOBILE
 @if (showMenu) {
   <div class="menu-backdrop" (click)="toggleMenu()">
     <div class="menu-mobile" (click)="$event.stopPropagation()">
@@ -145,7 +144,7 @@
   </div>
 }
 
-<!-- MODAL LOGOUT -->
+ MODAL LOGOUT 
 @if (showLogoutModal) {
   <div class="modal-backdrop" [class.closing]="closing">
     <div class="modal">

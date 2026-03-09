@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService, ProdutoVitrine, Product } from '../../service/product.service';
-import { AuthService } from '../../service/auth.service';
 import { Observable } from 'rxjs';
 import { CartService } from '../../service/cart.service';
+import { Product, ProductService, ProdutoVitrine } from '../../service/product.service';
 
 @Component({
   selector: 'app-lista-de-produto',
@@ -14,41 +13,52 @@ import { CartService } from '../../service/cart.service';
 })
 export class ListaDeProduto implements OnInit {
 
-  vitrine$!: Observable<ProdutoVitrine[]>;
-  variacaoSelecionada = new Map<string, number>();
+  @ViewChild('carouselContainer', { static: false })
+  carousel!: ElementRef<HTMLDivElement>;
 
-  @ViewChild('carouselContainer') carouselContainer!: ElementRef;
+  vitrine$!: Observable<ProdutoVitrine[]>;
+
+  variacoesSelecionadas = new Map<string, number>();
 
   constructor(
     private productService: ProductService,
-    private cartService: CartService,
-    public authService: AuthService
-  ) {
-    this.vitrine$ = this.productService.vitrine$;
-  }
+    private cartService: CartService
+  ) {}
 
   ngOnInit() {
+    this.vitrine$ = this.productService.vitrine$;
     this.productService.loadPublicProducts();
   }
 
+  getVariacao(p: ProdutoVitrine): Product {
+    const selectedId = this.variacoesSelecionadas.get(p.name);
+
+    if (selectedId) {
+      return p.variacoes.find(v => v.id === selectedId) || p.variacoes[0];
+    }
+
+    return p.variacoes[0];
+  }
+
+  selecionarVariacao(p: ProdutoVitrine, id: number) {
+    this.variacoesSelecionadas.set(p.name, id);
+  }
+
+  adicionar(produto: Product) {
+    this.cartService.add(produto);
+  }
+
   scrollLeft() {
-    this.carouselContainer?.nativeElement.scrollBy({ left: -280, behavior: 'smooth' });
+    this.carousel.nativeElement.scrollBy({
+      left: -300,
+      behavior: 'smooth'
+    });
   }
 
   scrollRight() {
-    this.carouselContainer?.nativeElement.scrollBy({ left: 280, behavior: 'smooth' });
-  }
-
-  adicionar(product: Product) {
-    this.cartService.add(product);
-  }
-
-  selecionarVariacao(produto: ProdutoVitrine, variacaoId: number) {
-    this.variacaoSelecionada.set(produto.name, variacaoId);
-  }
-
-  getVariacao(produto: ProdutoVitrine): Product {
-    const id = this.variacaoSelecionada.get(produto.name);
-    return produto.variacoes.find(v => v.id === id) ?? produto.variacoes[0];
+    this.carousel.nativeElement.scrollBy({
+      left: 300,
+      behavior: 'smooth'
+    });
   }
 }

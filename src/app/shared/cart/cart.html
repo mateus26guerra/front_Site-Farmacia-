@@ -1,4 +1,4 @@
-<div class="cart-backdrop" (click)="fechar()">
+<!-- <div class="cart-backdrop" (click)="fechar()">
   <div class="cart-drawer" (click)="$event.stopPropagation()">
 
     <header>
@@ -7,31 +7,52 @@
     </header>
 
     <div class="cart-items">
-      @for (item of cartService.cart$ | async; track item.product.id) {
-   <div class="cart-item">
-  <img [src]="item.product.imagemUrl">
+      @if (cartService.cart$ | async; as items) {
 
-  <div class="info">
-<strong>{{ item.product.name }}</strong>
-<small class="variacao">
-  {{ item.product.variacao }}
-</small>
+        @for (item of items; track item.product.id) {
 
-    <div class="quantity">
-      <button (click)="diminuir(item.product.id)">−</button>
-<span class="qty" [class.bump]="item.animar">
-  {{ item.quantidade }}
-</span>
-      <button (click)="aumentar(item.product.id)">+</button>
-    </div>
-  </div>
+          <div class="cart-item">
 
-  <div class="price">
-    {{ item.product.preco.valorFinal * item.quantidade | currency:'BRL' }}
-  </div>
+            IMAGEM BASE64 
+            <img
+              [src]="'data:image/png;base64,' + item.product.imagemBase64"
+              [alt]="item.product.name"
+            >
 
-  <button class="remove" (click)="remover(item.product.id)">🗑</button>
-</div>
+            <div class="info">
+              <strong>{{ item.product.name }}</strong>
+
+              <small class="variacao">
+                {{ item.product.variacao }}
+              </small>
+
+              <div class="quantity">
+                <button (click)="diminuir(item.product.id)">−</button>
+
+                <span class="qty" [class.bump]="item.animar">
+                  {{ item.quantidade }}
+                </span>
+
+                <button (click)="aumentar(item.product.id)">+</button>
+              </div>
+            </div>
+
+            PREÇO TOTAL DO ITEM 
+            <div class="price">
+              {{
+                item.product.precoVenda * item.quantidade
+                | currency:'BRL'
+              }}
+            </div>
+
+            <button class="remove"
+                    (click)="remover(item.product.id)">
+              🗑
+            </button>
+
+          </div>
+
+        }
 
       }
     </div>
@@ -39,12 +60,19 @@
     <footer>
       <strong>
         <span>Subtotal</span>
-        <span>{{ cartService.totalValor() | currency:'BRL' }}</span>
+        <span>
+          {{ cartService.totalValor() | currency:'BRL' }}
+        </span>
       </strong>
 
-      <button class="finish" (click)="irParaLogin()">Ir para cesta</button>
-      <button class="continue" (click)="fechar()">Continuar comprando</button>
+      <button class="finish" (click)="irParaLogin()">
+        Ir para cesta
+      </button>
+
+      <button class="continue" (click)="fechar()">
+        Continuar comprando
+      </button>
     </footer>
 
   </div>
-</div>
+</div> -->

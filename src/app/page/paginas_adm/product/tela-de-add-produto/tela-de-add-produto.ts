@@ -24,30 +24,20 @@ import { NavbarAdministradorComponent } from '../../../../shared/navbar-administ
 export class TelaDeAddProduto implements OnInit {
 
   name!: string;
-  valor!: number;
-  desconto: number = 0;
-  imagemUrl!: string;
+  categoriaSelecionada!: string;
   categorias: string[] = [];
-  categoriaSelecionada: string = '';
-  quantidadeEmEstoque!: number;
+
+  imagemBase64!: string;
+  previewImagem!: string;
+
+  dropdownAberto = false;
 
   variacoes: {
     nome: string;
-    precoDiferente: boolean;
-    novoPreco?: number;
-    temPromocao: boolean;
-    precoPromocional?: number;
+    precoVenda: number;
   }[] = [
-    {
-      nome: '',
-      precoDiferente: false,
-      temPromocao: false
-    }
+    { nome: '', precoVenda: 0 }
   ];
-
-  dropdownAberto = false;
-  opcaoPreco = false;
-opcaoPromocao = false;
 
   constructor(
     private productService: ProductService,
@@ -59,24 +49,49 @@ opcaoPromocao = false;
     this.productService.getCategorias().subscribe({
       next: cats => this.categorias = cats,
       error: () => {
-        Swal.fire({
-          title: 'Erro ao carregar categorias',
-          text: 'Verifique se a API está rodando.',
-          icon: 'error',
-          confirmButtonColor: '#dc2626'
-        });
+        Swal.fire('Erro', 'Erro ao carregar categorias', 'error');
       }
     });
   }
 
-  // ── Dropdown ────────────────────────────────────────
+  // =========================
+  // Upload de imagem
+  // =========================
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) this.convertToBase64(file);
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    if (event.dataTransfer?.files.length) {
+      const file = event.dataTransfer.files[0];
+      this.convertToBase64(file);
+    }
+  }
+
+  private convertToBase64(file: File) {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.previewImagem = reader.result as string;
+      this.imagemBase64 = this.previewImagem.split(',')[1];
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  // =========================
+  // Dropdown categoria
+  // =========================
 
   toggleDropdown() {
     this.dropdownAberto = !this.dropdownAberto;
-  }
-
-  fecharDropdown() {
-    this.dropdownAberto = false;
   }
 
   selecionarCategoria(cat: string) {
@@ -96,18 +111,12 @@ opcaoPromocao = false;
     this.dropdownAberto = false;
   }
 
-  // ── Variações ───────────────────────────────────────
-
-  trackByIndex(index: number): number {
-    return index;
-  }
+  // =========================
+  // Variações
+  // =========================
 
   adicionarVariacao() {
-    this.variacoes.push({
-      nome: '',
-      precoDiferente: false,
-      temPromocao: false
-    });
+    this.variacoes.push({ nome: '', precoVenda: 0 });
   }
 
   removerVariacao(index: number) {
@@ -116,95 +125,48 @@ opcaoPromocao = false;
     }
   }
 
-  // ── Validação ───────────────────────────────────────
-
-  private validarCampos(): boolean {
-
-    if (
-      !this.name?.trim() ||
-      !this.valor ||
-      this.valor <= 0 ||
-      !this.categoriaSelecionada ||
-      this.quantidadeEmEstoque == null
-    ) {
-      Swal.fire({
-        title: 'Campos obrigatórios!',
-        text: 'Preencha todos os campos obrigatórios.',
-        icon: 'warning',
-        confirmButtonColor: '#2563eb'
-      });
-      return false;
-    }
-
-    for (const v of this.variacoes) {
-
-      if (!v.nome?.trim()) {
-        Swal.fire('Erro', 'Nome da variação é obrigatório', 'warning');
-        return false;
-      }
-
-      if (v.precoDiferente) {
-        if (!v.novoPreco || v.novoPreco <= 0) {
-          Swal.fire('Erro', 'Informe um novo preço válido', 'warning');
-          return false;
-        }
-      }
-
-      if (v.temPromocao) {
-        if (!v.precoPromocional || v.precoPromocional <= 0) {
-          Swal.fire('Erro', 'Informe um preço promocional válido', 'warning');
-          return false;
-        }
-      }
-    }
-
-    return true;
+  trackByIndex(index: number): number {
+    return index;
   }
 
-  // ── Salvar ──────────────────────────────────────────
+  // =========================
+  // Salvar
+  // =========================
 
   salvar() {
 
-    if (!this.validarCampos()) return;
+    if (!this.name?.trim() ||
+        !this.categoriaSelecionada ||
+        !this.imagemBase64) {
 
-    const requests = this.variacoes.map(v => {
+      Swal.fire('Atenção', 'Preencha todos os campos obrigatórios.', 'warning');
+      return;
+    }
 
-      const precoFinal = v.precoDiferente && v.novoPreco
-        ? v.novoPreco
-        : this.valor;
+    for (const v of this.variacoes) {
+      if (!v.nome.trim() || v.precoVenda <= 0) {
+        Swal.fire('Erro', 'Preencha corretamente as variações.', 'warning');
+        return;
+      }
+    }
 
-      const promocaoFinal = v.temPromocao && v.precoPromocional
-        ? v.precoPromocional
-        : this.desconto ?? 0;
-
-      return this.productService.addProduct({
+    const requests = this.variacoes.map(v =>
+      this.productService.addProduct({
         name: this.name.trim(),
-        valor: precoFinal,
-        desconto: promocaoFinal,
         variacao: v.nome.trim(),
-        imagemUrl: this.imagemUrl?.trim() ?? '',
         categoriaNome: this.categoriaSelecionada,
-        quantidadeEmEstoque: this.quantidadeEmEstoque
-      });
-
-    });
+        precoVenda: v.precoVenda,
+        imagemBase64: this.imagemBase64
+      })
+    );
 
     forkJoin(requests).subscribe({
       next: () => {
-        Swal.fire({
-          title: 'Produto criado!',
-          text: 'Os produtos foram cadastrados com sucesso.',
-          icon: 'success',
-          confirmButtonColor: '#2563eb'
-        }).then(() => this.router.navigate(['/products']));
+        Swal.fire('Sucesso', 'Produto cadastrado!', 'success')
+          .then(() => this.router.navigate(['/products']));
       },
       error: () => {
-        Swal.fire({
-          title: 'Erro!',
-          text: 'Erro ao salvar produto.',
-          icon: 'error',
-          confirmButtonColor: '#dc2626'
-        });
+        Swal.fire('Erro', 'Erro ao salvar produto.', 'error');
       }
     });
   }

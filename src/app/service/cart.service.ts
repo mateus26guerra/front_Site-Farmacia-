@@ -5,9 +5,6 @@ import { Product } from './product.service';
 export interface CartItem {
   product: Product;
   quantidade: number;
-
-  animar?: boolean;
-  removendo?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -43,59 +40,42 @@ export class CartService {
     this.cartSubject.next([]);
   }
 
+  aumentar(productId: number) {
+    const items = [...this.items];
+    const item = items.find(i => i.product.id === productId);
+
+    if (item) {
+      item.quantidade++;
+      this.cartSubject.next(items);
+    }
+  }
+
+  diminuir(productId: number) {
+    const items = [...this.items];
+    const item = items.find(i => i.product.id === productId);
+
+    if (item && item.quantidade > 1) {
+      item.quantidade--;
+      this.cartSubject.next(items);
+    }
+  }
+
   totalItens(): number {
     return this.items.reduce((t, i) => t + i.quantidade, 0);
   }
 
-  totalValor(): number {
+  totalOriginal(): number {
     return this.items.reduce(
-      (t, i) => t + (i.product.preco.valorFinal * i.quantidade),
+      (t, i) => t + (i.product.precoVenda * i.quantidade),
       0
     );
   }
 
-  aumentar(productId: number) {
-  const items = [...this.items];
-  const item = items.find(i => i.product.id === productId);
-
-  if (item) {
-    item.quantidade++;
-    this.cartSubject.next(items);
+  totalDesconto(): number {
+    return 0; // você não tem desconto no backend
   }
-}
 
-diminuir(productId: number) {
-  const items = [...this.items];
-  const item = items.find(i => i.product.id === productId);
-
-  if (item && item.quantidade > 1) {
-    item.quantidade--;
-    this.cartSubject.next(items);
+  totalComDesconto(): number {
+    return this.totalOriginal();
   }
-}
-
-// Soma preço ORIGINAL
-totalOriginal(): number {
-  return this.cartSubject.value.reduce((total, item) => {
-    return total + (item.product.preco.valor * item.quantidade);
-  }, 0);
-}
-
-// Soma desconto em dinheiro
-totalDesconto(): number {
-  return this.cartSubject.value.reduce((total, item) => {
-    const descontoUnitario =
-      item.product.preco.valor *
-      (item.product.preco.desconto / 100);
-
-    return total + (descontoUnitario * item.quantidade);
-  }, 0);
-}
-
-// Total final
-totalComDesconto(): number {
-  return this.totalOriginal() - this.totalDesconto();
-}
-
-  
 }

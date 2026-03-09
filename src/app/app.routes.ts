@@ -17,6 +17,7 @@ import { GestaoDeLoja } from './page/paginas_adm/gestao-de-loja/gestao-de-loja';
 import { TelaDeAddLoja } from './page/paginas_adm/gestao-de-loja/tela-de-add-loja/tela-de-add-loja';
 import { EditarLoja } from './page/paginas_adm/gestao-de-loja/editar-loja/editar-loja';
 import { AddFuncionarioLoja } from './page/paginas_adm/gestao-de-loja/add-funcionario-loja/add-funcionario-loja';
+import { AddProdutoEstoqueLoja } from './page/paginas_adm/product/add-produto-estoque-loja/add-produto-estoque-loja';
 
 export const routes: Routes = [
   { path: '', component: TelaInicial , canActivate: [publicGuard] },
@@ -24,6 +25,8 @@ export const routes: Routes = [
   { path: 'cestar', component: CestaDeCompras, canActivate:[publicGuard]},
   { path: 'dados', component: DadoClientes, canActivate:[publicGuard]},
   { path: 'finalizar-pedido', component: FinalizarPedido, canActivate:[publicGuard]},
+
+
 
   { path: 'pedido', component: Pedidos, canActivate: [authGuard] },
   { path: 'loja', component: GestaoDeLoja, canActivate: [authGuard] },
@@ -34,6 +37,7 @@ export const routes: Routes = [
   { path: 'products', component: ProductListComponent, canActivate: [authGuard] },
   { path: 'AddUsuario', component: AdminUsersComponent, canActivate: [adminGuard] },
   { path: 'addProduto', component: TelaDeAddProduto, canActivate: [adminGuard]},
+  { path: 'addestoque', component: AddProdutoEstoqueLoja, canActivate: [authGuard]},
   { path: 'addCategoria', component: AddEditCartegoria, canActivate: [adminGuard]},
 
   { path: '**', redirectTo: '' }

@@ -13,34 +13,21 @@
 
         <div class="product-card">
 
-          <!-- DESCONTO -->
-          @if (variacao.preco.desconto > 0) {
-            <span class="discount-badge">
--{{
-  (variacao.preco.desconto / variacao.preco.valor) * 100
-  | number:'1.0-0'
-}}%
-            </span>
-          }
-
           <!-- BOTÃO ADD -->
           <button class="add-btn" (click)="adicionar(variacao)">+</button>
 
-          <!-- IMAGEM -->
-          <img [src]="variacao.imagemUrl" alt="{{ p.name }}" />
+          <!-- IMAGEM BASE64 -->
+          <img 
+            [src]="'data:image/png;base64,' + variacao.imagemBase64" 
+            [alt]="p.name"
+          />
 
           <!-- INFO -->
           <div class="info">
             <h3 class="product-name">{{ p.name }}</h3>
 
-            @if (variacao.preco.desconto > 0) {
-              <p class="old-price">
-                {{ variacao.preco.valor | currency:'BRL' }}
-              </p>
-            }
-
             <p class="price">
-              {{ variacao.preco.valorFinal | currency:'BRL' }}
+              {{ variacao.precoVenda | currency:'BRL' }}
             </p>
           </div>
 

@@ -7,28 +7,17 @@ export interface Product {
   id: number;
   name: string;
   variacao: string;
-  imagemUrl: string;
-
-  categoria?: {
-    id: number;
-    nome_categoria: string;
-  };
-
-  preco: {
-    valor: number;
-    desconto: number;
-    valorFinal: number;
-  };
+  imagemBase64: string;
+  categoriaNome: string;
+  precoVenda: number;
 }
 
 export interface ProdutoAddDTO {
   name: string;
-  valor: number;
-  desconto: number;
   variacao: string;
-  imagemUrl: string;
+  imagemBase64: string;
   categoriaNome: string;
-  quantidadeEmEstoque: number;
+  precoVenda: number;
 }
 
 export interface ProdutoVitrine {
@@ -61,12 +50,25 @@ export class ProductService {
   );
 
   constructor(private http: HttpClient) {}
+  
 
-  loadPublicProducts() {
-    this.http
-      .get<Product[]>(`${this.API_PUBLICA}/list`)
-      .subscribe(products => this.productsSubject.next(products));
-  }
+loadPublicProducts() {
+  this.http
+    .get<any[]>(`${this.API_PUBLICA}/list`)
+    .pipe(
+      map(produtos =>
+        produtos.map(p => ({
+          id: p.id,
+          name: p.nome,
+          variacao: p.variacao,
+          imagemBase64: p.imagemUrl,
+          categoriaNome: '',
+          precoVenda: p.preco
+        }))
+      )
+    )
+    .subscribe(products => this.productsSubject.next(products));
+}
 
   loadPrivateProducts() {
     this.http
@@ -89,14 +91,20 @@ export class ProductService {
 
   groupByName(produtos: Product[]): ProdutoVitrine[] {
     const map = new Map<string, Product[]>();
+
     produtos.forEach(p => {
-      if (!map.has(p.name)) map.set(p.name, []);
+      if (!map.has(p.name)) {
+        map.set(p.name, []);
+      }
       map.get(p.name)!.push(p);
     });
-    return Array.from(map.entries()).map(([name, variacoes]) => ({ name, variacoes }));
+
+    return Array.from(map.entries()).map(([name, variacoes]) => ({
+      name,
+      variacoes
+    }));
   }
 
-  // ✅ FIX: API retorna string[] direto, sem objeto
   getCategorias() {
     return this.http.get<string[]>(`${this.API_PUBLICA}/categorias`);
   }

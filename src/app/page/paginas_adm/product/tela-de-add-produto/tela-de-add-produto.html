@@ -3,185 +3,119 @@
 <div class="page-wrapper">
   <div class="card">
 
-    <h2 class="card-title">
-      Cadastro de Produto
-    </h2>
+    <h2 class="card-title">Cadastro de Produto</h2>
 
     <form (ngSubmit)="salvar()">
 
       <div class="form-grid">
 
+        <!-- Nome -->
         <div class="form-group full">
-          <label for="name">Nome do Produto</label>
-          <input
-            id="name"
-            type="text"
-            placeholder="Ex: Dipirona 500mg"
-            [(ngModel)]="name"
-            name="name"
-            required
-            autocomplete="off">
-          <span class="helper-text">Digite o nome principal do produto.</span>
+          <label>Nome do Produto</label>
+          <input type="text"
+                 [(ngModel)]="name"
+                 name="name"
+                 required
+                 autocomplete="off">
         </div>
 
-        <div class="form-group">
-          <label for="valor">Valor (R$)</label>
-          <input
-            id="valor"
-            type="number"
-            placeholder="Ex: 19.90"
-            [(ngModel)]="valor"
-            name="valor"
-            min="0"
-            step="0.01"
-            required>
-          <span class="helper-text">Valor base do produto.</span>
-        </div>
-
-        <div class="form-group">
-          <label for="desconto">Desconto (%)</label>
-          <input
-            id="desconto"
-            type="number"
-            placeholder="Ex: 10"
-            [(ngModel)]="desconto"
-            name="desconto"
-            min="0"
-            max="100">
-          <span class="helper-text">Opcional (0–100).</span>
-        </div>
-
-        <div class="form-group">
-          <label for="quantidadeEmEstoque">Estoque</label>
-          <input
-            id="quantidadeEmEstoque"
-            type="number"
-            placeholder="Ex: 150"
-            [(ngModel)]="quantidadeEmEstoque"
-            name="quantidadeEmEstoque"
-            min="0">
-          <span class="helper-text">Quantidade disponível.</span>
-        </div>
-
+        <!-- Categoria -->
         <div class="form-group">
           <label>Categoria</label>
 
-          <div class="custom-select" [class.open]="dropdownAberto" (clickOutside)="fecharDropdown()">
-            <button
-              type="button"
-              class="custom-select__trigger"
-              (click)="toggleDropdown()">
-              <span [class.placeholder]="!categoriaSelecionada">
-                {{ categoriaSelecionada || 'Selecione uma categoria' }}
-              </span>
-              <svg class="custom-select__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"/>
-              </svg>
+          <div class="custom-select" [class.open]="dropdownAberto">
+            <button type="button"
+                    class="custom-select__trigger"
+                    (click)="toggleDropdown()">
+
+              {{ categoriaSelecionada || 'Selecione uma categoria' }}
+
             </button>
 
-            <ul class="custom-select__list">
-              <li
-                *ngFor="let cat of categorias"
-                class="custom-select__item"
-                [class.selected]="cat === categoriaSelecionada"
-                (click)="selecionarCategoria(cat)">
+            <ul *ngIf="dropdownAberto" class="custom-select__list">
+              <li *ngFor="let cat of categorias"
+                  (click)="selecionarCategoria(cat)">
                 {{ cat }}
-                <svg *ngIf="cat === categoriaSelecionada" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
               </li>
             </ul>
           </div>
-
-          <span class="helper-text">Escolha a categoria do produto.</span>
         </div>
 
+        <!-- Upload Imagem -->
         <div class="form-group full">
-          <label for="imagemUrl">Imagem (URL)</label>
-          <input
-            id="imagemUrl"
-            type="text"
-            placeholder="https://exemplo.com/imagem.jpg"
-            [(ngModel)]="imagemUrl"
-            name="imagemUrl"
-            autocomplete="off">
-          <span class="helper-text">Link direto para a imagem do produto.</span>
+          <label>Imagem do Produto</label>
+
+          <div class="upload-box"
+               (dragover)="onDragOver($event)"
+               (drop)="onDrop($event)">
+
+            <input type="file"
+                   accept="image/*"
+                   (change)="onFileSelected($event)"
+                   hidden
+                   #fileInput>
+
+            <button type="button"
+                    class="btn secondary"
+                    (click)="fileInput.click()">
+              Selecionar Imagem
+            </button>
+
+            <p *ngIf="!previewImagem">
+              Arraste a imagem aqui ou clique para selecionar
+            </p>
+
+            <img *ngIf="previewImagem"
+                 [src]="previewImagem"
+                 class="preview-img">
+          </div>
         </div>
 
       </div>
 
       <hr class="section-divider">
 
-      <!-- Título + checkboxes globais lado a lado -->
-      <div class="section-label-row">
-        <p class="section-label">Variações do Produto</p>
+      <!-- Variações -->
+      <p class="section-label">Variações</p>
 
-        <label class="check-inline">
-          <input type="checkbox"
-                 [(ngModel)]="opcaoPreco"
-                 name="opcaoPreco">
-          Preço diferente?
-        </label>
+      <div *ngFor="let v of variacoes; let i = index; trackBy: trackByIndex"
+           class="variacao-row">
 
-        <label class="check-inline">
-          <input type="checkbox"
-                 [(ngModel)]="opcaoPromocao"
-                 name="opcaoPromocao">
-          Promoção?
-        </label>
-      </div>
+        <input type="text"
+               placeholder="Ex: 500mg"
+               [(ngModel)]="variacoes[i].nome"
+               [name]="'variacao' + i">
 
-      <!-- Lista de variações -->
-      <div
-        *ngFor="let v of variacoes; let i = index; trackBy: trackByIndex"
-        class="variacao-row">
+        <input type="number"
+               placeholder="Preço de venda"
+               [(ngModel)]="variacoes[i].precoVenda"
+               [name]="'precoVenda' + i"
+               min="0"
+               step="0.01">
 
-        <input
-          type="text"
-          placeholder="Ex: Tamanho P"
-          [(ngModel)]="variacoes[i].nome"
-          [name]="'variacao' + i"
-          style="flex:1">
-
-        <input *ngIf="opcaoPreco"
-          type="number"
-          placeholder="Novo preço"
-          [(ngModel)]="variacoes[i].novoPreco"
-          [name]="'novoPreco' + i"
-          min="0"
-          step="0.01"
-          style="width:130px; flex-shrink:0">
-
-        <input *ngIf="opcaoPromocao"
-          type="number"
-          placeholder="Preço promo"
-          [(ngModel)]="variacoes[i].precoPromocional"
-          [name]="'precoPromo' + i"
-          min="0"
-          step="0.01"
-          style="width:130px; flex-shrink:0">
-
-        <button
-          type="button"
-          class="btn danger-sm"
-          (click)="removerVariacao(i)">
+        <button type="button"
+                class="btn danger-sm"
+                (click)="removerVariacao(i)">
           Remover
         </button>
 
       </div>
 
-      <button
-        type="button"
-        class="btn success"
-        (click)="adicionarVariacao()">
+      <button type="button"
+              class="btn success"
+              (click)="adicionarVariacao()">
         Adicionar Variação
       </button>
 
       <div class="button-group">
-        <button type="button" class="btn secondary" [routerLink]="['/produtos']">
+        <button type="button"
+                class="btn secondary"
+                [routerLink]="['/produtos']">
           Cancelar
         </button>
-        <button type="submit" class="btn primary">
+
+        <button type="submit"
+                class="btn primary">
           Salvar Produto
         </button>
       </div>

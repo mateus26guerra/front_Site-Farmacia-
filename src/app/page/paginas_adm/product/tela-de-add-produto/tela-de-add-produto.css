@@ -419,3 +419,17 @@ button.btn.danger-sm,
   .form-group input,
   .variacao-row input { font-size: 16px; }
 }
+
+.upload-box {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.preview-img {
+  margin-top: 10px;
+  max-height: 150px;
+  border-radius: 8px;
+}
