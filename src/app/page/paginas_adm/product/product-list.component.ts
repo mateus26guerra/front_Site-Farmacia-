@@ -1,81 +1,140 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
-import Swal from 'sweetalert2';
-
-import { ProductService } from '../../../service/product.service';
-import { ListaDeProduto } from '../../../shared/lista-de-produto/lista-de-produto';
+import { EstoqueService, Estoque } from '../../../service/estoque.service';
 import { SidebarComponent } from '../../../shared/sidebar/sidebar.component';
 import { NavbarAdministradorComponent } from '../../../shared/navbar-administrador/navbar-administrador';
-
-import {
-  LucideAngularModule,
-  Package,
-  Plus,
-  FolderPlus,
-  BarChart3,
-  Trash2
-} from 'lucide-angular';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    LucideAngularModule,
-    ListaDeProduto,
-    SidebarComponent,
-    NavbarAdministradorComponent
-  ],
+  imports: [CommonModule, FormsModule, SidebarComponent, NavbarAdministradorComponent,RouterModule],
   templateUrl: './product-list.component.html',
-  styleUrl: './product.css',
+  styleUrl: './product.css'
 })
+export class ProductListComponent implements OnInit {
 
+  produtos: Estoque[] = []
+  produtosFiltrados: Estoque[] = []
 
-export class ProductListComponent {
+  lojas: any[] = []
 
-  // 🔹 FORM PRODUTO
-  name = '';
-  valor!: number;
-  desconto = 0;
-  imagemUrl = '';
-  categoriaId!: number;
-  temEmEstoque = true;
+  lojaSelecionada: number | null = null
 
-  // 🔹 CONTROLE MODAIS
-  showProductModal = false;
-  showCategoryModal = false;
+  alterados: Set<number> = new Set()
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private estoqueService: EstoqueService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
+  ngOnInit() {
 
-  
-  // 🔥 MODAL PRODUTO
-  openProductModal() {
-    this.showProductModal = true;
+    this.carregarDados()
+
   }
 
-  closeProductModal() {
-    this.showProductModal = false;
+  carregarDados() {
+
+    this.estoqueService.listar().subscribe((res: Estoque[]) => {
+
+      this.produtos = res
+      this.produtosFiltrados = res
+
+      const mapa = new Map()
+
+      res.forEach(e => {
+
+        if (!mapa.has(e.loja.id)) {
+          mapa.set(e.loja.id, e.loja)
+        }
+
+      })
+
+      this.lojas = Array.from(mapa.values())
+
+      this.cdr.detectChanges()
+
+    })
+
   }
 
-  // 🔥 MODAL CATEGORIA
-  openCategoryModal() {
-    this.showCategoryModal = true;
+  mostrarTudo() {
+
+    this.produtosFiltrados = this.produtos
+    this.lojaSelecionada = null
+
+    this.cdr.detectChanges()
+
   }
 
-  closeCategoryModal() {
-    this.showCategoryModal = false;
+  selecionarLoja(event: any) {
+
+    const lojaId = Number(event.target.value)
+
+    this.lojaSelecionada = lojaId
+
+    if (!lojaId) {
+
+      this.produtosFiltrados = this.produtos
+      this.cdr.detectChanges()
+      return
+
+    }
+
+    // 🔥 filtro feito no front (resolve bug)
+    this.produtosFiltrados =
+      this.produtos.filter(p => p.loja.id === lojaId)
+
+    this.cdr.detectChanges()
+
   }
 
-  // 🔍 PESQUISA
-  onSearch(value: string) {
-    this.productService.setSearch(value);
+  aumentarEstoque(p: Estoque) {
+
+    p.quantidade++
+
+    this.alterados.add(p.id)
+
   }
 
-  
+  diminuirEstoque(p: Estoque) {
+
+    if (p.quantidade > 0) {
+
+      p.quantidade--
+
+      this.alterados.add(p.id)
+
+    }
+
+  }
+
+  estoqueAlterado(p: Estoque) {
+
+    return this.alterados.has(p.id)
+
+  }
+
+  atualizarEstoque(p: Estoque) {
+
+    this.estoqueService.salvar({
+
+      produtoId: p.produto.id,
+      lojaId: p.loja.id,
+      quantidade: p.quantidade,
+      precoVenda: p.valorFinal
+
+    }).subscribe(() => {
+
+      this.alterados.delete(p.id)
+
+      this.cdr.detectChanges()
+
+    })
+
+  }
+
 }

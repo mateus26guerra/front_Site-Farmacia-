@@ -2,54 +2,57 @@
 
 <div class="carousel-wrapper">
 
-  <button class="carousel-btn" (click)="scrollLeft()">❮</button>
+<button class="carousel-btn" (click)="scrollLeft()">❮</button>
 
-  <div class="carousel" #carouselContainer>
-    <div class="products">
+<div class="carousel" #carouselContainer>
 
-      @for (p of vitrine$ | async; track p.name) {
+<div class="products">
 
-        @let variacao = getVariacao(p);
+@for (p of produtos; track p.id) {
 
-        <div class="product-card">
+<div class="product-card">
 
-          <!-- BOTÃO ADD -->
-          <button class="add-btn" (click)="adicionar(variacao)">+</button>
+<button class="add-btn" (click)="adicionar(p)">+</button>
 
-          <!-- IMAGEM BASE64 -->
-          <img 
-            [src]="'data:image/png;base64,' + variacao.imagemBase64" 
-            [alt]="p.name"
-          />
+<img
+[src]="'data:image/png;base64,' + p.produto.imagemBase64"
+[alt]="p.produto.name"
+/>
 
-          <!-- INFO -->
-          <div class="info">
-            <h3 class="product-name">{{ p.name }}</h3>
+<div class="info">
 
-            <p class="price">
-              {{ variacao.precoVenda | currency:'BRL' }}
-            </p>
-          </div>
+<h3 class="product-name">
 
-          <!-- VARIAÇÕES -->
-          <div class="variacoes">
-            @for (v of p.variacoes; track v.id) {
-              <button
-                class="variacao-btn"
-                [class.active]="v.id === variacao.id"
-                (click)="selecionarVariacao(p, v.id)"
-              >
-                {{ v.variacao }}
-              </button>
-            }
-          </div>
+{{ p.produto.name }}
 
-        </div>
-      }
+</h3>
 
-    </div>
-  </div>
+<p class="price">
 
-  <button class="carousel-btn" (click)="scrollRight()">❯</button>
+{{ p.valorFinal | currency:'BRL' }}
+
+</p>
+
+</div>
+
+<div class="variacoes">
+
+<span class="variacao-tag">
+
+{{ p.produto.variacao }}
+
+</span>
+
+</div>
+
+</div>
+
+}
+
+</div>
+
+</div>
+
+<button class="carousel-btn" (click)="scrollRight()">❯</button>
 
 </div>

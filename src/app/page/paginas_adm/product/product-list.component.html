@@ -1,52 +1,146 @@
 <app-navbar-administrador></app-navbar-administrador>
 <app-sidebar></app-sidebar>
+<div class="page-wrapper">
 
-<form class="card-form">
-  <div class="card">
+<div class="card">
 
-  
-      <h2 class="card-title">
-  <i data-lucide="package"></i>
-  Gerenciamento de Produtos
+<h2 class="title">
+Gerenciamento de Produtos
 </h2>
 
+<div class="top-controls">
 
-    <!-- Barra de busca -->
-    <div class="search-box">
-      <input
-        type="text"
-        placeholder="Pesquisar produtos..."
-        (input)="onSearch($event.target.value)"
-      />
-    </div>
+<input
+class="search"
+type="text"
+placeholder="Pesquisar produtos..."
+>
 
-    <!-- Botões de ação -->
-    <div class="action-buttons">
+<select
+class="loja-select"
+(change)="selecionarLoja($event)"
+>
 
-<button type="button" class="btn primary" [routerLink]="['/addProduto']">
-  <i data-lucide="plus"></i>
-  Novo Produto
+<option value="">Todas as lojas</option>
+
+<option
+*ngFor="let l of lojas"
+[value]="l.id"
+>
+{{l.nome}}
+</option>
+
+</select>
+
+<button
+class="btn show-all"
+(click)="mostrarTudo()"
+>
+Mostrar tudo
 </button>
 
-<button type="button" class="btn secondary"  [routerLink]="['/addCategoria']">
-  <i data-lucide="folder-plus"></i>
-  Nova Categoria
+</div>
+
+<div class="action-buttons">
+
+<button class="btn primary"  [routerLink]="['/addProduto']">
+Novo Produto
 </button>
 
-<button type="button" class="btn success"  [routerLink]="['/addestoque']" >
-  <i data-lucide="bar-chart-3"></i>
-  Produto de Estoque
+<button class="btn secondary"  [routerLink]="['/addCategoria']">
+Nova Categoria
 </button>
 
-<button type="button" class="btn danger">
-  <i data-lucide="trash-2"></i>
-  Excluir
+<button class="btn success" [routerLink]="['/addestoque']" >
+Produto de Estoque
 </button>
 
+</div>
 
-    </div>
+</div>
 
-  </div>
-</form>
+<div class="product-table">
 
-<app-lista-de-produto></app-lista-de-produto>
+<div class="table-header">
+
+<div>Imagem</div>
+<div>Produto</div>
+<div>Loja</div>
+<div>Estoque</div>
+<div>Preço</div>
+<div>Ações</div>
+
+</div>
+
+<div
+class="table-row"
+*ngFor="let p of produtosFiltrados"
+>
+
+<div class="col-image">
+
+<img
+[src]="'data:image/png;base64,' + p.produto.imagemBase64"
+>
+
+</div>
+
+<div class="col-name">
+
+{{p.produto.name}}
+
+</div>
+
+<div class="col-store">
+
+{{p.loja.nome}}
+
+</div>
+
+<div class="col-stock">
+
+{{p.quantidade}}
+
+</div>
+
+<div class="col-price">
+
+R$ {{p.valorFinal}}
+
+</div>
+
+<div class="col-actions">
+
+<button
+class="btn-minus"
+(click)="diminuirEstoque(p)"
+>
+-
+</button>
+
+<span class="stock-number">
+{{p.quantidade}}
+</span>
+
+<button
+class="btn-plus"
+(click)="aumentarEstoque(p)"
+>
++
+</button>
+
+<button
+class="btn-update"
+*ngIf="estoqueAlterado(p)"
+(click)="atualizarEstoque(p)"
+>
+Salvar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>

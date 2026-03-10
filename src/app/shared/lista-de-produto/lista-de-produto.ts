@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+import { EstoqueService, Estoque } from '../../service/estoque.service';
 import { CartService } from '../../service/cart.service';
-import { Product, ProductService, ProdutoVitrine } from '../../service/product.service';
 
 @Component({
   selector: 'app-lista-de-produto',
@@ -16,36 +15,36 @@ export class ListaDeProduto implements OnInit {
   @ViewChild('carouselContainer', { static: false })
   carousel!: ElementRef<HTMLDivElement>;
 
-  vitrine$!: Observable<ProdutoVitrine[]>;
-
-  variacoesSelecionadas = new Map<string, number>();
+  produtos: Estoque[] = [];
 
   constructor(
-    private productService: ProductService,
-    private cartService: CartService
+    private estoqueService: EstoqueService,
+    private cartService: CartService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    this.vitrine$ = this.productService.vitrine$;
-    this.productService.loadPublicProducts();
+
+    this.estoqueService.listar().subscribe({
+      next: (res) => {
+
+        console.log("ESTOQUE API:", res);
+
+        this.produtos = res;
+
+        // força atualização da tela
+        this.cdr.detectChanges();
+
+      },
+      error: (err) => {
+        console.error("Erro ao carregar estoque", err);
+      }
+    });
+
   }
 
-  getVariacao(p: ProdutoVitrine): Product {
-    const selectedId = this.variacoesSelecionadas.get(p.name);
-
-    if (selectedId) {
-      return p.variacoes.find(v => v.id === selectedId) || p.variacoes[0];
-    }
-
-    return p.variacoes[0];
-  }
-
-  selecionarVariacao(p: ProdutoVitrine, id: number) {
-    this.variacoesSelecionadas.set(p.name, id);
-  }
-
-  adicionar(produto: Product) {
-    this.cartService.add(produto);
+  adicionar(produto: Estoque) {
+    // this.cartService.add(produto);
   }
 
   scrollLeft() {
@@ -61,4 +60,5 @@ export class ListaDeProduto implements OnInit {
       behavior: 'smooth'
     });
   }
+
 }

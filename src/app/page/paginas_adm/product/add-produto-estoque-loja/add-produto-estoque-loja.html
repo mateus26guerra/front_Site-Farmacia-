@@ -9,6 +9,8 @@ Adicionar Produto ao Estoque
 </h2>
 
 <form (ngSubmit)="salvar()">
+    
+<div class="form-row">
 
 <!-- LOJA -->
 
@@ -30,6 +32,23 @@ Selecione uma loja
 
 </div>
 
+
+<!-- PESQUISAR PRODUTO -->
+
+<div class="form-group">
+
+<label>Pesquisar Produto</label>
+
+<input
+type="text"
+placeholder="Digite o nome do produto..."
+[(ngModel)]="buscaProduto"
+name="buscaProduto"
+/>
+
+</div>
+
+</div>
 <!-- PRODUTOS -->
 
 <p class="section-label">Produtos</p>
@@ -38,55 +57,74 @@ Selecione uma loja
 
 <div
 class="produto-card"
-*ngFor="let p of produtos"
+*ngFor="let p of produtosFiltrados()"
 (click)="selecionarProduto(p)"
-[class.selected]="produtoSelecionado?.id === p.id"
+[class.selected]="produtoSelecionado?.name === p.name"
 >
 
 <img
-*ngIf="p.imagemBase64"
-[src]="'data:image/*;base64,' + p.imagemBase64"
+*ngIf="p.variacoes[0].imagemBase64"
+[src]="'data:image/*;base64,' + p.variacoes[0].imagemBase64"
 />
 
-<p>{{ p.name }}</p>
+<p class="produto-nome">{{ p.name }}</p>
 
 </div>
 
 </div>
 
-<!-- QUANTIDADE -->
 
-<div class="form-group">
+<!-- VARIAÇÕES -->
 
-<label>Quantidade</label>
+<div *ngIf="produtoSelecionado" class="variacoes-container">
+
+<h3 class="variacoes-title">
+Controle de Estoque
+</h3>
+
+<div class="variacoes-header">
+
+<span>Variação</span>
+<span>Quantidade</span>
+<span>Preço de Venda</span>
+
+</div>
+
+<div
+class="variacao-row"
+*ngFor="let v of produtoSelecionado.variacoes"
+>
+
+<span class="variacao-nome">
+{{ v.variacao }}
+</span>
 
 <input
 type="number"
-[(ngModel)]="quantidade"
-name="quantidade"
+placeholder="0"
+[(ngModel)]="v.quantidade"
+name="quantidade{{v.id}}"
 />
-
-</div>
-
-<!-- PREÇO -->
-
-<div class="form-group">
-
-<label>Preço</label>
 
 <input
 type="number"
-[(ngModel)]="precoVenda"
-name="precoVenda"
+placeholder="0.00"
 step="0.01"
+[(ngModel)]="v.precoVenda"
+name="preco{{v.id}}"
 />
 
 </div>
+
+</div>
+
+
+<!-- BOTÃO -->
 
 <div class="button-group">
 
 <button type="submit" class="btn primary">
-Salvar
+Salvar Estoque
 </button>
 
 </div>
@@ -94,4 +132,5 @@ Salvar
 </form>
 
 </div>
+
 </div>

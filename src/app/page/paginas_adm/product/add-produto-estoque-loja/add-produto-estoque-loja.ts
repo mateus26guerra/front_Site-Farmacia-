@@ -7,6 +7,16 @@ import { EstoqueService, EstoqueRequest } from '../../../../service/estoque.serv
 import { ProdutoService, Produto } from '../../../../service/produto.service';
 import { LojaService, Loja } from '../../../../service/loja.service';
 
+interface ProdutoGrupo {
+  name: string;
+  variacoes: ProdutoComEstoque[];
+}
+
+interface ProdutoComEstoque extends Produto {
+  quantidade?: number;
+  precoVenda?: number;
+}
+
 @Component({
   selector: 'app-add-produto-estoque-loja',
   standalone: true,
@@ -20,17 +30,13 @@ import { LojaService, Loja } from '../../../../service/loja.service';
 })
 export class AddProdutoEstoqueLoja implements OnInit {
 
-  produtos: Produto[] = [];
+  produtosAgrupados: ProdutoGrupo[] = [];
   lojas: Loja[] = [];
 
-  produtoSelecionado?: Produto;
+  produtoSelecionado?: ProdutoGrupo;
+  lojaSelecionada?: Loja;
 
-  lojasSelecionadas: Loja[] = [];
-
-  quantidade = 0;
-  precoVenda = 0;
-
-  loading = false;
+  buscaProduto = "";
 
   constructor(
     private produtoService: ProdutoService,
@@ -45,40 +51,57 @@ export class AddProdutoEstoqueLoja implements OnInit {
   }
 
   carregarProdutos() {
-    this.produtoService.listar().subscribe({
-      next: (produtos) => {
-        this.produtos = produtos;
-        this.cdr.detectChanges();
-      }
+    this.produtoService.listar().subscribe(produtos => {
+
+      const mapa = new Map<string, ProdutoComEstoque[]>();
+
+      produtos.forEach(p => {
+
+        const produto: ProdutoComEstoque = {
+          ...p,
+          quantidade: 0,
+          precoVenda: 0
+        };
+
+        if (!mapa.has(p.name)) {
+          mapa.set(p.name, []);
+        }
+
+        mapa.get(p.name)!.push(produto);
+
+      });
+
+      this.produtosAgrupados = Array.from(mapa.entries()).map(([name, variacoes]) => ({
+        name,
+        variacoes
+      }));
+
+      this.cdr.detectChanges();
+
     });
   }
 
   carregarLojas() {
-    this.lojaService.listar().subscribe({
-      next: (lojas) => {
-        this.lojas = lojas;
-        this.cdr.detectChanges();
-      }
+    this.lojaService.listar().subscribe(lojas => {
+      this.lojas = lojas;
+      this.cdr.detectChanges();
     });
   }
 
-  selecionarProduto(produto: Produto) {
+  selecionarProduto(produto: ProdutoGrupo) {
     this.produtoSelecionado = produto;
   }
 
-  toggleLoja(loja: Loja) {
+  produtosFiltrados(): ProdutoGrupo[] {
 
-    const index = this.lojasSelecionadas.findIndex(l => l.id === loja.id);
-
-    if (index >= 0) {
-      this.lojasSelecionadas.splice(index, 1);
-    } else {
-      this.lojasSelecionadas.push(loja);
+    if (!this.buscaProduto) {
+      return this.produtosAgrupados;
     }
-  }
 
-  lojaSelecionada(loja: Loja) {
-    return this.lojasSelecionadas.some(l => l.id === loja.id);
+    return this.produtosAgrupados.filter(p =>
+      p.name.toLowerCase().includes(this.buscaProduto.toLowerCase())
+    );
+
   }
 
   salvar() {
@@ -88,40 +111,28 @@ export class AddProdutoEstoqueLoja implements OnInit {
       return;
     }
 
-    if (this.lojasSelecionadas.length === 0) {
-      alert("Selecione pelo menos uma loja");
+    if (!this.lojaSelecionada) {
+      alert("Selecione uma loja");
       return;
     }
 
-    this.loading = true;
+    this.produtoSelecionado.variacoes.forEach(v => {
 
-    const requests = this.lojasSelecionadas.map(loja => {
+      if (!v.quantidade || !v.precoVenda) return;
 
       const data: EstoqueRequest = {
-        produtoId: this.produtoSelecionado!.id,
-        lojaId: loja.id!,
-        quantidade: this.quantidade,
-        precoVenda: this.precoVenda
+        produtoId: v.id,
+        lojaId: this.lojaSelecionada!.id!,
+        quantidade: v.quantidade,
+        precoVenda: v.precoVenda
       };
 
-      return this.estoqueService.salvar(data).toPromise();
+      this.estoqueService.salvar(data).subscribe();
 
     });
 
-    Promise.all(requests)
-      .then(() => {
+    alert("Estoque cadastrado!");
 
-        alert("Produto adicionado nas lojas!");
-
-        this.quantidade = 0;
-        this.precoVenda = 0;
-        this.lojasSelecionadas = [];
-        this.produtoSelecionado = undefined;
-
-      })
-      .finally(() => {
-        this.loading = false;
-      });
   }
 
 }
