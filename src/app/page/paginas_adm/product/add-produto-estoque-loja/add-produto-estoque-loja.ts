@@ -122,7 +122,9 @@ export class AddProdutoEstoqueLoja implements OnInit {
 
       const data: EstoqueRequest = {
         produtoId: v.id,
-        lojaId: this.lojaSelecionada!.id!,
+        lojaID: this.lojaSelecionada!.id!,
+        nomeLoja: this.lojaSelecionada!.nome,
+        nomeProduto: v.name,
         quantidade: v.quantidade,
         precoVenda: v.precoVenda
       };

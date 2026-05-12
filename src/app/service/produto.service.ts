@@ -7,6 +7,7 @@ export interface Produto {
   name: string;
   variacao: string;
   imagemBase64: string;
+categoriaNome: string;
 }
 
 @Injectable({

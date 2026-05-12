@@ -1,5 +1,6 @@
 <app-navbar-administrador></app-navbar-administrador>
 <app-sidebar></app-sidebar>
+
 <div class="page-wrapper">
 
 <div class="card">
@@ -23,10 +24,7 @@ class="loja-select"
 
 <option value="">Todas as lojas</option>
 
-<option
-*ngFor="let l of lojas"
-[value]="l.id"
->
+<option *ngFor="let l of lojas" [value]="l.id">
 {{l.nome}}
 </option>
 
@@ -36,22 +34,29 @@ class="loja-select"
 class="btn show-all"
 (click)="mostrarTudo()"
 >
-Mostrar tudo
+Mostrar estoque
+</button>
+
+<button
+class="btn show-all"
+(click)="mostrarTodosProdutos()"
+>
+Todos produtos
 </button>
 
 </div>
 
 <div class="action-buttons">
 
-<button class="btn primary"  [routerLink]="['/addProduto']">
+<button class="btn primary" [routerLink]="['/addProduto']">
 Novo Produto
 </button>
 
-<button class="btn secondary"  [routerLink]="['/addCategoria']">
+<button class="btn secondary" [routerLink]="['/addCategoria']">
 Nova Categoria
 </button>
 
-<button class="btn success" [routerLink]="['/addestoque']" >
+<button class="btn success" [routerLink]="['/addestoque']">
 Produto de Estoque
 </button>
 
@@ -59,7 +64,11 @@ Produto de Estoque
 
 </div>
 
-<div class="product-table">
+<!-- ================================= -->
+<!-- TABELA ESTOQUE -->
+<!-- ================================= -->
+
+<div *ngIf="modo === 'estoque'" class="product-table">
 
 <div class="table-header">
 
@@ -78,56 +87,34 @@ class="table-row"
 >
 
 <div class="col-image">
-
-<img
-[src]="'data:image/png;base64,' + p.produto.imagemBase64"
->
-
+<img [src]="'data:image/png;base64,' + p.produto.imagemBase64">
 </div>
 
 <div class="col-name">
-
 {{p.produto.name}}
-
 </div>
 
 <div class="col-store">
-
 {{p.loja.nome}}
-
 </div>
 
 <div class="col-stock">
-
 {{p.quantidade}}
-
 </div>
 
 <div class="col-price">
-
 R$ {{p.valorFinal}}
-
 </div>
 
 <div class="col-actions">
 
-<button
-class="btn-minus"
-(click)="diminuirEstoque(p)"
->
--
-</button>
+<button class="btn-minus" (click)="diminuirEstoque(p)">-</button>
 
 <span class="stock-number">
 {{p.quantidade}}
 </span>
 
-<button
-class="btn-plus"
-(click)="aumentarEstoque(p)"
->
-+
-</button>
+<button class="btn-plus" (click)="aumentarEstoque(p)">+</button>
 
 <button
 class="btn-update"
@@ -139,6 +126,44 @@ Salvar
 
 </div>
 
+</div>
+
+</div>
+
+<!-- ================================= -->
+<!-- TABELA PRODUTOS -->
+<!-- ================================= -->
+
+<div *ngIf="modo === 'produtos'" class="product-table">
+
+<div class="produtos-header">
+
+<div>Imagem</div>
+<div>Produto</div>
+<div>Variação</div>
+<div>Categoria</div>
+
+</div>
+
+<div
+class="produtos-row"
+*ngFor="let p of todosProdutos"
+>
+
+<div class="col-image">
+<img [src]="'data:image/png;base64,' + p.imagemBase64">
+</div>
+
+<div class="col-name">
+{{p.name}}
+</div>
+
+<div>
+{{p.variacao}}
+</div>
+
+<div>
+{{p.categoriaNome}}
 </div>
 
 </div>

@@ -144,7 +144,7 @@ export class TelaDeAddProduto implements OnInit {
     }
 
     for (const v of this.variacoes) {
-      if (!v.nome.trim() || v.precoVenda <= 0) {
+      if (!v.nome.trim() ) {
         Swal.fire('Erro', 'Preencha corretamente as variações.', 'warning');
         return;
       }

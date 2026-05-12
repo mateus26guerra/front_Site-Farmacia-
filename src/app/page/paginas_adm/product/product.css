@@ -69,13 +69,19 @@ gap:10px;
 }
 
 /* tabela */
+/* tabela base */
 
 .product-table{
 background:white;
 border-radius:12px;
 overflow:hidden;
 box-shadow:0 4px 16px rgba(0,0,0,0.05);
+margin-top:20px;
 }
+
+/* ======================= */
+/* TABELA ESTOQUE */
+/* ======================= */
 
 .table-header{
 display:grid;
@@ -97,6 +103,33 @@ border-top:1px solid #eee;
 background:#fafafa;
 }
 
+/* ======================= */
+/* TABELA PRODUTOS */
+/* ======================= */
+
+.produtos-header{
+display:grid;
+grid-template-columns:80px 2fr 1fr 1fr;
+padding:15px;
+background:#f5f5f5;
+font-weight:600;
+}
+
+.produtos-row{
+display:grid;
+grid-template-columns:80px 2fr 1fr 1fr;
+padding:15px;
+align-items:center;
+border-top:1px solid #eee;
+}
+
+.produtos-row:hover{
+background:#fafafa;
+}
+/* ======================= */
+/* COLUNAS */
+/* ======================= */
+
 .col-image img{
 width:45px;
 height:45px;
@@ -105,7 +138,6 @@ object-fit:contain;
 
 .col-name{
 font-weight:500;
-
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
@@ -128,6 +160,10 @@ gap:6px;
 align-items:center;
 }
 
+/* ======================= */
+/* BOTÕES */
+/* ======================= */
+
 .btn-minus,
 .btn-plus{
 width:30px;
@@ -140,6 +176,11 @@ font-size:16px;
 cursor:pointer;
 }
 
+.btn-minus:hover,
+.btn-plus:hover{
+background:#4338ca;
+}
+
 .btn-update{
 background:#f59e0b;
 color:white;
@@ -147,6 +188,10 @@ padding:6px 10px;
 border:none;
 border-radius:6px;
 cursor:pointer;
+}
+
+.btn-update:hover{
+background:#d97706;
 }
 
 .stock-number{

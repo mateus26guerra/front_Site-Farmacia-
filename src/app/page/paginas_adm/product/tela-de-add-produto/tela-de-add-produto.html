@@ -86,13 +86,6 @@
                [(ngModel)]="variacoes[i].nome"
                [name]="'variacao' + i">
 
-        <input type="number"
-               placeholder="Preço de venda"
-               [(ngModel)]="variacoes[i].precoVenda"
-               [name]="'precoVenda' + i"
-               min="0"
-               step="0.01">
-
         <button type="button"
                 class="btn danger-sm"
                 (click)="removerVariacao(i)">

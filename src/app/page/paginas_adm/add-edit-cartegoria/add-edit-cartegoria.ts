@@ -79,7 +79,7 @@ export class AddEditCartegoria implements OnInit {
   }
 
   editar(cat: Categoria) {
-    this.nomeCategoria = cat.nome_categoria;
+    this.nomeCategoria = cat.nomeCategoria;
     this.editandoId = cat.id;
     this.cdr.detectChanges();
   }

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 // ✅ campo corrigido para bater com o que o backend retorna
 export interface Categoria {
   id: number;
-  nome_categoria: string;
+  nomeCategoria: string;
 }
 
 @Injectable({

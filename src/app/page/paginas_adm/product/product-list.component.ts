@@ -6,7 +6,7 @@ import { EstoqueService, Estoque } from '../../../service/estoque.service';
 import { SidebarComponent } from '../../../shared/sidebar/sidebar.component';
 import { NavbarAdministradorComponent } from '../../../shared/navbar-administrador/navbar-administrador';
 import { RouterModule } from '@angular/router';
-
+import { ProdutoService, Produto } from '../../../service/produto.service';
 @Component({
   selector: 'app-products',
   standalone: true,
@@ -22,11 +22,15 @@ export class ProductListComponent implements OnInit {
   lojas: any[] = []
 
   lojaSelecionada: number | null = null
-
+modo: 'estoque' | 'produtos' = 'estoque'
   alterados: Set<number> = new Set()
+
+  todosProdutos: Produto[] = []
+mostrarListaProdutos = false
 
   constructor(
     private estoqueService: EstoqueService,
+    private produtoService: ProdutoService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -61,15 +65,29 @@ export class ProductListComponent implements OnInit {
 
   }
 
-  mostrarTudo() {
+mostrarTudo() {
 
-    this.produtosFiltrados = this.produtos
-    this.lojaSelecionada = null
+  this.modo = 'estoque'
+
+  this.produtosFiltrados = this.produtos
+  this.lojaSelecionada = null
+
+  this.cdr.detectChanges()
+
+}
+
+mostrarTodosProdutos() {
+
+  this.produtoService.listar().subscribe((res) => {
+
+    this.todosProdutos = res
+    this.modo = 'produtos'
 
     this.cdr.detectChanges()
 
-  }
+  })
 
+}
   selecionarLoja(event: any) {
 
     const lojaId = Number(event.target.value)
@@ -123,7 +141,7 @@ export class ProductListComponent implements OnInit {
     this.estoqueService.salvar({
 
       produtoId: p.produto.id,
-      lojaId: p.loja.id,
+      lojaID: p.loja.id,
       quantidade: p.quantidade,
       precoVenda: p.valorFinal
 

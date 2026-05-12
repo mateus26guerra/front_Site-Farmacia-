@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 
 export interface EstoqueRequest {
   produtoId: number;
-  lojaId: number;
+  lojaID: number;
+  nomeLoja?: string;
+  nomeProduto?: string;
   quantidade: number;
   precoVenda: number;
 }
