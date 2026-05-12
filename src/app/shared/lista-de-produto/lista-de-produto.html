@@ -2,57 +2,51 @@
 
 <div class="carousel-wrapper">
 
-<button class="carousel-btn" (click)="scrollLeft()">❮</button>
+  <button class="carousel-btn" (click)="scrollLeft()">❮</button>
 
-<div class="carousel" #carouselContainer>
+  <div class="carousel" #carouselContainer>
 
-<div class="products">
+    <div class="products">
 
-@for (p of produtos; track p.id) {
+      @for (p of produtos; track p.id) {
 
-<div class="product-card">
+        <div class="product-card">
 
-<button class="add-btn" (click)="adicionar(p)">+</button>
+          <button class="add-btn" (click)="adicionar(p)">+</button>
 
-<img
-[src]="'data:image/png;base64,' + p.produto.imagemBase64"
-[alt]="p.produto.name"
-/>
+          <!-- imagem vem direto -->
+          <img
+            [src]="'data:image/png;base64,' + p.imagem"
+            [alt]="p.nomeProduto"
+          />
 
-<div class="info">
+          <div class="info">
 
-<h3 class="product-name">
+            <h3 class="product-name">
+              {{ p.nomeProduto }}
+            </h3>
 
-{{ p.produto.name }}
+            <p class="price">
+              {{ p.valorFinal | currency:'BRL' }}
+            </p>
 
-</h3>
+          </div>
 
-<p class="price">
+          <div class="variacoes">
+            <span class="variacao-tag">
+              <!-- se não tiver mais variação, remove ou adapta -->
+              ID: {{ p.produtoId }}
+            </span>
+          </div>
 
-{{ p.valorFinal | currency:'BRL' }}
+        </div>
 
-</p>
+      }
 
-</div>
+    </div>
 
-<div class="variacoes">
+  </div>
 
-<span class="variacao-tag">
-
-{{ p.produto.variacao }}
-
-</span>
-
-</div>
-
-</div>
-
-}
-
-</div>
-
-</div>
-
-<button class="carousel-btn" (click)="scrollRight()">❯</button>
+  <button class="carousel-btn" (click)="scrollRight()">❯</button>
 
 </div>

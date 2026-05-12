@@ -87,15 +87,15 @@ class="table-row"
 >
 
 <div class="col-image">
-<img [src]="'data:image/png;base64,' + p.produto.imagemBase64">
+<img [src]="'data:image/webp;base64,' + p.imagem">
 </div>
 
 <div class="col-name">
-{{p.produto.name}}
+{{p.nomeProduto}}
 </div>
 
 <div class="col-store">
-{{p.loja.nome}}
+{{p.nomeLoja}}
 </div>
 
 <div class="col-stock">

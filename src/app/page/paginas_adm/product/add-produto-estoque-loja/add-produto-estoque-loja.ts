@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { NavbarAdministradorComponent } from "../../../../shared/navbar-administrador/navbar-administrador";
 import { EstoqueService, EstoqueRequest } from '../../../../service/estoque.service';
-import { ProdutoService, Produto } from '../../../../service/produto.service';
+import { ProductService, Product } from '../../../../service/product.service';
 import { LojaService, Loja } from '../../../../service/loja.service';
 
 interface ProdutoGrupo {
@@ -12,9 +12,12 @@ interface ProdutoGrupo {
   variacoes: ProdutoComEstoque[];
 }
 
-interface ProdutoComEstoque extends Produto {
-  quantidade?: number;
-  precoVenda?: number;
+/**
+ * NÃO estende Product com conflito de tipo opcional
+ */
+interface ProdutoComEstoque extends Product {
+  quantidade: number;
+  precoVenda: number;
 }
 
 @Component({
@@ -39,7 +42,7 @@ export class AddProdutoEstoqueLoja implements OnInit {
   buscaProduto = "";
 
   constructor(
-    private produtoService: ProdutoService,
+    private produtoService: ProductService,
     private lojaService: LojaService,
     private estoqueService: EstoqueService,
     private cdr: ChangeDetectorRef
@@ -51,16 +54,19 @@ export class AddProdutoEstoqueLoja implements OnInit {
   }
 
   carregarProdutos() {
-    this.produtoService.listar().subscribe(produtos => {
+
+    this.produtoService.loadProducts();
+
+    this.produtoService.products$.subscribe((produtos: Product[]) => {
 
       const mapa = new Map<string, ProdutoComEstoque[]>();
 
-      produtos.forEach(p => {
+      produtos.forEach((p: Product) => {
 
         const produto: ProdutoComEstoque = {
           ...p,
           quantidade: 0,
-          precoVenda: 0
+          precoVenda: p.precoVenda
         };
 
         if (!mapa.has(p.name)) {
@@ -68,7 +74,6 @@ export class AddProdutoEstoqueLoja implements OnInit {
         }
 
         mapa.get(p.name)!.push(produto);
-
       });
 
       this.produtosAgrupados = Array.from(mapa.entries()).map(([name, variacoes]) => ({
@@ -77,12 +82,11 @@ export class AddProdutoEstoqueLoja implements OnInit {
       }));
 
       this.cdr.detectChanges();
-
     });
   }
 
   carregarLojas() {
-    this.lojaService.listar().subscribe(lojas => {
+    this.lojaService.listar().subscribe((lojas: Loja[]) => {
       this.lojas = lojas;
       this.cdr.detectChanges();
     });
@@ -98,10 +102,9 @@ export class AddProdutoEstoqueLoja implements OnInit {
       return this.produtosAgrupados;
     }
 
-    return this.produtosAgrupados.filter(p =>
+    return this.produtosAgrupados.filter((p: ProdutoGrupo) =>
       p.name.toLowerCase().includes(this.buscaProduto.toLowerCase())
     );
-
   }
 
   salvar() {
@@ -116,7 +119,7 @@ export class AddProdutoEstoqueLoja implements OnInit {
       return;
     }
 
-    this.produtoSelecionado.variacoes.forEach(v => {
+    this.produtoSelecionado.variacoes.forEach((v: ProdutoComEstoque) => {
 
       if (!v.quantidade || !v.precoVenda) return;
 
@@ -130,11 +133,8 @@ export class AddProdutoEstoqueLoja implements OnInit {
       };
 
       this.estoqueService.salvar(data).subscribe();
-
     });
 
     alert("Estoque cadastrado!");
-
   }
-
 }

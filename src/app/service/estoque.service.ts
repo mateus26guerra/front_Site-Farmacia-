@@ -15,22 +15,21 @@ export interface Estoque {
 
   id: number;
 
-  loja: {
-    id: number;
-    nome: string;
-  };
+  lojaId: number;
+  nomeLoja: string;
 
-  produto: {
-    id: number;
-    name: string;
-    variacao: string;
-    imagemBase64: string;
-  };
+  produtoId: number;
+  nomeProduto: string;
+
+  imagem: string;
 
   quantidade: number;
 
-  valorFinal: number;
+  precoVenda: number;
 
+  percentualDesconto: number;
+
+  valorFinal: number;
 }
 
 @Injectable({

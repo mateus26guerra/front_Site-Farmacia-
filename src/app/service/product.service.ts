@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+/* =========================
+   DTOs (BACKEND MAPPED)
+========================= */
 
 export interface Product {
   id: number;
@@ -20,6 +24,13 @@ export interface ProdutoAddDTO {
   precoVenda: number;
 }
 
+export interface ProdutoUpdateDTO {
+  name?: string;
+  variacao?: string;
+  imagemBase64?: string;
+  categoriaNome?: string;
+}
+
 export interface ProdutoVitrine {
   name: string;
   variacoes: Product[];
@@ -28,11 +39,14 @@ export interface ProdutoVitrine {
 @Injectable({ providedIn: 'root' })
 export class ProductService {
 
-  private API_PRIVADA = 'http://localhost:8080/products';
-  private API_PUBLICA = 'http://localhost:8080/productsPublico';
+  /* =========================
+     ONLY ADMIN API
+  ========================= */
+  private API = `${environment.apiUrl}/products`;
+
 
   private productsSubject = new BehaviorSubject<Product[]>([]);
-  private searchSubject   = new BehaviorSubject<string>('');
+  private searchSubject = new BehaviorSubject<string>('');
 
   products$ = combineLatest([
     this.productsSubject,
@@ -50,45 +64,47 @@ export class ProductService {
   );
 
   constructor(private http: HttpClient) {}
-  
 
-loadPublicProducts() {
-  this.http
-    .get<any[]>(`${this.API_PUBLICA}/list`)
-    .pipe(
-      map(produtos =>
-        produtos.map(p => ({
-          id: p.id,
-          name: p.nome,
-          variacao: p.variacao,
-          imagemBase64: p.imagemUrl,
-          categoriaNome: '',
-          precoVenda: p.preco
-        }))
-      )
-    )
-    .subscribe(products => this.productsSubject.next(products));
-}
-
-  loadPrivateProducts() {
-    this.http
-      .get<Product[]>(`${this.API_PRIVADA}/list`)
-      .subscribe(products => this.productsSubject.next(products));
+  /* =========================
+     LOAD
+  ========================= */
+  loadProducts() {
+    this.http.get<Product[]>(this.API)
+      .subscribe(data => this.productsSubject.next(data));
   }
 
+  /* =========================
+     CREATE
+  ========================= */
+  addProduct(product: ProdutoAddDTO) {
+    return this.http.post(this.API, product);
+  }
+
+  /* =========================
+     UPDATE (PATCH)
+  ========================= */
+  updateProduct(id: number, product: ProdutoUpdateDTO) {
+    return this.http.patch(`${this.API}/${id}`, product);
+  }
+
+  /* =========================
+     DELETE
+  ========================= */
+  deleteProduct(id: number) {
+    return this.http.delete(`${this.API}/${id}`)
+      .subscribe(() => this.loadProducts());
+  }
+
+  /* =========================
+     SEARCH
+  ========================= */
   setSearch(term: string) {
     this.searchSubject.next(term);
   }
 
-  deleteProduct(id: number) {
-    this.http.delete(`${this.API_PRIVADA}/${id}`)
-      .subscribe(() => this.loadPrivateProducts());
-  }
-
-  addProduct(product: ProdutoAddDTO) {
-    return this.http.post(`${this.API_PRIVADA}`, product);
-  }
-
+  /* =========================
+     GROUP VITRINE
+  ========================= */
   groupByName(produtos: Product[]): ProdutoVitrine[] {
     const map = new Map<string, Product[]>();
 
@@ -105,7 +121,36 @@ loadPublicProducts() {
     }));
   }
 
+  /* =========================================================
+     🔵 🔵 🔵 BACKUP / LEGACY (IGNORAR POR ENQUANTO)
+     - API pública antiga
+     - mapping antigo
+     - não usar mais no admin
+  ========================================================= */
+
+  
+  private API_PUBLICA = 'http://localhost:8080/productsPublico';
+
+  loadPublicProducts() {
+    this.http
+      .get<any[]>(`${this.API_PUBLICA}/list`)
+      .pipe(
+        map(produtos =>
+          produtos.map(p => ({
+            id: p.id,
+            name: p.nome,
+            variacao: p.variacao,
+            imagemBase64: p.imagemUrl,
+            categoriaNome: '',
+            precoVenda: p.preco
+          }))
+        )
+      )
+      .subscribe(products => this.productsSubject.next(products));
+  }
+
   getCategorias() {
     return this.http.get<string[]>(`${this.API_PUBLICA}/categorias`);
   }
+  
 }
