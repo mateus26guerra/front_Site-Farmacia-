@@ -75,17 +75,44 @@ export class TelaDeAddProduto implements OnInit {
     }
   }
 
-  private convertToBase64(file: File) {
-    const reader = new FileReader();
+ private convertToBase64(file: File) {
 
-    reader.onload = () => {
-      this.previewImagem = reader.result as string;
-      this.imagemBase64 = this.previewImagem.split(',')[1];
+  const img = new Image();
+
+  const reader = new FileReader();
+
+  reader.onload = (e: any) => {
+
+    img.src = e.target.result;
+
+    img.onload = () => {
+
+      const canvas = document.createElement('canvas');
+
+      const MAX_WIDTH = 800;
+      const scale = MAX_WIDTH / img.width;
+
+      canvas.width = MAX_WIDTH;
+      canvas.height = img.height * scale;
+
+      const ctx = canvas.getContext('2d');
+
+      if (!ctx) return;
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // CONVERTE PARA WEBP + COMPRESSÃO
+      const webpBase64 = canvas.toDataURL('image/webp', 0.7);
+
+      this.previewImagem = webpBase64;
+
+      // remove "data:image/webp;base64,"
+      this.imagemBase64 = webpBase64.split(',')[1];
     };
+  };
 
-    reader.readAsDataURL(file);
-  }
-
+  reader.readAsDataURL(file);
+}
   // =========================
   // Dropdown categoria
   // =========================

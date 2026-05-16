@@ -64,7 +64,9 @@ class="produto-card"
 
 <img
 *ngIf="p.variacoes[0].imagemBase64"
-[src]="'data:image/*;base64,' + p.variacoes[0].imagemBase64"
+[src]="'data:image/webp;base64,' + p.variacoes[0].imagemBase64"
+loading="lazy"
+decoding="async"
 />
 
 <p class="produto-nome">{{ p.name }}</p>

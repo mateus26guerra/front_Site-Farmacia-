@@ -22,26 +22,29 @@ export class ListaDeProduto implements OnInit {
     private cartService: CartService,
     private cdr: ChangeDetectorRef
   ) {}
+ngOnInit() {
 
-  ngOnInit() {
+  this.estoqueService.listar().subscribe({
 
-    this.estoqueService.listar().subscribe({
-      next: (res) => {
+    next: (res) => {
 
-        console.log("ESTOQUE API:", res);
+      console.log("ESTOQUE API:", res);
 
-        this.produtos = res;
+      this.produtos = res.content;
 
-        // força atualização da tela
-        this.cdr.detectChanges();
+      this.cdr.detectChanges();
 
-      },
-      error: (err) => {
-        console.error("Erro ao carregar estoque", err);
-      }
-    });
+    },
 
-  }
+    error: (err) => {
+
+      console.error("Erro ao carregar estoque", err);
+
+    }
+
+  });
+
+}
 
   adicionar(produto: Estoque) {
     // this.cartService.add(produto);

@@ -87,7 +87,7 @@ class="table-row"
 >
 
 <div class="col-image">
-<img [src]="'data:image/webp;base64,' + p.imagem">
+<img [src]="'data:image/webp;base64,' + p.imagemBase64">
 </div>
 
 <div class="col-name">
@@ -129,7 +129,35 @@ Salvar
 </div>
 
 </div>
+<div
+  *ngIf="modo === 'estoque'"
+  class="pagination"
+>
 
+  <button
+    class="btn-page"
+    (click)="paginaAnteriorEstoque()"
+    [disabled]="paginaAtualEstoque === 0"
+  >
+    ← Anterior
+  </button>
+
+  <span class="page-info">
+
+    Página {{ paginaAtualEstoque + 1 }}
+    de {{ totalPaginasEstoque }}
+
+  </span>
+
+  <button
+    class="btn-page"
+    (click)="proximaPaginaEstoque()"
+    [disabled]="paginaAtualEstoque >= totalPaginasEstoque - 1"
+  >
+    Próxima →
+  </button>
+
+</div>
 <!-- ================================= -->
 <!-- TABELA PRODUTOS -->
 <!-- ================================= -->
@@ -147,8 +175,7 @@ Salvar
 
 <div
 class="produtos-row"
-*ngFor="let p of todosProdutos"
->
+*ngFor="let p of produtosPaginados">
 
 <div class="col-image">
 <img [src]="'data:image/png;base64,' + p.imagemBase64">
@@ -167,5 +194,28 @@ class="produtos-row"
 </div>
 
 </div>
+
+</div>
+<div class="pagination">
+
+  <button
+    class="btn-page"
+    (click)="paginaAnterior()"
+    [disabled]="paginaAtual === 0"
+  >
+    ← Anterior
+  </button>
+
+  <span class="page-info">
+    Página {{ paginaAtual + 1 }}
+  </span>
+
+  <button
+    class="btn-page"
+    (click)="proximaPagina()"
+    [disabled]="(paginaAtual + 1) * itensPorPagina >= todosProdutos.length"
+  >
+    Próxima →
+  </button>
 
 </div>

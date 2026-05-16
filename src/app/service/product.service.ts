@@ -36,6 +36,16 @@ export interface ProdutoVitrine {
   variacoes: Product[];
 }
 
+export interface PageResponse<T> {
+  content: T[];
+  page: {
+    size: number;
+    number: number;
+    totalElements: number;
+    totalPages: number;
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class ProductService {
 
@@ -43,7 +53,8 @@ export class ProductService {
      ONLY ADMIN API
   ========================= */
   private API = `${environment.apiUrl}/products`;
-
+totalPages = 0;
+totalElements = 0;
 
   private productsSubject = new BehaviorSubject<Product[]>([]);
   private searchSubject = new BehaviorSubject<string>('');
@@ -68,10 +79,23 @@ export class ProductService {
   /* =========================
      LOAD
   ========================= */
-  loadProducts() {
-    this.http.get<Product[]>(this.API)
-      .subscribe(data => this.productsSubject.next(data));
-  }
+loadProducts(page: number = 0, size: number = 20) {
+
+  this.http
+    .get<PageResponse<Product>>(
+      `${this.API}?page=${page}&size=${size}`
+    )
+    .subscribe(response => {
+
+      // produtos da página
+      this.productsSubject.next(response.content);
+
+      // informações da paginação
+      this.totalPages = response.page.totalPages;
+      this.totalElements = response.page.totalElements;
+
+    });
+}
 
   /* =========================
      CREATE
@@ -129,11 +153,13 @@ export class ProductService {
   ========================================================= */
 
   
+    private applista = 'http://localhost:8080/products';
+
   private API_PUBLICA = 'http://localhost:8080/productsPublico';
 
   loadPublicProducts() {
     this.http
-      .get<any[]>(`${this.API_PUBLICA}/list`)
+      .get<any[]>(`${this.applista}`)
       .pipe(
         map(produtos =>
           produtos.map(p => ({

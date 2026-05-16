@@ -23,6 +23,9 @@ import { ProductService, Product } from '../../../service/product.service';
 })
 export class ProductListComponent implements OnInit {
 
+  paginaAtualEstoque = 0;
+totalPaginasEstoque = 0;
+
   produtos: Estoque[] = [];
   produtosFiltrados: Estoque[] = [];
 
@@ -48,22 +51,57 @@ export class ProductListComponent implements OnInit {
     this.carregarDados();
   }
 
-  carregarDados() {
+paginaAtual = 0;
+itensPorPagina = 10;
 
-    this.estoqueService.listar().subscribe((res: Estoque[]) => {
+get produtosPaginados(): Product[] {
 
-      this.produtos = res;
-      this.produtosFiltrados = res;
+  const inicio = this.paginaAtual * this.itensPorPagina;
+  const fim = inicio + this.itensPorPagina;
+
+  return this.todosProdutos.slice(inicio, fim);
+}
+
+proximaPagina() {
+
+  const totalPaginas =
+    Math.ceil(this.todosProdutos.length / this.itensPorPagina);
+
+  if (this.paginaAtual < totalPaginas - 1) {
+    this.paginaAtual++;
+  }
+}
+
+paginaAnterior() {
+
+  if (this.paginaAtual > 0) {
+    this.paginaAtual--;
+  }
+}
+
+carregarDados(page: number = 0) {
+
+  this.estoqueService
+    .listar(page, 10)
+    .subscribe((res) => {
+
+      this.produtos = res.content;
+      this.produtosFiltrados = res.content;
+
+      this.paginaAtualEstoque = res.number;
+      this.totalPaginasEstoque = res.totalPages;
 
       const mapa = new Map<number, any>();
 
-      res.forEach(e => {
+      res.content.forEach((e: Estoque) => {
 
         if (!mapa.has(e.lojaId)) {
+
           mapa.set(e.lojaId, {
             id: e.lojaId,
             nome: e.nomeLoja
           });
+
         }
 
       });
@@ -71,8 +109,9 @@ export class ProductListComponent implements OnInit {
       this.lojas = Array.from(mapa.values());
 
       this.cdr.detectChanges();
+
     });
-  }
+}
 
   mostrarTudo() {
 
@@ -146,4 +185,22 @@ export class ProductListComponent implements OnInit {
       this.cdr.detectChanges();
     });
   }
+
+  proximaPaginaEstoque() {
+
+  if (this.paginaAtualEstoque < this.totalPaginasEstoque - 1) {
+
+    this.carregarDados(this.paginaAtualEstoque + 1);
+
+  }
+}
+
+paginaAnteriorEstoque() {
+
+  if (this.paginaAtualEstoque > 0) {
+
+    this.carregarDados(this.paginaAtualEstoque - 1);
+
+  }
+}
 }

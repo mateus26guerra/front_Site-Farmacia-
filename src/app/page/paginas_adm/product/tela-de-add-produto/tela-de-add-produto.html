@@ -28,7 +28,7 @@
                     class="custom-select__trigger"
                     (click)="toggleDropdown()">
 
-              {{ categoriaSelecionada || 'Selecione uma categoria' }}
+              {{ categoriaSelecionada || 'Selecione uma categoria' }} 
 
             </button>
 
@@ -66,8 +66,10 @@
             </p>
 
             <img *ngIf="previewImagem"
-                 [src]="previewImagem"
-                 class="preview-img">
+                [src]="previewImagem"
+                class="preview-img"
+                loading="lazy"
+                decoding="async">
           </div>
         </div>
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface EstoqueRequest {
   produtoId: number;
@@ -21,7 +22,7 @@ export interface Estoque {
   produtoId: number;
   nomeProduto: string;
 
-  imagem: string;
+  imagemBase64: string;
 
   quantidade: number;
 
@@ -30,6 +31,24 @@ export interface Estoque {
   percentualDesconto: number;
 
   valorFinal: number;
+
+  variacao: string;
+}
+
+export interface PageResponse<T> {
+
+  content: T[];
+
+  totalElements: number;
+  totalPages: number;
+
+  size: number;
+  number: number;
+
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
 }
 
 @Injectable({
@@ -37,38 +56,67 @@ export interface Estoque {
 })
 export class EstoqueService {
 
-  private api = 'http://localhost:8080/estoque';
+  private api = `${environment.apiUrl}/estoque`;
 
-  private apiADD = 'http://localhost:8080/productsPublico/lista';
-
-
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient
+  ) {}
 
   salvar(data: EstoqueRequest): Observable<any> {
-    return this.http.post(this.api, data);
-  }
-listar(): Observable<Estoque[]> {
-  return this.http.get<Estoque[]>(this.apiADD);
-}
 
-  filtrar(lojaId?: number, nomeLoja?: string, semEstoque?: boolean) {
-
-  let params: any = {};
-
-  if (lojaId !== undefined) {
-    params.lojaId = lojaId;
+    return this.http.post(
+      this.api,
+      data
+    );
   }
 
-  if (nomeLoja) {
-    params.nomeLoja = nomeLoja;
+  listar(
+    page: number = 0,
+    size: number = 10
+  ): Observable<PageResponse<Estoque>> {
+
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size);
+
+    return this.http.get<PageResponse<Estoque>>(
+      `${this.api}/relatorio`,
+      { params }
+    );
   }
 
-  if (semEstoque !== undefined) {
-    params.semEstoque = semEstoque;
+  filtrar(
+    lojaId?: number,
+    nomeLoja?: string,
+    semEstoque?: boolean
+  ): Observable<Estoque[]> {
+
+    let params = new HttpParams();
+
+    if (lojaId !== undefined) {
+      params = params.set(
+        'lojaId',
+        lojaId
+      );
+    }
+
+    if (nomeLoja) {
+      params = params.set(
+        'nomeLoja',
+        nomeLoja
+      );
+    }
+
+    if (semEstoque !== undefined) {
+      params = params.set(
+        'semEstoque',
+        semEstoque
+      );
+    }
+
+    return this.http.get<Estoque[]>(
+      `${this.api}/filtro`,
+      { params }
+    );
   }
-
-  return this.http.get<Estoque[]>(this.api + "/filtro", { params });
-
-}
-
 }
