@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Navbar } from '../../../shared/navbar/navbar';
-import { CartService } from '../../../service/cart.service';
 import { Router } from '@angular/router';
-import { NavbarFinalizarPedido } from "../../../shared/navbar-finalizar-pedido/navbar-finalizar-pedido";
+
+import { CartService } from '../../../service/cart.service';
+import { NavbarFinalizarPedido } from '../../../shared/navbar-finalizar-pedido/navbar-finalizar-pedido';
 
 @Component({
   selector: 'app-cesta-de-compras',
   standalone: true,
-  imports: [CommonModule, NavbarFinalizarPedido],
+  imports: [
+    CommonModule,
+    NavbarFinalizarPedido
+  ],
   templateUrl: './cesta-de-compras.html',
   styleUrl: './cesta-de-compras.css',
 })
@@ -19,22 +22,41 @@ export class CestaDeCompras {
     private router: Router
   ) {}
 
-  remover(id: number) {
-    this.cartService.remove(id);
+  remover(
+    produtoId: number,
+    lojaId: number
+  ) {
+    this.cartService.remove(
+      produtoId,
+      lojaId
+    );
   }
 
-  aumentar(id: number) {
-    this.cartService.aumentar(id);
+  aumentar(
+    produtoId: number,
+    lojaId: number
+  ) {
+    this.cartService.aumentar(
+      produtoId,
+      lojaId
+    );
   }
 
-  diminuir(id: number) {
-    this.cartService.diminuir(id);
+  diminuir(
+    produtoId: number,
+    lojaId: number
+  ) {
+    this.cartService.diminuir(
+      produtoId,
+      lojaId
+    );
   }
 
   irParaHome() {
     this.router.navigate(['/']);
   }
-   irParaTelaDados() {
+
+  irParaTelaDados() {
     this.router.navigate(['/dados']);
   }
 }

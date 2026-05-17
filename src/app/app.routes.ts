@@ -8,9 +8,9 @@ import { AdminUsersComponent } from './page/paginas_adm/admin-users/admin-users'
 import { publicGuard } from './core/public.guard';
 import { TelaDeAddProduto } from './page/paginas_adm/product/tela-de-add-produto/tela-de-add-produto';
 import { CestaDeCompras } from './page/fazerPedido/cesta-de-compras/cesta-de-compras';
-import { DadoClientes } from './page/fazerPedido/dado-clientes/dado-clientes';
+// import { DadoClientes } from './page/fazerPedido/dado-clientes/dado-clientes';
 import { AddEditCartegoria } from './page/paginas_adm/product/add-edit-cartegoria/add-edit-cartegoria';
-import { FinalizarPedido } from './page/fazerPedido/finalizar-pedido/finalizar-pedido';
+// import { FinalizarPedido } from './page/fazerPedido/finalizar-pedido/finalizar-pedido';
 import { Pedidos } from './page/paginas_adm/pedidos/pedidos';
 import { DetalhePedido } from './page/paginas_adm/detalhe-pedido/detalhe-pedido';
 import { GestaoDeLoja } from './page/paginas_adm/gestao-de-loja/gestao-de-loja';
@@ -24,8 +24,8 @@ export const routes: Routes = [
   { path: '', component: TelaInicial , canActivate: [publicGuard] },
   { path: 'login', component: LoginComponent, canActivate: [publicGuard] },
   { path: 'cestar', component: CestaDeCompras, canActivate:[publicGuard]},
-  { path: 'dados', component: DadoClientes, canActivate:[publicGuard]},
-  { path: 'finalizar-pedido', component: FinalizarPedido, canActivate:[publicGuard]},
+  // { path: 'dados', component: DadoClientes, canActivate:[publicGuard]},
+  // { path: 'finalizar-pedido', component: FinalizarPedido, canActivate:[publicGuard]},
 
 
 

@@ -161,3 +161,11 @@
 .carousel-btn:hover {
   background: #f7f7f7;
 }
+.store-name {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-top: -4px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}

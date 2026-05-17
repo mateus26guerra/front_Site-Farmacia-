@@ -27,7 +27,7 @@
   to { transform: translateX(0); }
 }
 
-/* HEADER */
+/* HEADER */ 
 .cart-drawer header {
   padding: 20px;
   border-bottom: 1px solid #eee;

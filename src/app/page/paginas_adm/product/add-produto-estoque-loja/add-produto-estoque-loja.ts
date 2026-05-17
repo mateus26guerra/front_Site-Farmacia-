@@ -53,11 +53,13 @@ export class AddProdutoEstoqueLoja implements OnInit {
     this.carregarLojas();
   }
 
-  carregarProdutos() {
+carregarProdutos() {
 
-    this.produtoService.loadProducts();
+  this.produtoService
+    .loadProducts()
+    .subscribe(response => {
 
-    this.produtoService.products$.subscribe((produtos: Product[]) => {
+      const produtos = response.content;
 
       const mapa = new Map<string, ProdutoComEstoque[]>();
 
@@ -76,14 +78,17 @@ export class AddProdutoEstoqueLoja implements OnInit {
         mapa.get(p.name)!.push(produto);
       });
 
-      this.produtosAgrupados = Array.from(mapa.entries()).map(([name, variacoes]) => ({
-        name,
-        variacoes
-      }));
+      this.produtosAgrupados =
+        Array.from(mapa.entries()).map(
+          ([name, variacoes]) => ({
+            name,
+            variacoes
+          })
+        );
 
       this.cdr.detectChanges();
     });
-  }
+}
 
   carregarLojas() {
     this.lojaService.listar().subscribe((lojas: Loja[]) => {

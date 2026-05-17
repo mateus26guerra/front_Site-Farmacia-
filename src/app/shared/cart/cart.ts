@@ -20,17 +20,26 @@ export class Cart {
     this.close.emit();
   }
 
-  remover(id: number) {
-    this.cartService.remove(id);
-  }
+remover(produtoId: number, lojaId: number) {
+  this.cartService.remove(
+    produtoId,
+    lojaId
+  );
+}
 
-  aumentar(id: number) {
-    this.cartService.aumentar(id);
-  }
+aumentar(produtoId: number, lojaId: number) {
+  this.cartService.aumentar(
+    produtoId,
+    lojaId
+  );
+}
 
-  diminuir(id: number) {
-    this.cartService.diminuir(id);
-  }
+diminuir(produtoId: number, lojaId: number) {
+  this.cartService.diminuir(
+    produtoId,
+    lojaId
+  );
+}
   
 irParaLogin() {
   this.router.navigate(['/cestar']);

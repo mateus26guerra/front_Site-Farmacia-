@@ -46,9 +46,16 @@ ngOnInit() {
 
 }
 
-  adicionar(produto: Estoque) {
-    // this.cartService.add(produto);
-  }
+ adicionar(produto: Estoque) {
+  this.cartService.add(produto);
+
+  console.log(
+    'Produto adicionado:',
+    produto.nomeProduto,
+    'Loja:',
+    produto.nomeLoja
+  );
+}
 
   scrollLeft() {
     this.carousel.nativeElement.scrollBy({

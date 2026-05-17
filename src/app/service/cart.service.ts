@@ -1,81 +1,139 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Product } from './product.service';
+import { Estoque } from './estoque.service';
+
 
 export interface CartItem {
-  product: Product;
+  produtoId: number;
+  lojaId: number;
+  nomeLoja: string;
+
+  nomeProduto: string;
+  imagemBase64?: string;
+  variacao?: string;
+
+  precoVenda: number;
+  valorFinal: number;
+
   quantidade: number;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class CartService {
 
-  private cartSubject = new BehaviorSubject<CartItem[]>([]);
+  private items: CartItem[] = [];
+
+  private cartSubject =
+    new BehaviorSubject<CartItem[]>([]);
+
   cart$ = this.cartSubject.asObservable();
 
-  get items(): CartItem[] {
-    return this.cartSubject.value;
-  }
+  add(produto: Estoque) {
 
-  add(product: Product) {
-    const items = [...this.items];
-    const existing = items.find(i => i.product.id === product.id);
+    const existente = this.items.find(
+      i =>
+        i.produtoId === produto.produtoId &&
+        i.lojaId === produto.lojaId
+    );
 
-    if (existing) {
-      existing.quantidade++;
+    if (existente) {
+
+      existente.quantidade++;
+
     } else {
-      items.push({ product, quantidade: 1 });
+
+      this.items.push({
+        produtoId: produto.produtoId,
+        lojaId: produto.lojaId,
+        nomeLoja: produto.nomeLoja,
+
+        nomeProduto: produto.nomeProduto,
+        imagemBase64: produto.imagemBase64,
+        variacao: produto.variacao,
+
+        precoVenda: produto.precoVenda,
+        valorFinal: produto.valorFinal,
+
+        quantidade: 1
+      });
+
     }
 
-    this.cartSubject.next(items);
+    this.cartSubject.next([...this.items]);
   }
 
-  remove(productId: number) {
-    this.cartSubject.next(
-      this.items.filter(i => i.product.id !== productId)
+  remove(produtoId: number, lojaId: number) {
+
+    this.items = this.items.filter(
+      i =>
+        !(
+          i.produtoId === produtoId &&
+          i.lojaId === lojaId
+        )
     );
+
+    this.cartSubject.next([...this.items]);
   }
 
-  clear() {
-    this.cartSubject.next([]);
-  }
+  aumentar(produtoId: number, lojaId: number) {
 
-  aumentar(productId: number) {
-    const items = [...this.items];
-    const item = items.find(i => i.product.id === productId);
+    const item = this.items.find(
+      i =>
+        i.produtoId === produtoId &&
+        i.lojaId === lojaId
+    );
 
     if (item) {
       item.quantidade++;
-      this.cartSubject.next(items);
     }
+
+    this.cartSubject.next([...this.items]);
   }
 
-  diminuir(productId: number) {
-    const items = [...this.items];
-    const item = items.find(i => i.product.id === productId);
+  diminuir(produtoId: number, lojaId: number) {
 
-    if (item && item.quantidade > 1) {
-      item.quantidade--;
-      this.cartSubject.next(items);
+    const item = this.items.find(
+      i =>
+        i.produtoId === produtoId &&
+        i.lojaId === lojaId
+    );
+
+    if (!item) return;
+
+    item.quantidade--;
+
+    if (item.quantidade <= 0) {
+
+      this.remove(produtoId, lojaId);
+      return;
+
     }
+
+    this.cartSubject.next([...this.items]);
   }
 
   totalItens(): number {
-    return this.items.reduce((t, i) => t + i.quantidade, 0);
-  }
 
-  totalOriginal(): number {
     return this.items.reduce(
-      (t, i) => t + (i.product.precoVenda * i.quantidade),
+      (acc, item) =>
+        acc + item.quantidade,
       0
     );
+
   }
 
-  totalDesconto(): number {
-    return 0; // você não tem desconto no backend
-  }
+  totalValor(): number {
 
-  totalComDesconto(): number {
-    return this.totalOriginal();
+    return this.items.reduce(
+      (acc, item) =>
+        acc + (
+          item.valorFinal *
+          item.quantidade
+        ),
+      0
+    );
+
   }
 }

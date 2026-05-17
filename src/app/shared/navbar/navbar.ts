@@ -3,16 +3,19 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../service/auth.service';
 import { ProductService } from '../../service/product.service';
-import { Cart } from '../cart/cart';
 import { CartService } from '../../service/cart.service';
+import { Cart } from '../cart/cart';
 
 declare const lucide: any;
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule],
-  templateUrl: './navbar.html',
+imports: [
+  RouterModule,
+  CommonModule,
+  Cart
+],  templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
 export class Navbar implements OnInit, AfterViewChecked {
