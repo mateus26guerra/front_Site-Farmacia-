@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LojaService, Loja } from '../../../../service/loja.service';
+import { LojaService, Loja } from '../../../../service/loja/loja.service';
 import { NavbarAdministradorComponent } from "../../../../shared/navbar-administrador/navbar-administrador";
 import { SidebarComponent } from "../../../../shared/sidebar/sidebar.component";
 import { CommonModule } from '@angular/common';
@@ -23,15 +23,16 @@ export class EditarLoja implements OnInit {
 
   id!: number;
 
-  loja: Loja = {
-    
-    nome: '',
-    cep: '',
-    cnpj: '',
-    telefone: '',
-    tipoAtendimento: '',
-    imagemUrl: ''
-  };
+loja: Loja = {
+  nomeLoja: '',
+  cep: '',
+  cpnj: '',
+  telefone: '',
+  textoDescricao: '',
+  tipoAtendimento: '',
+  valorMinimoFreteGratis: 0,
+  imagemUrl: '' 
+};
 
   modoEdicao = false; // 👈 controla se pode editar
 

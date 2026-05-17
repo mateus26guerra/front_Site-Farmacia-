@@ -1,55 +1,79 @@
 import { Component } from '@angular/core';
-import { LojaService } from '../../../../service/loja.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+
+import { LojaService } from '../../../../service/loja/loja.service';
+
 import { NavbarAdministradorComponent } from "../../../../shared/navbar-administrador/navbar-administrador";
-import { SidebarComponent } from "../../../../shared/sidebar/sidebar.component";
+import { SidebarComponent } from '../../../../shared/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-tela-de-add-loja',
+  standalone: true,
   templateUrl: './tela-de-add-loja.html',
   styleUrl: './tela-de-add-loja.css',
-  imports: [FormsModule, NavbarAdministradorComponent, SidebarComponent]
+  imports: [
+    FormsModule,
+    NavbarAdministradorComponent,
+    SidebarComponent
+  ]
 })
 export class TelaDeAddLoja {
 
-  nome = '';
+  nomeLoja = '';
   cep = '';
-  cnpj = '';
+  cpnj = '';
   telefone = '';
+  textoDescricao = '';
   tipoAtendimento = '';
-  imagemUrl = '';
+  valorMinimoFreteGratis: number | null = null;
 
   constructor(
     private lojaService: LojaService,
-    private router: Router,
-    private formsModule: FormsModule,
+    private router: Router
   ) {}
 
   salvar() {
+
     const novaLoja = {
-      nome: this.nome,
+
+      nomeLoja: this.nomeLoja,
+
       cep: this.cep,
-      cnpj: this.cnpj,
+
+      cpnj: this.cpnj || null,
+
       telefone: this.telefone,
+
+      textoDescricao: this.textoDescricao || null,
+
       tipoAtendimento: this.tipoAtendimento,
-      imagemUrl: this.imagemUrl
+
+      valorMinimoFreteGratis:
+        this.valorMinimoFreteGratis ?? 0
     };
 
+    console.log(novaLoja);
+
     this.lojaService.criar(novaLoja).subscribe({
+
       next: () => {
+
         alert('Loja criada com sucesso!');
+
         this.router.navigate(['/lojas']);
       },
+
       error: (err) => {
+
         console.error(err);
+
         alert('Erro ao criar loja');
       }
     });
   }
 
-    cancelar() {
+  cancelar() {
     this.router.navigate(['/pedidos']);
   }
-
 }

@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { NavbarAdministradorComponent } from "../../../../shared/navbar-administrador/navbar-administrador";
 import { EstoqueService, EstoqueRequest } from '../../../../service/estoque.service';
 import { ProductService, Product } from '../../../../service/product.service';
-import { LojaService, Loja } from '../../../../service/loja.service';
+import { LojaService,Loja } from '../../../../service/loja/loja.service';
 
 interface ProdutoGrupo {
   name: string;
@@ -126,7 +126,7 @@ export class AddProdutoEstoqueLoja implements OnInit {
       const data: EstoqueRequest = {
         produtoId: v.id,
         lojaID: this.lojaSelecionada!.id!,
-        nomeLoja: this.lojaSelecionada!.nome,
+        nomeLoja: this.lojaSelecionada!.nomeLoja,
         nomeProduto: v.name,
         quantidade: v.quantidade,
         precoVenda: v.precoVenda

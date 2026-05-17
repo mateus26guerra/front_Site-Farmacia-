@@ -9,7 +9,7 @@ import { publicGuard } from './core/public.guard';
 import { TelaDeAddProduto } from './page/paginas_adm/product/tela-de-add-produto/tela-de-add-produto';
 import { CestaDeCompras } from './page/fazerPedido/cesta-de-compras/cesta-de-compras';
 import { DadoClientes } from './page/fazerPedido/dado-clientes/dado-clientes';
-import { AddEditCartegoria } from './page/paginas_adm/add-edit-cartegoria/add-edit-cartegoria';
+import { AddEditCartegoria } from './page/paginas_adm/product/add-edit-cartegoria/add-edit-cartegoria';
 import { FinalizarPedido } from './page/fazerPedido/finalizar-pedido/finalizar-pedido';
 import { Pedidos } from './page/paginas_adm/pedidos/pedidos';
 import { DetalhePedido } from './page/paginas_adm/detalhe-pedido/detalhe-pedido';
@@ -18,7 +18,8 @@ import { TelaDeAddLoja } from './page/paginas_adm/gestao-de-loja/tela-de-add-loj
 import { EditarLoja } from './page/paginas_adm/gestao-de-loja/editar-loja/editar-loja';
 import { AddFuncionarioLoja } from './page/paginas_adm/gestao-de-loja/add-funcionario-loja/add-funcionario-loja';
 import { AddProdutoEstoqueLoja } from './page/paginas_adm/product/add-produto-estoque-loja/add-produto-estoque-loja';
-
+import { AddBairro } from './page/paginas_adm/gestao-de-loja/add-bairro/add-bairro';
+import { RelacionarBairroLoja } from './page/paginas_adm/gestao-de-loja/relacionar-bairro-loja/relacionar-bairro-loja';
 export const routes: Routes = [
   { path: '', component: TelaInicial , canActivate: [publicGuard] },
   { path: 'login', component: LoginComponent, canActivate: [publicGuard] },
@@ -39,6 +40,7 @@ export const routes: Routes = [
   { path: 'addProduto', component: TelaDeAddProduto, canActivate: [adminGuard]},
   { path: 'addestoque', component: AddProdutoEstoqueLoja, canActivate: [authGuard]},
   { path: 'addCategoria', component: AddEditCartegoria, canActivate: [adminGuard]},
-
+  { path: 'add-bairro', component: AddBairro, canActivate: [adminGuard]},
+  {path: 'loja/:id/bairros',loadComponent: () =>import('./page/paginas_adm/gestao-de-loja/relacionar-bairro-loja/relacionar-bairro-loja').then(m => m.RelacionarBairroLoja),canActivate: [authGuard]},
   { path: '**', redirectTo: '' }
 ];

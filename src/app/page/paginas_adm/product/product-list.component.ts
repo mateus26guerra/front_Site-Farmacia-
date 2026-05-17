@@ -1,12 +1,20 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
-import { EstoqueService, Estoque } from '../../../service/estoque.service';
+import {
+  EstoqueService,
+  Estoque
+} from '../../../service/estoque.service';
+
+import {
+  ProductService,
+  Product
+} from '../../../service/product.service';
+
 import { SidebarComponent } from '../../../shared/sidebar/sidebar.component';
 import { NavbarAdministradorComponent } from '../../../shared/navbar-administrador/navbar-administrador';
-import { RouterModule } from '@angular/router';
-import { ProductService, Product } from '../../../service/product.service';
 
 @Component({
   selector: 'app-products',
@@ -23,8 +31,12 @@ import { ProductService, Product } from '../../../service/product.service';
 })
 export class ProductListComponent implements OnInit {
 
+  /* =========================
+     ESTOQUE
+  ========================= */
+
   paginaAtualEstoque = 0;
-totalPaginasEstoque = 0;
+  totalPaginasEstoque = 0;
 
   produtos: Estoque[] = [];
   produtosFiltrados: Estoque[] = [];
@@ -33,13 +45,22 @@ totalPaginasEstoque = 0;
 
   lojaSelecionada: number | null = null;
 
-  modo: 'estoque' | 'produtos' = 'estoque';
+  /* =========================
+     PRODUTOS
+  ========================= */
 
-  alterados: Set<number> = new Set();
+  paginaAtualProduto = 0;
+  totalPaginasProduto = 0;
 
   todosProdutos: Product[] = [];
 
-  mostrarListaProdutos = false;
+  /* =========================
+     GERAL
+  ========================= */
+
+  modo: 'estoque' | 'produtos' = 'estoque';
+
+  alterados: Set<number> = new Set();
 
   constructor(
     private estoqueService: EstoqueService,
@@ -51,133 +72,185 @@ totalPaginasEstoque = 0;
     this.carregarDados();
   }
 
-paginaAtual = 0;
-itensPorPagina = 10;
+  /* =========================
+     ESTOQUE
+  ========================= */
+carregarDados(
+  page: number = 0
+) {
 
-get produtosPaginados(): Product[] {
-
-  const inicio = this.paginaAtual * this.itensPorPagina;
-  const fim = inicio + this.itensPorPagina;
-
-  return this.todosProdutos.slice(inicio, fim);
-}
-
-proximaPagina() {
-
-  const totalPaginas =
-    Math.ceil(this.todosProdutos.length / this.itensPorPagina);
-
-  if (this.paginaAtual < totalPaginas - 1) {
-    this.paginaAtual++;
-  }
-}
-
-paginaAnterior() {
-
-  if (this.paginaAtual > 0) {
-    this.paginaAtual--;
-  }
-}
-
-carregarDados(page: number = 0) {
+  this.modo = 'estoque';
 
   this.estoqueService
     .listar(page, 10)
-    .subscribe((res) => {
+    .subscribe({
 
-      this.produtos = res.content;
-      this.produtosFiltrados = res.content;
+      next: (res) => {
 
-      this.paginaAtualEstoque = res.number;
-      this.totalPaginasEstoque = res.totalPages;
+        console.log(
+          'ESTOQUE PAGINADO:',
+          res
+        );
 
-      const mapa = new Map<number, any>();
+        this.produtos =
+          res.content;
 
-      res.content.forEach((e: Estoque) => {
+        this.produtosFiltrados =
+          [...res.content];
 
-        if (!mapa.has(e.lojaId)) {
+        this.paginaAtualEstoque =
+  res.page.number;
 
-          mapa.set(e.lojaId, {
-            id: e.lojaId,
-            nome: e.nomeLoja
-          });
+this.totalPaginasEstoque =
+  res.page.totalPages;
+  
+        const mapa =
+          new Map<number, any>();
 
-        }
+        res.content.forEach(
+          (e: Estoque) => {
 
-      });
+            if (
+              !mapa.has(e.lojaId)
+            ) {
 
-      this.lojas = Array.from(mapa.values());
+              mapa.set(
+                e.lojaId,
+                {
+                  id: e.lojaId,
+                  nome: e.nomeLoja
+                }
+              );
+            }
+          }
+        );
 
-      this.cdr.detectChanges();
+        this.lojas =
+          Array.from(
+            mapa.values()
+          );
 
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+
+        console.error(
+          'Erro ao carregar estoque',
+          err
+        );
+      }
     });
 }
 
+proximaPaginaEstoque() {
+
+  console.log(
+    'Próxima página:',
+    this.paginaAtualEstoque + 1
+  );
+
+  if (
+    this.paginaAtualEstoque <
+    this.totalPaginasEstoque - 1
+  ) {
+
+    const novaPagina =
+      this.paginaAtualEstoque + 1;
+
+    this.carregarDados(
+      novaPagina
+    );
+  }
+}
+
+paginaAnteriorEstoque() {
+
+  console.log(
+    'Página anterior:',
+    this.paginaAtualEstoque - 1
+  );
+
+  if (
+    this.paginaAtualEstoque > 0
+  ) {
+
+    const novaPagina =
+      this.paginaAtualEstoque - 1;
+
+    this.carregarDados(
+      novaPagina
+    );
+  }
+}
   mostrarTudo() {
 
     this.modo = 'estoque';
 
-    this.produtosFiltrados = this.produtos;
+    this.produtosFiltrados =
+      this.produtos;
+
     this.lojaSelecionada = null;
 
     this.cdr.detectChanges();
   }
 
-  mostrarTodosProdutos() {
-
-    this.produtoService.loadProducts();
-
-    this.produtoService.products$
-      .subscribe((res: Product[]) => {
-
-        this.todosProdutos = res;
-        this.modo = 'produtos';
-
-        this.cdr.detectChanges();
-      });
-  }
-
   selecionarLoja(event: any) {
 
-    const lojaId = Number(event.target.value);
+    const lojaId =
+      Number(event.target.value);
 
     this.lojaSelecionada = lojaId;
 
     if (!lojaId) {
-      this.produtosFiltrados = this.produtos;
+
+      this.produtosFiltrados =
+        this.produtos;
+
       this.cdr.detectChanges();
+
       return;
     }
 
     this.produtosFiltrados =
-      this.produtos.filter(p => p.lojaId === lojaId);
+      this.produtos.filter(
+        p => p.lojaId === lojaId
+      );
 
     this.cdr.detectChanges();
   }
 
   aumentarEstoque(p: Estoque) {
+
     p.quantidade++;
+
     this.alterados.add(p.id);
   }
 
   diminuirEstoque(p: Estoque) {
+
     if (p.quantidade > 0) {
+
       p.quantidade--;
+
       this.alterados.add(p.id);
     }
   }
 
   estoqueAlterado(p: Estoque) {
+
     return this.alterados.has(p.id);
   }
 
   atualizarEstoque(p: Estoque) {
 
     this.estoqueService.salvar({
+
       produtoId: p.produtoId,
       lojaID: p.lojaId,
       quantidade: p.quantidade,
       precoVenda: p.valorFinal
+
     }).subscribe(() => {
 
       this.alterados.delete(p.id);
@@ -186,21 +259,65 @@ carregarDados(page: number = 0) {
     });
   }
 
-  proximaPaginaEstoque() {
+  /* =========================
+     PRODUTOS
+  ========================= */
 
-  if (this.paginaAtualEstoque < this.totalPaginasEstoque - 1) {
+mostrarTodosProdutos(
+  page: number = 0
+) {
 
-    this.carregarDados(this.paginaAtualEstoque + 1);
+  this.produtoService
+    .loadProducts(page, 10)
+    .subscribe({
 
+      next: (res) => {
+
+        this.todosProdutos =
+          res.content;
+
+        this.modo = 'produtos';
+
+        this.paginaAtualProduto =
+          res.page.number;
+
+        this.totalPaginasProduto =
+          res.page.totalPages;
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+
+        console.error(
+          'Erro ao carregar produtos',
+          err
+        );
+      }
+    });
+}
+proximaPaginaProduto() {
+
+  if (
+    this.paginaAtualProduto <
+    this.totalPaginasProduto - 1
+  ) {
+
+    this.mostrarTodosProdutos(
+      this.paginaAtualProduto + 1
+    );
   }
 }
 
-paginaAnteriorEstoque() {
+paginaAnteriorProduto() {
 
-  if (this.paginaAtualEstoque > 0) {
+  if (
+    this.paginaAtualProduto > 0
+  ) {
 
-    this.carregarDados(this.paginaAtualEstoque - 1);
-
+    this.mostrarTodosProdutos(
+      this.paginaAtualProduto - 1
+    );
   }
 }
 }

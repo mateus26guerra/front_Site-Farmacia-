@@ -1,95 +1,85 @@
-/* ===== LISTA DE LOJAS ===== */
 .lista-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 20px 40px 20px;
-}
-body {
-  background-color: #f4f6f8;
-  margin: 0;
-}
-
-/* Grid de cards lado a lado */
-.lojas-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
-}
-
-/* Card individual */
-.loja-card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.loja-card h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #111;
-  margin-bottom: 4px;
-}
-
-.loja-card p {
-  font-size: 0.875rem;
-  color: #555;
-  margin: 0;
-}
-
-.loja-card p strong {
-  color: #111;
-  font-weight: 500;
-}
-
-/* Botões do card */
-.loja-card .botoes {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid #f0f0f0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.loja-card .botoes button {
-  font-family: 'Poppins', sans-serif;
   width: 100%;
-  padding: 9px 12px;
+  margin-top: 20px;
+}
+
+.table-wrapper {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow:
+    0 4px 16px rgba(0,0,0,.08);
+}
+
+.lojas-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lojas-table thead {
+  background: #f5f5f5;
+}
+
+.lojas-table th {
+  text-align: left;
+  padding: 18px;
+  font-size: 14px;
+  color: #555;
+}
+
+.lojas-table td {
+  padding: 18px;
+  border-top: 1px solid #eee;
+}
+
+.lojas-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.acoes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn {
   border: none;
   border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 500;
+  padding: 8px 12px;
   cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
 }
 
-.loja-card .botoes button:first-child {
+.editar {
   background: #111;
-  color: #fff;
+  color: white;
 }
 
-.loja-card .botoes button:last-child {
+.funcionario {
   background: #f0f0f0;
-  color: #111;
 }
 
-/* Empty state */
+.bairro {
+  background: #e8f4ff;
+  color: #1565c0;
+}
+
 .empty-state {
   text-align: center;
-  padding: 3rem;
-  color: #aaa;
-  font-size: 0.95rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  background: white;
+  border-radius: 14px;
+  color: #999;
 }
 
-/* Responsivo */
-@media (max-width: 600px) {
-  .lojas-grid {
-    grid-template-columns: 1fr;
+@media(max-width: 900px) {
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .lojas-table {
+    min-width: 800px;
   }
 }

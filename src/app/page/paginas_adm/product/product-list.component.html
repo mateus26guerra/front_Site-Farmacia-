@@ -175,7 +175,7 @@ Salvar
 
 <div
 class="produtos-row"
-*ngFor="let p of produtosPaginados">
+*ngFor="let p of todosProdutos">
 
 <div class="col-image">
 <img [src]="'data:image/png;base64,' + p.imagemBase64">
@@ -200,20 +200,23 @@ class="produtos-row"
 
   <button
     class="btn-page"
-    (click)="paginaAnterior()"
-    [disabled]="paginaAtual === 0"
+    (click)="paginaAnteriorProduto()"
+    [disabled]="paginaAtualProduto === 0"
   >
     ← Anterior
   </button>
 
-  <span class="page-info">
-    Página {{ paginaAtual + 1 }}
-  </span>
+ <span class="page-info">
+  Página
+  {{ paginaAtualProduto + 1 }}
+  de
+  {{ totalPaginasProduto }}
+</span>
 
   <button
     class="btn-page"
-    (click)="proximaPagina()"
-    [disabled]="(paginaAtual + 1) * itensPorPagina >= todosProdutos.length"
+    (click)="proximaPaginaProduto()"
+    [disabled]="paginaAtualProduto >= totalPaginasProduto - 1"
   >
     Próxima →
   </button>

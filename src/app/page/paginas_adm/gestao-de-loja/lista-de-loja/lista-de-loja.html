@@ -1,23 +1,73 @@
+
 <div class="lista-container">
 
   <div *ngIf="lojas.length === 0" class="empty-state">
     Nenhuma loja cadastrada.
   </div>
 
-  <div class="lojas-grid">
-    <div *ngFor="let loja of lojas" class="loja-card">
+  <div
+    *ngIf="lojas.length > 0"
+    class="table-wrapper"
+  >
 
-      <h3>{{ loja.nome }}</h3>
-      <p><strong>CNPJ:</strong> {{ loja.cnpj }}</p>
-      <p><strong>Telefone:</strong> {{ loja.telefone }}</p>
-      <p><strong>Tipo:</strong> {{ loja.tipoAtendimento }}</p>
+    <table class="lojas-table">
 
-      <div class="botoes">
-        <button [routerLink]="['/editar-loja', loja.id]">Editar</button>
-        <button [routerLink]="['/addloja', loja.id, 'funcionarios']">Adicionar Funcionário</button>
-      </div>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
 
-    </div>
+      <tbody>
+
+        <tr *ngFor="let loja of lojas">
+
+          <td>
+            {{ loja.nomeLoja }}
+          </td>
+
+         
+          <td>
+            {{ loja.tipoAtendimento }}
+          </td>
+
+          <td class="acoes">
+
+            <button
+              class="btn editar"
+              [routerLink]="[
+                '/editar-loja',
+                loja.id
+              ]"
+            >
+              Editar
+            </button>
+
+            <button
+              class="btn funcionario"
+              [routerLink]="[
+                '/addloja',
+                loja.id,
+                'funcionarios'
+              ]"
+            >
+              Funcionários
+            </button>
+
+            <button [routerLink]="['/loja', loja.id, 'bairros']">
+          Relacionar Bairro
+        </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
   </div>
 
 </div>

@@ -79,22 +79,16 @@ totalElements = 0;
   /* =========================
      LOAD
   ========================= */
-loadProducts(page: number = 0, size: number = 20) {
+loadProducts(
+  page: number = 0,
+  size: number = 20
+) {
 
-  this.http
-    .get<PageResponse<Product>>(
-      `${this.API}?page=${page}&size=${size}`
-    )
-    .subscribe(response => {
-
-      // produtos da página
-      this.productsSubject.next(response.content);
-
-      // informações da paginação
-      this.totalPages = response.page.totalPages;
-      this.totalElements = response.page.totalElements;
-
-    });
+  return this.http.get<
+    PageResponse<Product>
+  >(
+    `${this.API}?page=${page}&size=${size}`
+  );
 }
 
   /* =========================

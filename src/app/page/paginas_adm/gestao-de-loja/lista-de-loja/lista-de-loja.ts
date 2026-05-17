@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Loja, LojaService } from '../../../../service/loja.service';
+import { Loja, LojaService } from '../../../../service/loja/loja.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-lista-de-loja',
   standalone: true,
-  imports: [CommonModule, RouterModule], // 👈 ADICIONA ISSO
+  imports: [CommonModule, RouterModule], 
   templateUrl: './lista-de-loja.html',
   styleUrls: ['./lista-de-loja.css'],
 })
@@ -39,4 +39,12 @@ export class ListaDeLoja implements OnInit {
   adicionarFuncionario(loja: Loja) {
     this.router.navigate(['/addloja', loja.id, 'funcionarios']);
   }
+
+  relacionarBairro(loja: Loja) {
+
+  this.router.navigate([
+    '/relacionar-bairro',
+    loja.id
+  ]);
+}
 }

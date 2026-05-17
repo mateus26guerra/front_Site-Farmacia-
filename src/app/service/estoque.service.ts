@@ -39,16 +39,14 @@ export interface PageResponse<T> {
 
   content: T[];
 
-  totalElements: number;
-  totalPages: number;
+  page: {
 
-  size: number;
-  number: number;
+    size: number;
+    number: number;
 
-  first: boolean;
-  last: boolean;
-  numberOfElements: number;
-  empty: boolean;
+    totalElements: number;
+    totalPages: number;
+  };
 }
 
 @Injectable({
