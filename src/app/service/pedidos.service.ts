@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface ItemPedido {
   produtoId: number;
@@ -8,7 +9,7 @@ export interface ItemPedido {
   variacao: string;
   imagemUrl: string;
   categoria: string;
-  preco: number; 
+  preco: number;
   quantidade: number;
 }
 
@@ -26,10 +27,12 @@ export interface Pedido {
 
   formaDePagamento: string;
 
-  statusDoPedido: string;  
- cep: string;   
+  statusDoPedido: string;
+  cep: string;
+
   itens: ItemPedido[];
- observacao?: string;
+
+  observacao?: string;
   totalProdutos?: number;
   valorFrete?: number;
   totalComFrete?: number;
@@ -42,24 +45,42 @@ export interface Pedido {
 })
 export class PedidosService {
 
-  private api = 'http://localhost:8080/pedidos';
+  private api =
+    `${environment.apiUrl}/pedidos`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient
+  ) {}
 
-  listar(): Observable<Pedido[]> {
+  listar():
+    Observable<Pedido[]> {
 
-    return this.http.get<Pedido[]>(this.api);
-
+    return this.http.get<
+      Pedido[]
+    >(this.api);
   }
 
-  
- geraPdf(id: number) {
-  return this.http.get(`${this.api}/${id}/pdf`, {
-    responseType: 'blob'
-  });
-}
+  geraPdf(
+    id: number
+  ) {
 
-atualizarStatus(id: number, status: string) {
-  return this.http.patch(`${this.api}/${id}/status`, { status });
-}
+    return this.http.get(
+      `${this.api}/${id}/pdf`,
+      {
+        responseType:
+          'blob'
+      }
+    );
+  }
+
+  atualizarStatus(
+    id: number,
+    status: string
+  ) {
+
+    return this.http.patch(
+      `${this.api}/${id}/status`,
+      { status }
+    );
+  }
 }

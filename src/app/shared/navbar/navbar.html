@@ -157,3 +157,17 @@ LINHA INFERIOR - CATEGORIAS
     </div>
   </div>
 }
+
+@if (toastMessage) {
+  <div class="toast-error">
+
+    <span class="msg">
+      {{ toastMessage }}
+    </span>
+
+    <button class="close" (click)="fecharToast()">
+      ×
+    </button>
+
+  </div>
+}

@@ -25,11 +25,38 @@ export class Navbar implements OnInit, AfterViewChecked {
   showMenu = false;
   activeCategory = '';
 
- constructor(
+toastMessage: string | null = null;
+toastTimeout: any;
+
+constructor(
   public authService: AuthService,
   private productService: ProductService,
   public cartService: CartService
-) {}
+) {
+
+  this.cartService.cartError$.subscribe(msg => {
+
+    // limpa antes (evita travar UI)
+    this.toastMessage = null;
+
+    if (!msg) return;
+
+    this.toastMessage = msg;
+
+    clearTimeout(this.toastTimeout);
+
+    this.toastTimeout = setTimeout(() => {
+      this.toastMessage = null;
+    }, 4000);
+
+  });
+
+}
+
+fecharToast() {
+  this.toastMessage = null;
+  clearTimeout(this.toastTimeout);
+}
 
 
   onSearch(value: string) {

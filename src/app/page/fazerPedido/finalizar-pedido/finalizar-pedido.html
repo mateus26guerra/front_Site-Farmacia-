@@ -1,69 +1,182 @@
-<!-- <app-navbar-finalizar-pedido [activeStep]="3"></app-navbar-finalizar-pedido>
+<app-navbar-finalizar-pedido
+  [activeStep]="3">
+</app-navbar-finalizar-pedido>
 
 <div class="page-wrapper">
 
   <div class="card">
 
     <h2 class="card-title">
-      Finalize seu Pedido 
+      Finalize seu Pedido
     </h2>
 
-    <form (ngSubmit)="finalizar()">
+    <form
+      (ngSubmit)="finalizar()">
 
       <div class="form-grid">
 
         <div class="form-group full">
-          <label>Nome Completo</label>
-          <input type="text" [(ngModel)]="cliente" name="cliente" required>
+          <label>
+            Nome Completo
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="nomeCliente"
+            name="nomeCliente"
+            required>
         </div>
 
         <div class="form-group">
-          <label>Telefone (WhatsApp)</label>
-          <input type="text" [(ngModel)]="telefone" name="telefone" required>
+
+          <label>
+            E-mail
+          </label>
+
+          <input
+            type="email"
+            [(ngModel)]="email"
+            name="email">
         </div>
 
         <div class="form-group">
-          <label>Bairro</label>
-          <select [(ngModel)]="bairro" name="bairro" required>
-            <option value="" disabled selected>Selecione</option>
-            <option *ngFor="let b of bairros" [value]="b">{{ b }}</option>
+
+          <label>
+            WhatsApp
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="telefone"
+            name="telefone"
+            required>
+        </div>
+
+        @if (tipoEntrega === 'ENTREGA') {
+
+          <div class="form-group">
+
+            <label>
+              Bairro
+            </label>
+
+            <select
+              [(ngModel)]="bairroId"
+              name="bairroId"
+              required>
+
+              <option
+                value="">
+                Selecione
+              </option>
+
+           @for (
+  bairro of bairros;
+  track bairro.bairroId
+) {
+
+  <option
+    [value]="bairro.bairroId">
+
+    {{ bairro.nomeBairro }}
+
+  </option>
+}
+
+            </select>
+
+          </div>
+
+          <div class="form-group full">
+
+            <label>
+              Endereço
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="endereco"
+              name="endereco"
+              required>
+
+          </div>
+
+          <div class="form-group full">
+
+            <label>
+              Complemento
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="complemento"
+              name="complemento">
+
+          </div>
+
+        }
+
+        <div class="form-group">
+
+          <label>
+            Forma de Pagamento
+          </label>
+
+          <select
+            [(ngModel)]="formaDePagamento"
+            name="formaDePagamento"
+            required>
+
+            <option value="">
+              Selecione
+            </option>
+
+            <option value="PIX">
+              PIX
+            </option>
+
+            <option value="DINHEIRO">
+              Dinheiro
+            </option>
+
+            <option value="CARTAO">
+              Cartão
+            </option>
+
           </select>
+
         </div>
 
         <div class="form-group full">
-          <label>Endereço</label>
-          <input type="text" [(ngModel)]="endereco" name="endereco" required>
-        </div>
 
-        <div class="form-group full">
-          <label>Complemento</label>
-          <input type="text" [(ngModel)]="complemento" name="complemento">
-        </div>
+          <label>
+            Observação
+          </label>
 
-        <div class="form-group">
-          <label>Forma de Pagamento</label>
-          <select [(ngModel)]="formaDePagamento" name="formaDePagamento" required>
-            <option value="" disabled selected>Selecione</option>
-            <option *ngFor="let f of formas" [value]="f">{{ f }}</option>
-          </select>
-        </div>
+          <textarea
+            rows="3"
+            [(ngModel)]="observacao"
+            name="observacao">
+          </textarea>
 
- 
-
-        <!-- NOVO: Observação
-        <div class="form-group full">
-          <label>Observação (opcional)</label>
-          <textarea [(ngModel)]="observacao" name="observacao" rows="3"></textarea>
         </div>
 
       </div>
 
       <div class="button-group">
-        <button type="submit" class="btn primary">
+
+        <button
+          type="submit"
+          class="btn">
+
           Finalizar Pedido
+
         </button>
+
       </div>
 
     </form>
+
   </div>
-</div> -->
+
+</div>

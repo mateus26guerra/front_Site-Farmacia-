@@ -56,7 +56,9 @@ export class CestaDeCompras {
     this.router.navigate(['/']);
   }
 
-  irParaTelaDados() {
-    this.router.navigate(['/dados']);
-  }
+ irParaTelaDados() {
+  this.router.navigate([
+    '/dados'
+  ]);
+}
 }

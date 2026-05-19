@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+
 /* =========================
    DTOs (BACKEND MAPPED)
 ========================= */
@@ -46,18 +47,29 @@ export interface PageResponse<T> {
   };
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class ProductService {
 
   /* =========================
-     ONLY ADMIN API
+     APIs
   ========================= */
-  private API = `${environment.apiUrl}/products`;
-totalPages = 0;
-totalElements = 0;
 
-  private productsSubject = new BehaviorSubject<Product[]>([]);
-  private searchSubject = new BehaviorSubject<string>('');
+  private API =
+    `${environment.apiUrl}/products`;
+
+  private API_PUBLICA =
+    `${environment.apiUrl}/productsPublico`;
+
+  totalPages = 0;
+  totalElements = 0;
+
+  private productsSubject =
+    new BehaviorSubject<Product[]>([]);
+
+  private searchSubject =
+    new BehaviorSubject<string>('');
 
   products$ = combineLatest([
     this.productsSubject,
@@ -65,112 +77,198 @@ totalElements = 0;
   ]).pipe(
     map(([products, search]) =>
       products.filter(p =>
-        p.name.toLowerCase().includes(search.toLowerCase())
+        p.name
+          .toLowerCase()
+          .includes(
+            search.toLowerCase()
+          )
       )
     )
   );
 
   vitrine$ = this.products$.pipe(
-    map(produtos => this.groupByName(produtos))
+    map(produtos =>
+      this.groupByName(produtos)
+    )
   );
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient
+  ) {}
 
   /* =========================
-     LOAD
+     LOAD ADMIN
   ========================= */
-loadProducts(
-  page: number = 0,
-  size: number = 20
-) {
 
-  return this.http.get<
-    PageResponse<Product>
-  >(
-    `${this.API}?page=${page}&size=${size}`
-  );
-}
+  loadProducts(
+    page: number = 0,
+    size: number = 20
+  ) {
+
+    return this.http.get<
+      PageResponse<Product>
+    >(
+      `${this.API}?page=${page}&size=${size}`
+    );
+  }
 
   /* =========================
      CREATE
   ========================= */
-  addProduct(product: ProdutoAddDTO) {
-    return this.http.post(this.API, product);
+
+  addProduct(
+    product: ProdutoAddDTO
+  ) {
+
+    return this.http.post(
+      this.API,
+      product
+    );
   }
 
   /* =========================
-     UPDATE (PATCH)
+     UPDATE
   ========================= */
-  updateProduct(id: number, product: ProdutoUpdateDTO) {
-    return this.http.patch(`${this.API}/${id}`, product);
+
+  updateProduct(
+    id: number,
+    product: ProdutoUpdateDTO
+  ) {
+
+    return this.http.patch(
+      `${this.API}/${id}`,
+      product
+    );
   }
 
   /* =========================
      DELETE
   ========================= */
-  deleteProduct(id: number) {
-    return this.http.delete(`${this.API}/${id}`)
-      .subscribe(() => this.loadProducts());
+
+  deleteProduct(
+    id: number
+  ) {
+
+    return this.http.delete(
+      `${this.API}/${id}`
+    )
+    .subscribe(() => {
+
+      this.loadProducts();
+
+    });
   }
 
   /* =========================
      SEARCH
   ========================= */
-  setSearch(term: string) {
-    this.searchSubject.next(term);
+
+  setSearch(
+    term: string
+  ) {
+
+    this.searchSubject
+      .next(term);
   }
 
   /* =========================
      GROUP VITRINE
   ========================= */
-  groupByName(produtos: Product[]): ProdutoVitrine[] {
-    const map = new Map<string, Product[]>();
+
+  groupByName(
+    produtos: Product[]
+  ): ProdutoVitrine[] {
+
+    const map =
+      new Map<
+        string,
+        Product[]
+      >();
 
     produtos.forEach(p => {
-      if (!map.has(p.name)) {
-        map.set(p.name, []);
+
+      if (
+        !map.has(p.name)
+      ) {
+
+        map.set(
+          p.name,
+          []
+        );
       }
-      map.get(p.name)!.push(p);
+
+      map.get(p.name)!
+        .push(p);
     });
 
-    return Array.from(map.entries()).map(([name, variacoes]) => ({
-      name,
-      variacoes
-    }));
+    return Array.from(
+      map.entries()
+    ).map(
+      ([name, variacoes]) => ({
+
+        name,
+        variacoes
+
+      })
+    );
   }
 
-  /* =========================================================
-     🔵 🔵 🔵 BACKUP / LEGACY (IGNORAR POR ENQUANTO)
-     - API pública antiga
-     - mapping antigo
-     - não usar mais no admin
-  ========================================================= */
-
-  
-    private applista = 'http://localhost:8080/products';
-
-  private API_PUBLICA = 'http://localhost:8080/productsPublico';
+  /* =========================
+     API PÚBLICA
+  ========================= */
 
   loadPublicProducts() {
+
     this.http
-      .get<any[]>(`${this.applista}`)
+      .get<PageResponse<any>>(
+        this.API
+      )
       .pipe(
-        map(produtos =>
-          produtos.map(p => ({
-            id: p.id,
-            name: p.nome,
-            variacao: p.variacao,
-            imagemBase64: p.imagemUrl,
-            categoriaNome: '',
-            precoVenda: p.preco
-          }))
+
+        map(response =>
+
+          response.content.map(
+            p => ({
+
+              id: p.id,
+              name:
+                p.nomeProduto,
+
+              variacao:
+                p.variacao,
+
+              imagemBase64:
+                p.imagemUrl,
+
+              categoriaNome:
+                p.categoriaNome
+                || '',
+
+              precoVenda:
+                p.precoVenda
+
+            })
+          )
         )
       )
-      .subscribe(products => this.productsSubject.next(products));
+      .subscribe(products => {
+
+        this.productsSubject
+          .next(products);
+
+        console.log(
+          'Produtos carregados:',
+          products
+        );
+      });
   }
 
   getCategorias() {
-    return this.http.get<string[]>(`${this.API_PUBLICA}/categorias`);
+
+    return this.http.get<
+      string[]
+    >(
+      `${this.API_PUBLICA}/categorias`
+    );
   }
-  
 }

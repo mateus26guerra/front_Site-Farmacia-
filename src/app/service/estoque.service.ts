@@ -33,6 +33,8 @@ export interface Estoque {
   valorFinal: number;
 
   variacao: string;
+
+  Entregar: string;
 }
 
 export interface PageResponse<T> {
