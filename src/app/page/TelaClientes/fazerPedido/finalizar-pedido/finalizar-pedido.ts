@@ -66,6 +66,10 @@ implements OnInit {
   complemento = '';
   observacao = '';
 
+  
+  private API =
+    environment.apiUrl;
+
   bairroId:
     number | null = null;
 
@@ -129,7 +133,7 @@ implements OnInit {
     this.http.get<
       LojaComBairrosResponse[]
     >(
-      'http://localhost:8080/loja-bairros/lojas-com-bairros'
+      `${this.API}/loja-bairros/lojas-com-bairros`
     )
     .subscribe({
 
@@ -245,7 +249,7 @@ implements OnInit {
     };
 
     this.http.post(
-       `${environment.apiUrl}/productsPublico/pedidos`,
+       `${this.API}/productsPublico/pedidos`,
       pedido
     )
     .subscribe({

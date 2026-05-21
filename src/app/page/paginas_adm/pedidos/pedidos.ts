@@ -67,6 +67,7 @@ this.pedidos = res.map((p: any) => ({
   cliente: p.nomeCliente,
   statusDoPedido: p.status,
   criado: p.criadoEm,
+  totalFinal: p.totalFinal ?? 0,
 
   // campos opcionais
   totalComFrete: p.totalComFrete ?? 0,

@@ -133,7 +133,9 @@
             <tr>
               <th>Produto</th>
               <th>QTD</th>
-              <th>Preço Unit.</th>
+               <th>Unidade</th>
+              <th>Preço </th>
+              <th>Desconto</th>
               <th>Total</th>
             </tr>
           </thead>
@@ -156,6 +158,11 @@ class="produto-img"
                 {{ item.quantidade }}
               </td>
 
+              <td>
+                {{ item.preco| currency:'BRL' }}
+              </td>
+
+              
               <td>
                 {{ item.preco| currency:'BRL' }}
               </td>
@@ -252,10 +259,13 @@ class="produto-img"
                 {{ etapa.label }}
               </div>
 
-              <div class="historico-descricao">
-                Status atual:
-                {{ pedido.statusDoPedido }}
-              </div>
+              <div
+  class="historico-descricao"
+  *ngIf="isEtapaAtiva(etapa.key)"
+>
+  Status atual:
+  {{ etapa.key }}
+</div>
             </div>
 
           </div>

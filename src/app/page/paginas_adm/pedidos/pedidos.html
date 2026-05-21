@@ -145,7 +145,7 @@
 <option value="CANCELADO">Cancelado</option>
 </select>
           </td>
-            <td>{{ pedido.totalComFrete | currency:'BRL':'symbol':'1.2-2' }}</td>
+            <td>{{ pedido.totalFinal | currency:'BRL':'symbol':'1.2-2' }}</td>
           <td>
             <div class="actions-cell">
               <button class="btn-icon btn-ver" title="Ver detalhes" (click)="verDetalhes(pedido)">

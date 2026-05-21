@@ -41,6 +41,7 @@ export interface Pedido {
   totalComFrete?: number;
   freteGratis?: boolean;
   tipoEntrega?: string;
+  totalFinal?: number;
 }
 
 

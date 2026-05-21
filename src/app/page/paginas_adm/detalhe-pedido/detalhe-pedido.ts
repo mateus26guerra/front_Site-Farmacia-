@@ -24,15 +24,28 @@ export class DetalhePedido implements OnInit {
   ) {}
 
 statusEtapas = [
-  { key: 'Aguardando', label: 'Pedido Recebido' },
-  { key: 'Separação', label: 'Em Separação' },
-  { key: 'EmTransito', label: 'Em Trânsito' },
-  { key: 'Concluído', label: 'Pedido Concluído' }
+  { key: 'AGUARDANDO', label: 'Pedido Recebido' },
+  { key: 'SEPARACAO', label: 'Em Separação' },
+  { key: 'EM_TRANSITO', label: 'Em Trânsito' },
+  { key: 'CONCLUIDO', label: 'Pedido Concluído' }
 ];
 
 isEtapaAtiva(statusKey: string): boolean {
-  const ordem = ['Aguardando', 'Separação', 'EmTransito', 'Concluído'];
-  return ordem.indexOf(statusKey) <= ordem.indexOf(this.pedido.statusDoPedido);
+
+  const ordem = [
+    'AGUARDANDO',
+    'SEPARACAO',
+    'EM_TRANSITO',
+    'CONCLUIDO'
+  ];
+
+  const etapaAtual =
+    ordem.indexOf(this.pedido.statusDoPedido);
+
+  const etapa =
+    ordem.indexOf(statusKey);
+
+  return etapa <= etapaAtual;
 }
 
 ngOnInit() {
