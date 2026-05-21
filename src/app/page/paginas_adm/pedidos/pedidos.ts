@@ -243,4 +243,6 @@ atualizarStatus(pedido: PedidoUI) {
   imprimir(pedido: PedidoUI) {
     window.print();
   }
+
+  
 }

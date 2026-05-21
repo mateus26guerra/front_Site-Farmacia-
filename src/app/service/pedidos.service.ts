@@ -5,14 +5,16 @@ import { environment } from '../../environments/environment';
 
 export interface ItemPedido {
   produtoId: number;
-  nomeProduto: string;
-  variacao: string;
-  imagemUrl: string;
-  categoria: string;
-  preco: number;
-  quantidade: number;
-}
+ nomeProduto: string;
+variacao: string;
+imagemBase64: string;
+categoria: string;
 
+preco: number;
+quantidade: number;
+
+subtotal?: number;
+}
 export interface Pedido {
 
   id: number;
@@ -20,7 +22,7 @@ export interface Pedido {
 
   cliente: string;
   telefone: string;
-
+  email?: string;
   endereco: string;
   bairro: string;
   complemento: string;
@@ -31,6 +33,7 @@ export interface Pedido {
   cep: string;
 
   itens: ItemPedido[];
+  imagemBase64?: string;
 
   observacao?: string;
   totalProdutos?: number;
@@ -39,6 +42,7 @@ export interface Pedido {
   freteGratis?: boolean;
   tipoEntrega?: string;
 }
+
 
 @Injectable({
   providedIn: 'root',
@@ -83,4 +87,11 @@ export class PedidosService {
       { status }
     );
   }
+
+
+  buscarPorId(id: number): Observable<any> {
+  return this.http.get<any>(
+    `${this.api}/${id}`
+  );
+}
 }

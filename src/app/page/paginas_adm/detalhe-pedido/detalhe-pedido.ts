@@ -35,21 +35,94 @@ isEtapaAtiva(statusKey: string): boolean {
   return ordem.indexOf(statusKey) <= ordem.indexOf(this.pedido.statusDoPedido);
 }
 
-  ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+ngOnInit() {
 
-    this.service.listar().subscribe(lista => {
-      const encontrado = lista.find(p => p.id === id);
+  const id = Number(
+    this.route.snapshot.paramMap.get('id')
+  );
 
-      if (encontrado) {
-        this.pedido = encontrado;
-        this.cdr.detectChanges();
-      } else {
-        this.router.navigate(['/pedidos']);
-      }
-    });
+  if (!id) {
+    this.router.navigate(['/pedidos']);
+    return;
   }
 
+  this.service.buscarPorId(id)
+    .subscribe({
+
+      next: (res) => {
+
+        console.log('PEDIDO API:', res);
+
+        this.pedido = {
+          id: res.id,
+
+          cliente: res.nomeCliente,
+          telefone: res.telefone,
+          email: res.email,
+
+          endereco: res.endereco,
+          bairro: res.bairro,
+          complemento: res.complemento,
+          observacao: res.observacao,
+
+          criado: res.criadoEm,
+
+          statusDoPedido: res.status,
+          tipoEntrega: res.tipoEntrega,
+
+          formaDePagamento:
+            res.formaPagamento ?? '',
+
+          cep: '',
+
+          totalProdutos:
+            res.totalProdutos,
+
+          valorFrete:
+            res.valorFrete,
+
+          totalComFrete:
+            res.totalFinal,
+
+          freteGratis:
+            res.freteGratis,
+
+          itens: (res.itens ?? []).map((item: any) => ({
+            nomeProduto:
+              item.nomeProduto,
+
+            quantidade:
+              item.quantidade,
+
+            preco:
+              item.precoUnitario,
+
+            subtotal:
+              item.subtotal,
+
+              
+
+imagemBase64:
+item.imagemBase64
+? `data:image/png;base64,${item.imagemBase64}`
+: '',
+            variacao: '',
+            categoria: '',
+            produtoId: 0
+          }))
+        };
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+        console.error(err);
+        this.router.navigate(
+          ['/pedidos']
+        );
+      }
+    });
+}
   voltar() {
     this.router.navigate(['/pedidos']);
   }
@@ -60,11 +133,9 @@ isEtapaAtiva(statusKey: string): boolean {
     window.open(`https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`, '_blank');
   }
 
-  calcularTotal(): number {
-    return this.pedido.itens.reduce((total, item) => {
-      return total + (item.preco * item.quantidade);
-    }, 0);
-  }
+calcularTotal(): number {
+  return this.pedido.totalComFrete ?? 0;
+}
 
   gerarPDF() {
     this.service.geraPdf(this.pedido.id).subscribe((blob: Blob) => {
@@ -80,4 +151,8 @@ isEtapaAtiva(statusKey: string): boolean {
     });
   }
 
+
+  calcularSubtotal(item: any): number {
+  return (item.preco ?? 0) * (item.quantidade ?? 0);
+}
 }

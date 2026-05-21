@@ -631,3 +631,10 @@ button {
   background: #10b981;
 }
 
+.produto-img{
+width:60px;
+height:60px;
+object-fit:cover;
+border-radius:8px;
+margin-right:10px;
+}
