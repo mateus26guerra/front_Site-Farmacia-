@@ -60,11 +60,28 @@ export class Pedidos implements OnInit {
 
 carregarPedidos() {
   this.service.listar().subscribe(res => {
-    this.pedidos = res.map(p => ({
-      ...p,
-      selecionado: false
-    }));
+this.pedidos = res.map((p: any) => ({
+  id: p.id,
 
+  // mapeando API → frontend
+  cliente: p.nomeCliente,
+  statusDoPedido: p.status,
+  criado: p.criadoEm,
+
+  // campos opcionais
+  totalComFrete: p.totalComFrete ?? 0,
+  itens: p.itens ?? [],
+  telefone: p.telefone ?? '',
+  bairro: p.bairro ?? '',
+  endereco: p.endereco ?? '',
+  cep: p.cep ?? '',
+  complemento: p.complemento ?? '',
+  formaDePagamento: p.formaDePagamento ?? '',
+  tipoEntrega: p.tipoEntrega ?? '',
+  observacao: p.observacao ?? '',
+
+  selecionado: false
+}));
     this.calcularContadores();
     this.aplicarFiltros();
     this.cdr.detectChanges(); // 👈 força atualizar a view

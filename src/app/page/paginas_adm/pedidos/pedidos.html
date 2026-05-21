@@ -138,11 +138,11 @@
   [(ngModel)]="pedido.statusDoPedido"
   (ngModelChange)="atualizarStatus(pedido)"
 >
-  <option value="Aguardando">Aguardando</option>
-  <option value="Separação">Separação</option>
-  <option value="EmTransito">Em trânsito</option>
-  <option value="Concluído">Concluído</option>
-  <option value="cancelado">Cancelado</option>
+<option value="AGUARDANDO">Aguardando</option>
+<option value="SEPARACAO">Separação</option>
+<option value="EM_TRANSITO">Em trânsito</option>
+<option value="CONCLUIDO">Concluído</option>
+<option value="CANCELADO">Cancelado</option>
 </select>
           </td>
             <td>{{ pedido.totalComFrete | currency:'BRL':'symbol':'1.2-2' }}</td>

@@ -23,12 +23,12 @@ import Swal from 'sweetalert2';
 
 import {
   CartService
-} from '../../../service/cart.service';
+} from '../../../../service/cart.service';
 
 import {
   NavbarFinalizarPedido
-} from "../../../shared/navbar-finalizar-pedido/navbar-finalizar-pedido";
-import { environment } from '../../../../environments/environment';
+} from "../../../../shared/navbar-finalizar-pedido/navbar-finalizar-pedido";
+import { environment } from '../../../../../environments/environment';
 
 interface BairroResponse {
   bairroId: number;

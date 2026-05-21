@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { CartService } from '../../../service/cart.service';
-import { NavbarFinalizarPedido } from '../../../shared/navbar-finalizar-pedido/navbar-finalizar-pedido';
+import { CartService } from '../../../../service/cart.service';
+import { NavbarFinalizarPedido } from '../../../../shared/navbar-finalizar-pedido/navbar-finalizar-pedido';
 
 @Component({
   selector: 'app-cesta-de-compras',

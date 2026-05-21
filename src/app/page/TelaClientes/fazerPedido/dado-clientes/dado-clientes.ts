@@ -9,7 +9,7 @@ import {
 
 import {
   CartService
-} from '../../../service/cart.service';
+} from '../../../../service/cart.service';
 
 import {
   CommonModule
@@ -17,7 +17,7 @@ import {
 
 import {
   NavbarFinalizarPedido
-} from "../../../shared/navbar-finalizar-pedido/navbar-finalizar-pedido";
+} from "../../../../shared/navbar-finalizar-pedido/navbar-finalizar-pedido";
 
 @Component({
   selector: 'app-dado-clientes',
